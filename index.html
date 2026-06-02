@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vinay's German Vocab Coach</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="utility-bar" aria-label="App controls">
+        <div class="streak-pill" title="Practice-day streak">
+          <span aria-hidden="true">🔥</span>
+          <strong id="dayStreak">0</strong>
+          <span>day streak</span>
+        </div>
+        <button id="dashboardToggleBtn" class="secondary-button" type="button">Dashboard</button>
+        <button id="recapToggleBtn" class="secondary-button" type="button">Let's recap</button>
+      </header>
+
+      <section id="dashboardPanel" class="panel-popover dashboard-popover" aria-label="Progress dashboard" hidden>
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Progress</p>
+            <h2>Dashboard</h2>
+            <p id="storageStatus" class="storage-status">Checking local storage...</p>
+          </div>
+          <button id="closeDashboardBtn" class="icon-button" type="button" aria-label="Close dashboard">×</button>
+        </div>
+
+        <section class="stats-strip" aria-label="Learning stats">
+          <article>
+            <span id="totalWords">0</span>
+            <small>Total words</small>
+          </article>
+          <article>
+            <span id="learningWords">0</span>
+            <small>Learning</small>
+          </article>
+          <article>
+            <span id="masteredWords">0</span>
+            <small>Mastered</small>
+          </article>
+          <article>
+            <span id="roundCount">0</span>
+            <small>Rounds played</small>
+          </article>
+          <article>
+            <span id="streakCount">0</span>
+            <small>70% streak</small>
+          </article>
+        </section>
+
+        <section class="mode-scores" aria-label="Best scores by mode">
+          <div class="section-title">
+            <h3>Best scores</h3>
+            <small>separate by quiz type</small>
+          </div>
+          <div class="mode-score-grid">
+            <article>
+              <small>Quick Sprint</small>
+              <strong id="quickBestScore">0/5</strong>
+            </article>
+            <article>
+              <small>Full Round</small>
+              <strong id="fullBestScore">0/20</strong>
+            </article>
+            <article>
+              <small>Retry words</small>
+              <strong id="retryBestScore">--</strong>
+            </article>
+            <article>
+              <small>Multiple Choice</small>
+              <strong id="choiceBestScore">0/10</strong>
+            </article>
+          </div>
+        </section>
+
+        <section class="visual-dashboard" aria-label="Visual progress dashboard">
+          <article class="dashboard-hero">
+            <div>
+              <p class="eyebrow">Mastery progress</p>
+              <strong id="masteryLabel">0%</strong>
+            </div>
+            <div class="progress-track" aria-hidden="true">
+              <span id="masteryBar"></span>
+            </div>
+            <p id="masteryCaption">Master 3 correct streaks to move words here.</p>
+          </article>
+
+          <article class="dashboard-card">
+            <small>Words seen</small>
+            <strong id="wordsSeen">0</strong>
+            <span>started learning</span>
+          </article>
+
+          <article class="dashboard-card">
+            <small>Overall accuracy</small>
+            <strong id="dashboardAccuracy">0%</strong>
+            <span>all rounds</span>
+          </article>
+
+          <article class="status-dashboard">
+            <div class="section-title">
+              <h3>Word bank split</h3>
+              <small id="masteredGoal">0 / 0 mastered</small>
+            </div>
+            <div class="stacked-bar" aria-hidden="true">
+              <span id="newBar" class="bar-new"></span>
+              <span id="learningBar" class="bar-learning"></span>
+              <span id="masteredBar" class="bar-mastered"></span>
+            </div>
+            <div class="legend-row">
+              <span><b class="dot dot-new"></b><strong id="statusNewCount">0</strong> new</span>
+              <span><b class="dot dot-learning"></b><strong id="statusLearningCount">0</strong> learning</span>
+              <span><b class="dot dot-mastered"></b><strong id="statusMasteredCount">0</strong> mastered</span>
+            </div>
+          </article>
+
+          <article class="activity-dashboard">
+            <div class="section-title">
+              <h3>Recent rounds</h3>
+              <small>last 7</small>
+            </div>
+            <div id="sessionBars" class="session-bars" aria-label="Recent session accuracy"></div>
+          </article>
+        </section>
+
+        <section class="dashboard-tools" aria-label="Database tools">
+          <div class="tool-section">
+            <div class="section-title">
+              <h3>Bulk add words</h3>
+              <small>Paste lines or CSV</small>
+            </div>
+            <textarea id="addWordsText" rows="6" spellcheck="false" placeholder="job posting - die Stellenausschreibung&#10;to negotiate - verhandeln&#10;residence permit - der Aufenthaltstitel"></textarea>
+            <button id="addWordsBtn" class="secondary-button full-width" type="button">Add to word bank</button>
+            <p class="mini-status">Also accepts CSV with columns: word_en, word_de, part_of_speech, topic, difficulty, notes.</p>
+            <p id="addWordsStatus" class="mini-status" aria-live="polite"></p>
+          </div>
+
+          <div class="tool-section">
+            <div class="section-title">
+              <h3>Database</h3>
+              <small>Stored in this browser</small>
+            </div>
+            <div class="button-grid">
+              <button class="secondary-button" id="exportCsvBtn" type="button">Export CSV</button>
+              <label class="secondary-button file-button wide-file-button">
+                Import CSV
+                <input id="importCsvInput" type="file" accept=".csv,text/csv" />
+              </label>
+              <button id="sampleCsvBtn" class="secondary-button" type="button">CSV format</button>
+              <button id="resetBtn" class="danger-button" type="button">Reset</button>
+            </div>
+            <p class="mini-status">CSV export is your backup and move-data option.</p>
+          </div>
+        </section>
+      </section>
+
+      <section id="recapPanel" class="panel-popover recap-popover" aria-label="Let's recap" hidden>
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Let's recap</p>
+            <h2>Missed words</h2>
+          </div>
+          <button id="closeRecapBtn" class="icon-button" type="button" aria-label="Close recap">×</button>
+        </div>
+        <div id="hardWordsList" class="hard-list"></div>
+      </section>
+
+      <section class="workspace">
+        <section class="quiz-panel" aria-label="Quiz">
+          <section id="startScreen" class="start-screen" aria-label="Start round">
+            <div id="welcomeCard" class="welcome-card">
+              <p class="eyebrow">Phrase of the day</p>
+              <h2>Hello Vinay,<br />good to see you today.</h2>
+              <figure class="phrase-card">
+                <button id="refreshPhraseBtn" class="phrase-refresh" type="button" title="New phrase" aria-label="Show another phrase">↻</button>
+                <blockquote id="phraseGerman">"Alles im grünen Bereich."</blockquote>
+                <figcaption>
+                  <span>Meaning:</span>
+                  <strong id="phraseMeaning">Everything is okay.</strong>
+                  <small id="phraseNote">A useful everyday phrase when things are under control.</small>
+                </figcaption>
+              </figure>
+            </div>
+
+            <div id="roundMenu" class="round-menu">
+              <button id="quickRoundBtn" class="primary-button round-button" type="button">
+                <strong>Quick Sprint</strong>
+                <span>5 typed words</span>
+              </button>
+              <button id="fullRoundBtn" class="secondary-button round-button" type="button">
+                <strong>Full Round</strong>
+                <span>20 typed words</span>
+              </button>
+              <button id="retryBtn" class="secondary-button round-button" type="button">
+                <strong>Retry words</strong>
+                <span>Missed words only</span>
+              </button>
+              <button id="multipleChoiceBtn" class="secondary-button round-button" type="button">
+                <strong>Multiple Choice</strong>
+                <span>Pick 1 of 4</span>
+              </button>
+            </div>
+          </section>
+
+          <div class="quiz-header" id="quizHeader" hidden>
+            <div>
+              <p class="eyebrow" id="roundMeta">Ready when you are</p>
+              <h2 id="quizTitle">Start a 20-word round</h2>
+            </div>
+            <div class="quiz-actions">
+              <button id="exitRoundBtn" class="secondary-button" type="button">Exit round</button>
+            </div>
+          </div>
+
+          <div id="coachMessage" class="coach-message">
+            Build the habit: short rounds, honest scoring, the hard words come back until they behave.
+          </div>
+
+          <form id="quizForm" class="quiz-form" hidden>
+            <ol id="promptList" class="prompt-list"></ol>
+            <div class="submit-row">
+              <button id="submitAnswersBtn" class="primary-button" type="submit">Check answers ⚡</button>
+            </div>
+          </form>
+
+          <section id="choiceQuiz" class="choice-quiz" hidden>
+            <div class="choice-status">
+              <span id="choiceProgress">Question 1/10</span>
+              <span id="choiceScore">0 correct</span>
+            </div>
+            <h3 id="choicePrompt">The appointment</h3>
+            <div id="choiceOptions" class="choice-options"></div>
+            <button id="dontKnowChoiceBtn" class="choice-dont-know" type="button">I don't know</button>
+          </section>
+
+          <section id="resultsPanel" class="results-panel" aria-live="polite"></section>
+        </section>
+
+      </section>
+    </main>
+
+    <template id="answerRowTemplate">
+      <li class="answer-row">
+        <label>
+          <span class="prompt-text"></span>
+          <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" />
+        </label>
+      </li>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
