@@ -1,6 +1,7 @@
 const STORAGE_KEY = "vinay_german_vocab_coach_v1";
 const ROUND_SIZE = 20;
 const STARTER_BANK_VERSION = 3;
+const LEGACY_PROFILE_NAME = "Vinay";
 const TOPIC_PRIORITY = ["alltag", "haushalt", "arbeit", "transport", "gefühle", "gesundheit", "freizeit", "behörden", "abstrakt"];
 const TODAY = () => new Date().toISOString().slice(0, 10);
 const storage = createStorageAdapter();
@@ -1346,6 +1347,13 @@ const els = {
   phraseGerman: document.querySelector("#phraseGerman"),
   phraseMeaning: document.querySelector("#phraseMeaning"),
   phraseNote: document.querySelector("#phraseNote"),
+  greetingName: document.querySelector("#greetingName"),
+  profileNameForm: document.querySelector("#profileNameForm"),
+  profileNameInput: document.querySelector("#profileNameInput"),
+  profileNameStatus: document.querySelector("#profileNameStatus"),
+  profilePrompt: document.querySelector("#profilePrompt"),
+  profilePromptForm: document.querySelector("#profilePromptForm"),
+  profilePromptInput: document.querySelector("#profilePromptInput"),
   quizTitle: document.querySelector("#quizTitle"),
   roundMeta: document.querySelector("#roundMeta"),
   coachMessage: document.querySelector("#coachMessage"),
@@ -1392,6 +1400,7 @@ function createSeedDb() {
       created_at: now,
     })),
     sessions: [],
+    profile: createProfile(),
   };
 }
 
@@ -1426,10 +1435,13 @@ function loadDb() {
   }
   try {
     const parsed = JSON.parse(raw);
+    const profileBefore = JSON.stringify(parsed.profile || null);
     parsed.words = (parsed.words || []).map(normalizeWordRecord);
     parsed.sessions = parsed.sessions || [];
+    parsed.profile = normalizeProfile(parsed.profile, !parsed.profile);
     const addedStarterWords = mergeStarterWords(parsed);
-    const shouldPersistUpgrade = addedStarterWords || Number(parsed.version || 0) < STARTER_BANK_VERSION;
+    const profileChanged = JSON.stringify(parsed.profile) !== profileBefore;
+    const shouldPersistUpgrade = addedStarterWords || profileChanged || Number(parsed.version || 0) < STARTER_BANK_VERSION;
     parsed.version = STARTER_BANK_VERSION;
     if (shouldPersistUpgrade) storage.set(JSON.stringify(parsed));
     return parsed;
@@ -1458,6 +1470,24 @@ function normalizeWordRecord(word) {
     notes: word.notes || "",
     created_at: word.created_at || new Date().toISOString(),
   };
+}
+
+function createProfile(name = "", hasChosenName = false) {
+  const cleanName = sanitizeProfileName(name);
+  return {
+    name: cleanName,
+    hasChosenName: Boolean(cleanName && hasChosenName),
+  };
+}
+
+function normalizeProfile(profile, useLegacyName = false) {
+  if (!profile && useLegacyName) return createProfile(LEGACY_PROFILE_NAME, true);
+  const cleanName = sanitizeProfileName(profile?.name || "");
+  return createProfile(cleanName, Boolean(profile?.hasChosenName || cleanName));
+}
+
+function sanitizeProfileName(value) {
+  return String(value || "").replace(/\s+/g, " ").trim().slice(0, 32);
 }
 
 function getStarterWordRows() {
@@ -1505,6 +1535,52 @@ function mergeStarterWords(database) {
 function saveDb() {
   storage.set(JSON.stringify(db));
   renderDashboard();
+  renderProfile();
+}
+
+function saveProfileName(rawName, { fromPrompt = false } = {}) {
+  const name = sanitizeProfileName(rawName);
+  if (!name) {
+    if (els.profileNameStatus) els.profileNameStatus.textContent = "Add a name first.";
+    return false;
+  }
+
+  db.profile = createProfile(name, true);
+  storage.set(JSON.stringify(db));
+  renderProfile();
+  if (els.profileNameStatus) els.profileNameStatus.textContent = `Saved. Hello ${name}.`;
+  if (fromPrompt) closeProfilePrompt();
+  return true;
+}
+
+function renderProfile() {
+  const name = db.profile?.name || "there";
+  els.greetingName.textContent = name;
+  els.profileNameInput.value = db.profile?.name || "";
+}
+
+function shouldAskForProfileName() {
+  return !db.profile?.hasChosenName || !db.profile?.name;
+}
+
+function openProfilePrompt() {
+  els.profilePrompt.hidden = false;
+  els.profilePromptInput.value = "";
+  window.setTimeout(() => els.profilePromptInput.focus(), 0);
+}
+
+function closeProfilePrompt() {
+  els.profilePrompt.hidden = true;
+}
+
+function handleProfilePromptSubmit(event) {
+  event.preventDefault();
+  saveProfileName(els.profilePromptInput.value, { fromPrompt: true });
+}
+
+function handleProfileNameSubmit(event) {
+  event.preventDefault();
+  saveProfileName(els.profileNameInput.value);
 }
 
 function makeId() {
@@ -2605,7 +2681,7 @@ function exportCsv() {
       word.notes,
     ]),
   ];
-  downloadText(`vinay-german-vocab-${TODAY()}.csv`, rows.map(toCsvRow).join("\n"));
+  downloadText(`german-vocab-${TODAY()}.csv`, rows.map(toCsvRow).join("\n"));
 }
 
 function showSampleCsv() {
@@ -2614,7 +2690,7 @@ function showSampleCsv() {
     ["job posting", "die Stellenausschreibung", "noun", "arbeit", "B2", ""],
     ["to negotiate", "verhandeln", "verb", "arbeit", "B2", ""],
   ];
-  downloadText("vinay-vocab-import-template.csv", sample.map(toCsvRow).join("\n"));
+  downloadText("german-vocab-import-template.csv", sample.map(toCsvRow).join("\n"));
 }
 
 function downloadText(filename, text) {
@@ -2706,7 +2782,9 @@ function parseCsv(text) {
 function resetDb() {
   const confirmed = window.confirm("Reset all local vocab progress and restore the starter database?");
   if (!confirmed) return;
+  const profile = normalizeProfile(db.profile);
   db = createSeedDb();
+  db.profile = profile;
   saveDb();
   activeRound = null;
   els.quizForm.hidden = true;
@@ -2732,6 +2810,8 @@ els.multipleChoiceBtn.addEventListener("click", () => startRound({ mode: "choice
 els.dontKnowChoiceBtn.addEventListener("click", () => handleChoiceAnswer(null, els.dontKnowChoiceBtn));
 els.exitRoundBtn.addEventListener("click", exitRound);
 els.refreshPhraseBtn.addEventListener("click", renderDailyPhrase);
+els.profilePromptForm.addEventListener("submit", handleProfilePromptSubmit);
+els.profileNameForm.addEventListener("submit", handleProfileNameSubmit);
 els.dashboardToggleBtn.addEventListener("click", toggleDashboard);
 els.recapToggleBtn.addEventListener("click", toggleRecap);
 els.closeDashboardBtn.addEventListener("click", closeUtilityPanels);
@@ -2753,6 +2833,8 @@ document.addEventListener("keydown", handleEscapeKey);
 
 renderDailyPhrase();
 renderDashboard();
+renderProfile();
+if (shouldAskForProfileName()) openProfilePrompt();
 
 if ("serviceWorker" in window.navigator) {
   window.addEventListener("load", () => {

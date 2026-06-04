@@ -1,7 +1,7 @@
 #!/bin/zsh
 cd "$(dirname "$0")"
 
-echo "Starting Vinay's German Vocab Coach..."
+echo "Starting German Vocab Coach..."
 echo
 echo "Keep this window open while using the app."
 echo "Press Ctrl+C here when you want to stop it."

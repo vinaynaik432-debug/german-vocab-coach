@@ -1,4 +1,4 @@
-# Vinay's German Vocab Coach
+# German Vocab Coach
 
 An offline-first German vocabulary quiz app for English → German practice.
 
