@@ -14,6 +14,7 @@ If a browser blocks local storage for direct `file://` pages, the app still runs
 
 ## Features
 
+- Installable PWA with app icons and offline caching after first load
 - 20-word rounds with B1/B2 everyday vocabulary
 - 5-word quick rounds for short practice
 - Multiple-choice mode with 4 answer options and an `I don't know` action
@@ -21,6 +22,7 @@ If a browser blocks local storage for direct `file://` pages, the app still runs
 - Correct streaks, misses, half-credit spelling or article slips
 - Retry-only mode for hard learning words
 - Visual progress dashboard with mastery, practice streak, accuracy, recent rounds, and separate best scores for each quiz type
+- Dashboard word-status lists for new, learning, and mastered words, with visual manual move controls
 - 140+ rotating German phrases on the start screen
 - Phrase refresh button
 - Dashboard and recap panels hidden behind buttons
@@ -28,7 +30,7 @@ If a browser blocks local storage for direct `file://` pages, the app still runs
 - Distraction-free quiz mode while a round is active
 - Hardest words list
 - Bulk paste, CSV import, and CSV export
-- Built-in starter database
+- Built-in starter database with 1000+ everyday B1/B2 words
 
 ## Bulk Add
 
@@ -53,3 +55,22 @@ to negotiate,verhandeln,verb,arbeit,B2,
 ```
 
 Exported CSV includes progress columns too, so it can be used as a backup.
+
+## Install On Phone
+
+Host the folder on GitHub Pages, then open the HTTPS GitHub Pages link on your phone.
+
+On iPhone:
+
+1. Open the app link in Safari.
+2. Tap the Share button.
+3. Tap `Add to Home Screen`.
+4. Launch it from the new Home Screen icon.
+
+On Android:
+
+1. Open the app link in Chrome.
+2. Tap the browser menu.
+3. Tap `Install app` or `Add to Home screen`.
+
+The app caches itself after the first load, so it can open offline. Progress is still stored on each device separately unless you export/import CSV.

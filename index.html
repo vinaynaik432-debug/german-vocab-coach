@@ -3,8 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Offline-first German vocabulary practice for English to German B1/B2 learning." />
+    <meta name="theme-color" content="#171717" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="German Coach" />
     <title>Vinay's German Vocab Coach</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="icons/icon-180.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css?v=20260604-pwa1" />
   </head>
   <body>
     <main class="app-shell">
@@ -126,6 +134,25 @@
           </article>
         </section>
 
+        <section class="word-manager" aria-label="Word status manager">
+          <div class="section-title">
+            <h3>Word status</h3>
+            <small id="wordManagerSummary">Click a group to inspect words</small>
+          </div>
+          <div class="status-tabs" role="tablist" aria-label="Word status filters">
+            <button id="statusLearningBtn" class="status-tab active" type="button" data-status="learning" aria-selected="true">
+              Learning <span id="learningListCount">0</span>
+            </button>
+            <button id="statusMasteredBtn" class="status-tab" type="button" data-status="mastered" aria-selected="false">
+              Mastered <span id="masteredListCount">0</span>
+            </button>
+            <button id="statusNewBtn" class="status-tab" type="button" data-status="new" aria-selected="false">
+              New <span id="newListCount">0</span>
+            </button>
+          </div>
+          <div id="statusWordList" class="status-word-list" aria-live="polite"></div>
+        </section>
+
         <section class="dashboard-tools" aria-label="Database tools">
           <div class="tool-section">
             <div class="section-title">
@@ -174,6 +201,13 @@
             <div id="welcomeCard" class="welcome-card">
               <p class="eyebrow">Phrase of the day</p>
               <h2>Hello Vinay,<br />good to see you today.</h2>
+              <div class="coach-face" aria-hidden="true">
+                <span class="face-curl"></span>
+                <span class="face-eye face-eye-left"></span>
+                <span class="face-eye face-eye-right"></span>
+                <span class="face-nose"></span>
+                <span class="face-smile"></span>
+              </div>
               <figure class="phrase-card">
                 <button id="refreshPhraseBtn" class="phrase-refresh" type="button" title="New phrase" aria-label="Show another phrase">↻</button>
                 <blockquote id="phraseGerman">"Alles im grünen Bereich."</blockquote>
@@ -251,6 +285,6 @@
       </li>
     </template>
 
-    <script src="app.js" defer></script>
+    <script src="app.js?v=20260604-pwa1" defer></script>
   </body>
 </html>

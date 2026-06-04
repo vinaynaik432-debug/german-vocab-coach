@@ -1,5 +1,7 @@
 const STORAGE_KEY = "vinay_german_vocab_coach_v1";
 const ROUND_SIZE = 20;
+const STARTER_BANK_VERSION = 3;
+const TOPIC_PRIORITY = ["alltag", "haushalt", "arbeit", "transport", "gefühle", "gesundheit", "freizeit", "behörden", "abstrakt"];
 const TODAY = () => new Date().toISOString().slice(0, 10);
 const storage = createStorageAdapter();
 
@@ -131,6 +133,922 @@ const starterWords = [
   ["the bank transfer", "die Überweisung", "noun", "alltag", "B1", ""],
   ["the account", "das Konto", "noun", "alltag", "B1", ""],
   ["to withdraw money", "Geld abheben", "phrase", "alltag", "B1", ""],
+];
+
+function packStarterWords(topic, difficulty, rows) {
+  return rows.map(([word_en, word_de, part_of_speech, notes = ""]) => [word_en, word_de, part_of_speech, topic, difficulty, notes]);
+}
+
+const supplementalStarterWords = [
+  ...packStarterWords("arbeit", "B1", [
+    ["the workplace", "der Arbeitsplatz", "noun"],
+    ["the working hours", "die Arbeitszeit", "noun"],
+    ["part-time work", "die Teilzeit", "noun"],
+    ["full-time work", "die Vollzeit", "noun"],
+    ["the probation period", "die Probezeit", "noun"],
+    ["the resignation", "die Kündigung", "noun"],
+    ["the promotion", "die Beförderung", "noun"],
+    ["the department", "die Abteilung", "noun"],
+    ["the team", "das Team", "noun"],
+    ["the supervisor", "der Vorgesetzte", "noun"],
+    ["the boss", "der Chef", "noun", "Female: die Chefin."],
+    ["the employee", "der Mitarbeiter", "noun", "Female: die Mitarbeiterin."],
+    ["the employer", "der Arbeitgeber", "noun"],
+    ["the employee as worker", "der Arbeitnehmer", "noun"],
+    ["the shift", "die Schicht", "noun"],
+    ["the break", "die Pause", "noun"],
+    ["the project", "das Projekt", "noun"],
+    ["the customer", "der Kunde", "noun", "Female: die Kundin."],
+    ["the client", "der Auftraggeber", "noun", "Female: die Auftraggeberin."],
+    ["the order", "der Auftrag", "noun"],
+    ["the presentation", "die Präsentation", "noun"],
+    ["the feedback", "das Feedback", "noun"],
+    ["the email", "die E-Mail", "noun"],
+    ["the message", "die Nachricht", "noun"],
+    ["the phone call", "der Anruf", "noun"],
+    ["the call", "das Telefonat", "noun"],
+    ["the office", "das Büro", "noun"],
+    ["the home office", "das Homeoffice", "noun"],
+    ["the equipment", "die Ausstattung", "noun"],
+    ["the file", "die Datei", "noun"],
+    ["the folder", "der Ordner", "noun"],
+    ["the printer", "der Drucker", "noun"],
+    ["the appointment calendar", "der Kalender", "noun"],
+    ["the note", "die Notiz", "noun"],
+    ["the mistake at work", "der Fehler", "noun"],
+    ["to hire", "einstellen", "verb"],
+    ["to quit", "kündigen", "verb"],
+    ["to plan", "planen", "verb"],
+    ["to organize", "organisieren", "verb"],
+    ["to prepare", "vorbereiten", "verb"],
+    ["to introduce", "vorstellen", "verb"],
+    ["to convince", "überzeugen", "verb"],
+    ["to cooperate", "zusammenarbeiten", "verb"],
+    ["to process", "bearbeiten", "verb"],
+    ["to reach someone", "erreichen", "verb"],
+    ["to report sick", "sich krankmelden", "verb"],
+    ["punctual", "pünktlich", "adjective"],
+    ["flexible", "flexibel", "adjective"],
+    ["resilient", "belastbar", "adjective"],
+    ["suitable", "geeignet", "adjective"],
+    ["professional", "beruflich", "adjective"],
+  ]),
+  ...packStarterWords("alltag", "B1", [
+    ["the bag", "die Tasche", "noun"],
+    ["the key", "der Schlüssel", "noun"],
+    ["the wallet", "das Portemonnaie", "noun"],
+    ["the ID card", "der Ausweis", "noun"],
+    ["the receipt as proof", "die Quittung", "noun"],
+    ["the purchase", "der Einkauf", "noun"],
+    ["the opening hours", "die Öffnungszeiten", "noun"],
+    ["the shop", "der Laden", "noun"],
+    ["the bakery", "die Bäckerei", "noun"],
+    ["the butcher shop", "die Metzgerei", "noun"],
+    ["the offer", "das Angebot", "noun"],
+    ["the price", "der Preis", "noun"],
+    ["the size", "die Größe", "noun"],
+    ["the color", "die Farbe", "noun"],
+    ["the brand", "die Marke", "noun"],
+    ["the quality", "die Qualität", "noun"],
+    ["the delivery", "die Lieferung", "noun"],
+    ["the order online", "die Bestellung", "noun"],
+    ["the return", "die Rückgabe", "noun"],
+    ["the exchange", "der Umtausch", "noun"],
+    ["the guarantee", "die Garantie", "noun"],
+    ["the customer card", "die Kundenkarte", "noun"],
+    ["the package", "das Paket", "noun"],
+    ["the parcel service", "der Paketdienst", "noun"],
+    ["the post office", "die Post", "noun"],
+    ["the address", "die Adresse", "noun"],
+    ["the phone number", "die Telefonnummer", "noun"],
+    ["the contact", "der Kontakt", "noun"],
+    ["the calendar week", "die Kalenderwoche", "noun"],
+    ["the everyday life", "der Alltag", "noun"],
+    ["the plan for the day", "der Tagesplan", "noun"],
+    ["the habit", "die Gewohnheit", "noun"],
+    ["the reminder", "die Erinnerung", "noun"],
+    ["to shop", "einkaufen", "verb"],
+    ["to order", "bestellen", "verb"],
+    ["to return something", "zurückgeben", "verb"],
+    ["to exchange", "umtauschen", "verb"],
+    ["to try out", "ausprobieren", "verb"],
+    ["to try on", "anprobieren", "verb"],
+    ["to reserve", "reservieren", "verb"],
+    ["to save money", "sparen", "verb"],
+    ["to spend money", "Geld ausgeben", "phrase"],
+    ["to search for", "suchen", "verb"],
+    ["to find", "finden", "verb"],
+    ["to lose", "verlieren", "verb"],
+    ["to find again", "wiederfinden", "verb"],
+    ["to charge", "aufladen", "verb"],
+    ["cheap", "günstig", "adjective"],
+    ["expensive", "teuer", "adjective"],
+    ["comfortable", "bequem", "adjective"],
+    ["suitable in size", "passend", "adjective"],
+    ["empty", "leer", "adjective"],
+    ["full", "voll", "adjective"],
+    ["fresh", "frisch", "adjective"],
+    ["used", "gebraucht", "adjective"],
+    ["tidy", "ordentlich", "adjective"],
+  ]),
+  ...packStarterWords("haushalt", "B1", [
+    ["the room", "das Zimmer", "noun"],
+    ["the living room", "das Wohnzimmer", "noun"],
+    ["the bedroom", "das Schlafzimmer", "noun"],
+    ["the kitchen", "die Küche", "noun"],
+    ["the bathroom", "das Bad", "noun"],
+    ["the hallway", "der Flur", "noun"],
+    ["the balcony", "der Balkon", "noun"],
+    ["the basement", "der Keller", "noun"],
+    ["the elevator", "der Aufzug", "noun"],
+    ["the door", "die Tür", "noun"],
+    ["the window", "das Fenster", "noun"],
+    ["the lamp", "die Lampe", "noun"],
+    ["the wardrobe", "der Schrank", "noun"],
+    ["the shelf", "das Regal", "noun"],
+    ["the table", "der Tisch", "noun"],
+    ["the chair", "der Stuhl", "noun"],
+    ["the bed", "das Bett", "noun"],
+    ["the sofa", "das Sofa", "noun"],
+    ["the carpet", "der Teppich", "noun"],
+    ["the curtain", "die Gardine", "noun"],
+    ["the stove", "der Herd", "noun"],
+    ["the refrigerator", "der Kühlschrank", "noun"],
+    ["the dishwasher", "die Spülmaschine", "noun"],
+    ["the washing machine", "die Waschmaschine", "noun"],
+    ["the dryer", "der Trockner", "noun"],
+    ["the vacuum cleaner", "der Staubsauger", "noun"],
+    ["the broom", "der Besen", "noun"],
+    ["the cloth", "der Lappen", "noun"],
+    ["the bucket", "der Eimer", "noun"],
+    ["the cleaning product", "das Putzmittel", "noun"],
+    ["the socket", "die Steckdose", "noun"],
+    ["the light bulb", "die Glühbirne", "noun"],
+    ["the electricity", "der Strom", "noun"],
+    ["the water", "das Wasser", "noun"],
+    ["the utilities", "die Nebenkosten", "noun"],
+    ["the deposit", "die Kaution", "noun"],
+    ["the rental contract", "der Mietvertrag", "noun"],
+    ["the caretaker", "der Hausmeister", "noun"],
+    ["the neighbor", "der Nachbar", "noun", "Female: die Nachbarin."],
+    ["the move to a new home", "der Umzug", "noun"],
+    ["to clean", "putzen", "verb"],
+    ["to tidy up", "aufräumen", "verb"],
+    ["to air the room", "lüften", "verb"],
+    ["to heat", "heizen", "verb"],
+    ["to cook", "kochen", "verb"],
+    ["to bake", "backen", "verb"],
+    ["to mop", "wischen", "verb"],
+    ["to move in", "einziehen", "verb"],
+    ["to move out", "ausziehen", "verb"],
+    ["to move house", "umziehen", "verb"],
+    ["to lock", "abschließen", "verb"],
+    ["to unlock", "aufschließen", "verb"],
+    ["clean", "sauber", "adjective"],
+    ["dirty", "schmutzig", "adjective"],
+    ["cozy", "gemütlich", "adjective"],
+    ["loud", "laut", "adjective"],
+    ["quiet", "ruhig", "adjective"],
+    ["bright", "hell", "adjective"],
+    ["dark", "dunkel", "adjective"],
+    ["wet", "nass", "adjective"],
+    ["dry", "trocken", "adjective"],
+  ]),
+  ...packStarterWords("transport", "B1", [
+    ["the stop", "die Haltestelle", "noun"],
+    ["the subway", "die U-Bahn", "noun"],
+    ["the city train", "die S-Bahn", "noun"],
+    ["the tram", "die Straßenbahn", "noun"],
+    ["the bus", "der Bus", "noun"],
+    ["the train", "der Zug", "noun"],
+    ["the track", "das Gleis", "noun"],
+    ["the connection", "die Verbindung", "noun"],
+    ["the timetable", "der Fahrplan", "noun"],
+    ["the departure", "die Abfahrt", "noun"],
+    ["the arrival", "die Ankunft", "noun"],
+    ["the connecting train", "der Anschluss", "noun"],
+    ["the direction", "die Richtung", "noun"],
+    ["the line", "die Linie", "noun"],
+    ["the fare zone", "die Zone", "noun"],
+    ["the ticket", "der Fahrschein", "noun"],
+    ["the ticket check", "die Kontrolle", "noun"],
+    ["the ticket inspector", "der Kontrolleur", "noun"],
+    ["the construction site", "die Baustelle", "noun"],
+    ["the detour", "die Umleitung", "noun"],
+    ["the traffic jam", "der Stau", "noun"],
+    ["the highway", "die Autobahn", "noun"],
+    ["the exit", "die Ausfahrt", "noun"],
+    ["the entrance", "die Einfahrt", "noun"],
+    ["the parking space", "der Parkplatz", "noun"],
+    ["the parking garage", "das Parkhaus", "noun"],
+    ["the gas station", "die Tankstelle", "noun"],
+    ["the driving license", "der Führerschein", "noun"],
+    ["the car", "das Auto", "noun"],
+    ["the tire", "der Reifen", "noun"],
+    ["the workshop", "die Werkstatt", "noun"],
+    ["the traffic light", "die Ampel", "noun"],
+    ["the pedestrian", "der Fußgänger", "noun", "Female: die Fußgängerin."],
+    ["the crosswalk", "der Zebrastreifen", "noun"],
+    ["to drive", "fahren", "verb"],
+    ["to leave by vehicle", "losfahren", "verb"],
+    ["to arrive", "ankommen", "verb"],
+    ["to get in", "einsteigen", "verb"],
+    ["to get out", "aussteigen", "verb"],
+    ["to park", "parken", "verb"],
+    ["to park into a space", "einparken", "verb"],
+    ["to refuel", "tanken", "verb"],
+    ["to brake", "bremsen", "verb"],
+    ["to overtake", "überholen", "verb"],
+    ["to turn", "abbiegen", "verb"],
+    ["delayed", "verspätet", "adjective"],
+    ["direct", "direkt", "adjective"],
+    ["fast", "schnell", "adjective"],
+    ["slow", "langsam", "adjective"],
+  ]),
+  ...packStarterWords("gesundheit", "B1", [
+    ["the doctor", "der Arzt", "noun", "Female: die Ärztin."],
+    ["the medical practice", "die Praxis", "noun"],
+    ["the family doctor", "der Hausarzt", "noun", "Female: die Hausärztin."],
+    ["the specialist doctor", "der Facharzt", "noun", "Female: die Fachärztin."],
+    ["the hospital", "das Krankenhaus", "noun"],
+    ["the clinic", "die Klinik", "noun"],
+    ["the emergency room", "die Notaufnahme", "noun"],
+    ["the emergency call", "der Notruf", "noun"],
+    ["the examination", "die Untersuchung", "noun"],
+    ["the treatment", "die Behandlung", "noun"],
+    ["the diagnosis", "die Diagnose", "noun"],
+    ["the therapy", "die Therapie", "noun"],
+    ["the medication", "das Medikament", "noun"],
+    ["the tablet", "die Tablette", "noun"],
+    ["the ointment", "die Salbe", "noun"],
+    ["the vaccination", "die Impfung", "noun"],
+    ["the referral", "die Überweisung", "noun", "Also used for a bank transfer."],
+    ["the health insurance company", "die Krankenkasse", "noun"],
+    ["the insurance card", "die Versichertenkarte", "noun"],
+    ["the symptom", "das Symptom", "noun"],
+    ["the allergy", "die Allergie", "noun"],
+    ["the cold", "die Erkältung", "noun"],
+    ["the flu", "die Grippe", "noun"],
+    ["the cough", "der Husten", "noun"],
+    ["the runny nose", "der Schnupfen", "noun"],
+    ["the sore throat", "die Halsschmerzen", "noun", "Usually plural in German."],
+    ["the back", "der Rücken", "noun"],
+    ["the stomach", "der Bauch", "noun"],
+    ["the head", "der Kopf", "noun"],
+    ["the arm", "der Arm", "noun"],
+    ["the leg", "das Bein", "noun"],
+    ["the hand", "die Hand", "noun"],
+    ["the foot", "der Fuß", "noun"],
+    ["the eye", "das Auge", "noun"],
+    ["the ear", "das Ohr", "noun"],
+    ["the tooth", "der Zahn", "noun"],
+    ["the dentist", "der Zahnarzt", "noun", "Female: die Zahnärztin."],
+    ["to examine", "untersuchen", "verb"],
+    ["to treat", "behandeln", "verb"],
+    ["to prescribe", "verschreiben", "verb"],
+    ["to take medicine", "einnehmen", "verb"],
+    ["to measure", "messen", "verb"],
+    ["to injure oneself", "sich verletzen", "verb"],
+    ["to hurt", "weh tun", "phrase"],
+    ["to rest", "sich ausruhen", "verb"],
+    ["to get healthy", "gesund werden", "phrase"],
+    ["healthy", "gesund", "adjective"],
+    ["weak", "schwach", "adjective"],
+    ["strong", "stark", "adjective"],
+    ["contagious", "ansteckend", "adjective"],
+    ["tired", "müde", "adjective"],
+  ]),
+  ...packStarterWords("behörden", "B2", [
+    ["the application form request", "der Antrag", "noun"],
+    ["the certificate", "die Bescheinigung", "noun"],
+    ["the birth certificate", "die Geburtsurkunde", "noun"],
+    ["the registration certificate", "die Meldebescheinigung", "noun"],
+    ["the passport", "der Reisepass", "noun"],
+    ["the national ID card", "der Personalausweis", "noun"],
+    ["the visa", "das Visum", "noun"],
+    ["the stay", "der Aufenthalt", "noun"],
+    ["the work permit", "die Arbeitserlaubnis", "noun"],
+    ["the tax ID number", "die Steueridentifikationsnummer", "noun"],
+    ["the tax return", "die Steuererklärung", "noun"],
+    ["the tax office", "das Finanzamt", "noun"],
+    ["the immigration office", "die Ausländerbehörde", "noun"],
+    ["the office as authority", "das Amt", "noun"],
+    ["the case worker", "der Sachbearbeiter", "noun", "Female: die Sachbearbeiterin."],
+    ["the waiting number", "die Wartemarke", "noun"],
+    ["the number", "die Nummer", "noun"],
+    ["the counter", "der Schalter", "noun"],
+    ["the signature", "die Unterschrift", "noun"],
+    ["the copy", "die Kopie", "noun"],
+    ["the original", "das Original", "noun"],
+    ["the translation", "die Übersetzung", "noun"],
+    ["the stamp", "der Stempel", "noun"],
+    ["the fee", "die Gebühr", "noun"],
+    ["the reminder letter", "die Mahnung", "noun"],
+    ["the email address", "die E-Mail-Adresse", "noun"],
+    ["the letter", "der Brief", "noun"],
+    ["the mailbox", "der Briefkasten", "noun"],
+    ["the appointment confirmation", "die Terminbestätigung", "noun"],
+    ["the waiting time", "die Wartezeit", "noun"],
+    ["the processing time", "die Bearbeitungszeit", "noun"],
+    ["the decision notice", "der Bescheid", "noun"],
+    ["the permit", "die Erlaubnis", "noun"],
+    ["the obligation", "die Pflicht", "noun"],
+    ["to apply for", "beantragen", "verb"],
+    ["to confirm", "bestätigen", "verb"],
+    ["to copy", "kopieren", "verb"],
+    ["to certify", "beglaubigen", "verb"],
+    ["to pay", "bezahlen", "verb"],
+    ["to bring along", "mitbringen", "verb"],
+    ["to check", "prüfen", "verb"],
+    ["to approve", "genehmigen", "verb"],
+    ["to reject", "ablehnen", "verb"],
+    ["to extend", "verlängern", "verb"],
+    ["to deregister", "abmelden", "verb"],
+    ["to change registration", "ummelden", "verb"],
+    ["required", "erforderlich", "adjective"],
+    ["complete", "vollständig", "adjective"],
+    ["incomplete", "unvollständig", "adjective"],
+    ["official", "offiziell", "adjective"],
+    ["personal in person", "persönlich", "adjective"],
+    ["written", "schriftlich", "adjective"],
+  ]),
+  ...packStarterWords("freizeit", "B1", [
+    ["the friend", "der Freund", "noun", "Female: die Freundin."],
+    ["the family", "die Familie", "noun"],
+    ["the visit", "der Besuch", "noun"],
+    ["the guest", "der Gast", "noun"],
+    ["the party", "die Party", "noun"],
+    ["the celebration", "die Feier", "noun"],
+    ["the birthday", "der Geburtstag", "noun"],
+    ["the gift", "das Geschenk", "noun"],
+    ["the music", "die Musik", "noun"],
+    ["the movie", "der Film", "noun"],
+    ["the series", "die Serie", "noun"],
+    ["the book", "das Buch", "noun"],
+    ["the newspaper", "die Zeitung", "noun"],
+    ["the game", "das Spiel", "noun"],
+    ["the sport", "der Sport", "noun"],
+    ["the gym", "das Fitnessstudio", "noun"],
+    ["the swimming pool", "das Schwimmbad", "noun"],
+    ["the park", "der Park", "noun"],
+    ["the lake", "der See", "noun"],
+    ["the forest", "der Wald", "noun"],
+    ["the trip", "die Reise", "noun"],
+    ["the vacation", "der Urlaub", "noun"],
+    ["the accommodation", "die Unterkunft", "noun"],
+    ["the hotel", "das Hotel", "noun"],
+    ["the holiday apartment", "die Ferienwohnung", "noun"],
+    ["the excursion", "der Ausflug", "noun"],
+    ["the concert", "das Konzert", "noun"],
+    ["the theater", "das Theater", "noun"],
+    ["the cinema", "das Kino", "noun"],
+    ["the museum", "das Museum", "noun"],
+    ["the restaurant", "das Restaurant", "noun"],
+    ["the cafe", "das Café", "noun"],
+    ["the pub", "die Kneipe", "noun"],
+    ["the reservation", "die Reservierung", "noun"],
+    ["the bill at a restaurant", "die Rechnung", "noun"],
+    ["to invite", "einladen", "verb"],
+    ["to visit", "besuchen", "verb"],
+    ["to celebrate", "feiern", "verb"],
+    ["to give a gift", "schenken", "verb"],
+    ["to read", "lesen", "verb"],
+    ["to watch", "schauen", "verb"],
+    ["to play", "spielen", "verb"],
+    ["to train", "trainieren", "verb"],
+    ["to swim", "schwimmen", "verb"],
+    ["to go for a walk", "spazieren gehen", "phrase"],
+    ["to travel", "reisen", "verb"],
+    ["to book", "buchen", "verb"],
+    ["to enjoy", "genießen", "verb"],
+    ["to meet", "sich treffen", "verb"],
+    ["to arrange to meet", "sich verabreden", "verb"],
+    ["to laugh", "lachen", "verb"],
+    ["to tell a story", "erzählen", "verb"],
+    ["tasty", "lecker", "adjective"],
+    ["boring", "langweilig", "adjective"],
+    ["exciting", "spannend", "adjective"],
+    ["interesting", "interessant", "adjective"],
+    ["free of charge", "kostenlos", "adjective"],
+    ["fully booked", "ausgebucht", "adjective"],
+  ]),
+  ...packStarterWords("gefühle", "B1", [
+    ["happy", "glücklich", "adjective"],
+    ["sad", "traurig", "adjective"],
+    ["angry", "wütend", "adjective"],
+    ["disappointed", "enttäuscht", "adjective"],
+    ["satisfied", "zufrieden", "adjective"],
+    ["dissatisfied", "unzufrieden", "adjective"],
+    ["proud", "stolz", "adjective"],
+    ["uncertain", "unsicher", "adjective"],
+    ["safe or certain", "sicher", "adjective"],
+    ["nervous", "nervös", "adjective"],
+    ["calm", "ruhig", "adjective"],
+    ["stressed", "gestresst", "adjective"],
+    ["surprised", "überrascht", "adjective"],
+    ["grateful", "dankbar", "adjective"],
+    ["lonely", "einsam", "adjective"],
+    ["in love", "verliebt", "adjective"],
+    ["jealous", "eifersüchtig", "adjective"],
+    ["hopeful", "hoffnungsvoll", "adjective"],
+    ["clueless", "ratlos", "adjective"],
+    ["the joy", "die Freude", "noun"],
+    ["the sadness", "die Trauer", "noun"],
+    ["the anger", "die Wut", "noun"],
+    ["the disappointment", "die Enttäuschung", "noun"],
+    ["the satisfaction", "die Zufriedenheit", "noun"],
+    ["the worry", "die Sorge", "noun"],
+    ["the stress", "der Stress", "noun"],
+    ["the surprise", "die Überraschung", "noun"],
+    ["the pride", "der Stolz", "noun"],
+    ["the trust", "das Vertrauen", "noun"],
+    ["to be happy about", "sich freuen", "verb"],
+    ["to get annoyed", "sich ärgern", "verb"],
+    ["to worry", "sich Sorgen machen", "phrase"],
+    ["to miss someone", "vermissen", "verb"],
+    ["to hope", "hoffen", "verb"],
+    ["to doubt", "zweifeln", "verb"],
+    ["to be ashamed", "sich schämen", "verb"],
+    ["to be bored", "sich langweilen", "verb"],
+    ["to calm down", "sich beruhigen", "verb"],
+    ["to apologize", "sich entschuldigen", "verb"],
+    ["to thank", "danken", "verb"],
+    ["to argue", "streiten", "verb"],
+    ["to discuss", "diskutieren", "verb"],
+    ["to explain", "erklären", "verb"],
+    ["to listen", "zuhören", "verb"],
+    ["to ask a follow-up question", "nachfragen", "verb"],
+  ]),
+  ...packStarterWords("abstrakt", "B1", [
+    ["the goal", "das Ziel", "noun"],
+    ["the plan", "der Plan", "noun"],
+    ["the idea", "die Idee", "noun"],
+    ["the suggestion", "der Vorschlag", "noun"],
+    ["the possibility", "die Möglichkeit", "noun"],
+    ["the opportunity", "die Gelegenheit", "noun"],
+    ["the problem", "das Problem", "noun"],
+    ["the difficulty", "die Schwierigkeit", "noun"],
+    ["the question", "die Frage", "noun"],
+    ["the answer", "die Antwort", "noun"],
+    ["the cause", "die Ursache", "noun"],
+    ["the consequence", "die Folge", "noun"],
+    ["the result", "das Ergebnis", "noun"],
+    ["the difference", "der Unterschied", "noun"],
+    ["the similarity", "die Ähnlichkeit", "noun"],
+    ["the rule", "die Regel", "noun"],
+    ["the exception", "die Ausnahme", "noun"],
+    ["the explanation", "die Erklärung", "noun"],
+    ["the example", "das Beispiel", "noun"],
+    ["the meaning", "die Bedeutung", "noun"],
+    ["the connection", "der Zusammenhang", "noun"],
+    ["the condition", "die Bedingung", "noun"],
+    ["the change", "die Veränderung", "noun"],
+    ["the improvement", "die Verbesserung", "noun"],
+    ["the development", "die Entwicklung", "noun"],
+    ["the progress", "der Fortschritt", "noun"],
+    ["the future", "die Zukunft", "noun"],
+    ["the past", "die Vergangenheit", "noun"],
+    ["the present", "die Gegenwart", "noun"],
+    ["the situation", "die Situation", "noun"],
+    ["the topic", "das Thema", "noun"],
+    ["the detail", "das Detail", "noun"],
+    ["the overview", "der Überblick", "noun"],
+    ["the focus", "der Fokus", "noun"],
+    ["the priority", "die Priorität", "noun"],
+    ["to understand", "verstehen", "verb"],
+    ["to justify", "begründen", "verb"],
+    ["to prove", "beweisen", "verb"],
+    ["to consider", "überlegen", "verb"],
+    ["to think about", "nachdenken", "verb"],
+    ["to believe", "glauben", "verb"],
+    ["to mean as opinion", "meinen", "verb"],
+    ["to notice or determine", "feststellen", "verb"],
+    ["to recognize", "erkennen", "verb"],
+    ["to expect", "erwarten", "verb"],
+    ["to assume", "vermuten", "verb"],
+    ["to change", "ändern", "verb"],
+    ["to manage", "schaffen", "verb"],
+    ["to fail", "scheitern", "verb"],
+    ["to succeed", "gelingen", "verb"],
+    ["to influence", "beeinflussen", "verb"],
+    ["to affect", "betreffen", "verb"],
+    ["to describe", "beschreiben", "verb"],
+    ["to summarize", "zusammenfassen", "verb"],
+    ["important", "wichtig", "adjective"],
+    ["unimportant", "unwichtig", "adjective"],
+    ["clear", "eindeutig", "adjective"],
+    ["unclear", "unklar", "adjective"],
+    ["complicated", "kompliziert", "adjective"],
+    ["simple", "einfach", "adjective"],
+    ["typical", "typisch", "adjective"],
+    ["rare", "selten", "adjective"],
+    ["frequent", "häufig", "adjective"],
+    ["regularly", "regelmäßig", "adverb"],
+    ["occasionally", "gelegentlich", "adverb"],
+    ["basically", "grundsätzlich", "adverb"],
+    ["exactly", "genau", "adverb"],
+    ["approximately", "ungefähr", "adverb"],
+    ["immediately", "sofort", "adverb"],
+    ["later", "später", "adverb"],
+  ]),
+  ...packStarterWords("alltag", "B1", [
+    ["the bank", "die Bank", "noun"],
+    ["the cash", "das Bargeld", "noun"],
+    ["the card", "die Karte", "noun"],
+    ["the debit card", "die EC-Karte", "noun"],
+    ["the credit card", "die Kreditkarte", "noun"],
+    ["the account balance", "der Kontostand", "noun"],
+    ["the payment", "die Zahlung", "noun"],
+    ["the direct debit", "die Lastschrift", "noun"],
+    ["the installment", "die Rate", "noun"],
+    ["the amount", "der Betrag", "noun"],
+    ["the tax", "die Steuer", "noun"],
+    ["the fee in daily life", "die Gebühr", "noun"],
+    ["the reminder fee", "die Mahngebühr", "noun"],
+    ["the subscription", "das Abo", "noun"],
+    ["the contract cancellation", "die Vertragskündigung", "noun"],
+    ["the customer service", "der Kundenservice", "noun"],
+    ["the password", "das Passwort", "noun"],
+    ["the username", "der Benutzername", "noun"],
+    ["the app", "die App", "noun"],
+    ["the website", "die Webseite", "noun"],
+    ["the login", "die Anmeldung", "noun"],
+    ["the connection online", "die Internetverbindung", "noun"],
+    ["the data volume", "das Datenvolumen", "noun"],
+    ["the mobile contract", "der Handyvertrag", "noun"],
+    ["to transfer money", "Geld überweisen", "phrase"],
+    ["to pay by card", "mit Karte bezahlen", "phrase"],
+    ["to cancel a contract", "einen Vertrag kündigen", "phrase"],
+    ["to log in", "sich anmelden", "verb"],
+    ["to log out", "sich abmelden", "verb"],
+    ["to download", "herunterladen", "verb"],
+    ["to upload", "hochladen", "verb"],
+    ["to save", "speichern", "verb"],
+    ["to delete", "löschen", "verb"],
+    ["to open", "öffnen", "verb"],
+    ["to close", "schließen", "verb"],
+    ["to send", "senden", "verb"],
+    ["to receive", "empfangen", "verb"],
+    ["digital", "digital", "adjective"],
+    ["secure", "sicher", "adjective"],
+    ["private", "privat", "adjective"],
+    ["public", "öffentlich", "adjective"],
+  ]),
+  ...packStarterWords("arbeit", "B2", [
+    ["the responsibility area", "der Verantwortungsbereich", "noun"],
+    ["the leadership", "die Führung", "noun"],
+    ["the management", "die Geschäftsführung", "noun"],
+    ["the company", "das Unternehmen", "noun"],
+    ["the department head", "die Abteilungsleitung", "noun"],
+    ["the human resources department", "die Personalabteilung", "noun"],
+    ["the job interview", "das Vorstellungsgespräch", "noun"],
+    ["the cover letter", "das Anschreiben", "noun"],
+    ["the resume", "der Lebenslauf", "noun"],
+    ["the certificate at work", "das Zeugnis", "noun"],
+    ["the reference", "die Referenz", "noun"],
+    ["the position", "die Stelle", "noun"],
+    ["the task area", "das Aufgabengebiet", "noun"],
+    ["the working condition", "die Arbeitsbedingung", "noun"],
+    ["the overtime", "die Überstunde", "noun"],
+    ["the vacation day", "der Urlaubstag", "noun"],
+    ["the sick note", "die Krankmeldung", "noun"],
+    ["the payroll", "die Gehaltsabrechnung", "noun"],
+    ["the tax class", "die Steuerklasse", "noun"],
+    ["the social contribution", "der Sozialbeitrag", "noun"],
+    ["the pension insurance", "die Rentenversicherung", "noun"],
+    ["the unemployment insurance", "die Arbeitslosenversicherung", "noun"],
+    ["the accident insurance", "die Unfallversicherung", "noun"],
+    ["the employment agency", "die Arbeitsagentur", "noun"],
+    ["the training program", "die Ausbildung", "noun"],
+    ["the apprentice", "der Auszubildende", "noun", "Short form: der Azubi."],
+    ["the qualification", "die Qualifikation", "noun"],
+    ["the certificate of completion", "der Abschluss", "noun"],
+    ["the responsibility handover", "die Übergabe", "noun"],
+    ["the agreement", "die Vereinbarung", "noun"],
+    ["the negotiation round", "die Verhandlungsrunde", "noun"],
+    ["the budget", "das Budget", "noun"],
+    ["the expense", "die Ausgabe", "noun"],
+    ["the revenue", "der Umsatz", "noun"],
+    ["the profit", "der Gewinn", "noun"],
+    ["the loss", "der Verlust", "noun"],
+    ["the target group", "die Zielgruppe", "noun"],
+    ["the market", "der Markt", "noun"],
+    ["the offer as proposal", "das Angebot", "noun"],
+    ["the proposal", "das Angebotsschreiben", "noun"],
+    ["the invoice number", "die Rechnungsnummer", "noun"],
+    ["the due date", "das Fälligkeitsdatum", "noun"],
+    ["to apply for a job", "sich auf eine Stelle bewerben", "phrase"],
+    ["to arrange a meeting", "einen Termin vereinbaren", "phrase"],
+    ["to take responsibility", "Verantwortung übernehmen", "phrase"],
+    ["to hand over", "übergeben", "verb"],
+    ["to delegate", "delegieren", "verb"],
+    ["to clarify", "klären", "verb"],
+    ["to coordinate", "abstimmen", "verb"],
+    ["to implement", "umsetzen", "verb"],
+    ["to document", "dokumentieren", "verb"],
+    ["to evaluate", "bewerten", "verb"],
+    ["to estimate", "einschätzen", "verb"],
+    ["to request", "anfordern", "verb"],
+    ["to approve at work", "freigeben", "verb"],
+    ["to reject a proposal", "ablehnen", "verb"],
+    ["independent", "eigenständig", "adjective"],
+    ["responsible", "verantwortlich", "adjective"],
+    ["efficient", "effizient", "adjective"],
+    ["transparent", "transparent", "adjective"],
+    ["binding", "verbindlich", "adjective"],
+  ]),
+  ...packStarterWords("alltag", "B2", [
+    ["the consumer", "der Verbraucher", "noun", "Female: die Verbraucherin."],
+    ["the consumer protection", "der Verbraucherschutz", "noun"],
+    ["the membership", "die Mitgliedschaft", "noun"],
+    ["the notice period", "die Kündigungsfrist", "noun"],
+    ["the cancellation confirmation", "die Kündigungsbestätigung", "noun"],
+    ["the subscription fee", "der Mitgliedsbeitrag", "noun"],
+    ["the security deposit", "die Sicherheitsleistung", "noun"],
+    ["the insurance policy", "die Versicherungspolice", "noun"],
+    ["the claim", "der Anspruch", "noun"],
+    ["the support hotline", "die Hotline", "noun"],
+    ["the waiting loop", "die Warteschleife", "noun"],
+    ["the callback", "der Rückruf", "noun"],
+    ["the replacement device", "das Ersatzgerät", "noun"],
+    ["the warranty claim", "der Garantiefall", "noun"],
+    ["the defect", "der Mangel", "noun"],
+    ["the complaint department", "die Reklamationsabteilung", "noun"],
+    ["the refund", "die Erstattung", "noun"],
+    ["the voucher", "der Gutschein", "noun"],
+    ["the confirmation", "die Bestätigung", "noun"],
+    ["the notification", "die Benachrichtigung", "noun"],
+    ["the setting", "die Einstellung", "noun"],
+    ["the permission", "die Berechtigung", "noun"],
+    ["the privacy", "die Privatsphäre", "noun"],
+    ["the data protection", "der Datenschutz", "noun"],
+    ["the terms and conditions", "die AGB", "noun", "Short for Allgemeine Geschäftsbedingungen."],
+    ["the password reset", "das Zurücksetzen des Passworts", "phrase"],
+    ["the confirmation code", "der Bestätigungscode", "noun"],
+    ["the device", "das Gerät", "noun"],
+    ["the charger", "das Ladegerät", "noun"],
+    ["the screen", "der Bildschirm", "noun"],
+    ["the keyboard", "die Tastatur", "noun"],
+    ["the mouse", "die Maus", "noun"],
+    ["the headphones", "die Kopfhörer", "noun"],
+    ["the receipt number", "die Belegnummer", "noun"],
+    ["the delivery address", "die Lieferadresse", "noun"],
+    ["the billing address", "die Rechnungsadresse", "noun"],
+    ["to complain about goods", "reklamieren", "verb"],
+    ["to request a refund", "eine Erstattung beantragen", "phrase"],
+    ["to confirm", "bestätigen", "verb"],
+    ["to activate", "aktivieren", "verb"],
+    ["to deactivate", "deaktivieren", "verb"],
+    ["to update", "aktualisieren", "verb"],
+    ["to connect", "verbinden", "verb"],
+    ["to disconnect", "trennen", "verb"],
+    ["to reset", "zurücksetzen", "verb"],
+    ["to enter a code", "einen Code eingeben", "phrase"],
+    ["to scan", "scannen", "verb"],
+    ["to print out", "ausdrucken", "verb"],
+    ["to request support", "Support anfordern", "phrase"],
+    ["available online", "online verfügbar", "phrase"],
+    ["out of stock", "nicht vorrätig", "phrase"],
+  ]),
+  ...packStarterWords("gesundheit", "B2", [
+    ["the blood pressure", "der Blutdruck", "noun"],
+    ["the blood test", "die Blutuntersuchung", "noun"],
+    ["the laboratory result", "der Laborwert", "noun"],
+    ["the medical finding", "der Befund", "noun"],
+    ["the infection", "die Infektion", "noun"],
+    ["the inflammation", "die Entzündung", "noun"],
+    ["the wound", "die Wunde", "noun"],
+    ["the injury", "die Verletzung", "noun"],
+    ["the fracture", "der Bruch", "noun"],
+    ["the swelling", "die Schwellung", "noun"],
+    ["the rash", "der Ausschlag", "noun"],
+    ["the side effect", "die Nebenwirkung", "noun"],
+    ["the dosage", "die Dosierung", "noun"],
+    ["the package leaflet", "die Packungsbeilage", "noun"],
+    ["the emergency service", "der Notdienst", "noun"],
+    ["the ambulance", "der Krankenwagen", "noun"],
+    ["the caregiver", "die Pflegekraft", "noun"],
+    ["the care insurance", "die Pflegeversicherung", "noun"],
+    ["the mental health", "die psychische Gesundheit", "noun"],
+    ["the therapy appointment", "der Therapietermin", "noun"],
+    ["the stress symptom", "das Stresssymptom", "noun"],
+    ["the sleep problem", "das Schlafproblem", "noun"],
+    ["the nutrition", "die Ernährung", "noun"],
+    ["the movement", "die Bewegung", "noun"],
+    ["the prevention", "die Vorsorge", "noun"],
+    ["the checkup", "die Vorsorgeuntersuchung", "noun"],
+    ["to make an appointment with a specialist", "einen Facharzttermin vereinbaren", "phrase"],
+    ["to describe symptoms", "Symptome beschreiben", "phrase"],
+    ["to tolerate medicine", "ein Medikament vertragen", "phrase"],
+    ["to stop taking medicine", "ein Medikament absetzen", "phrase"],
+    ["to cool a wound", "eine Wunde kühlen", "phrase"],
+    ["to disinfect", "desinfizieren", "verb"],
+    ["to bandage", "verbinden", "verb"],
+    ["to diagnose", "diagnostizieren", "verb"],
+    ["to prevent", "vorbeugen", "verb"],
+    ["to reduce stress", "Stress abbauen", "phrase"],
+    ["chronic", "chronisch", "adjective"],
+    ["acute", "akut", "adjective"],
+    ["painful", "schmerzhaft", "adjective"],
+    ["harmless", "harmlos", "adjective"],
+    ["serious", "ernst", "adjective"],
+    ["insured", "versichert", "adjective"],
+    ["private health insured", "privat versichert", "phrase"],
+    ["statutory health insured", "gesetzlich versichert", "phrase"],
+  ]),
+  ...packStarterWords("behörden", "B2", [
+    ["the social security number", "die Sozialversicherungsnummer", "noun"],
+    ["the pension notice", "der Rentenbescheid", "noun"],
+    ["the contribution statement", "die Beitragsbescheinigung", "noun"],
+    ["the employment certificate", "die Arbeitsbescheinigung", "noun"],
+    ["the certificate of good conduct", "das Führungszeugnis", "noun"],
+    ["the residence registration", "die Wohnsitzanmeldung", "noun"],
+    ["the deregistration confirmation", "die Abmeldebestätigung", "noun"],
+    ["the change of address", "die Adressänderung", "noun"],
+    ["the civil registry office", "das Standesamt", "noun"],
+    ["the marriage certificate", "die Heiratsurkunde", "noun"],
+    ["the driving license office", "die Führerscheinstelle", "noun"],
+    ["the vehicle registration office", "die Zulassungsstelle", "noun"],
+    ["the registration certificate for car", "die Zulassungsbescheinigung", "noun"],
+    ["the license plate", "das Kennzeichen", "noun"],
+    ["the fine", "das Bußgeld", "noun"],
+    ["the objection", "der Widerspruch", "noun"],
+    ["the deadline extension", "die Fristverlängerung", "noun"],
+    ["the processing fee", "die Bearbeitungsgebühr", "noun"],
+    ["the appointment booking", "die Terminbuchung", "noun"],
+    ["the online application", "der Online-Antrag", "noun"],
+    ["the user account", "das Nutzerkonto", "noun"],
+    ["the consent", "die Zustimmung", "noun"],
+    ["the power of attorney", "die Vollmacht", "noun"],
+    ["the authorized person", "die bevollmächtigte Person", "noun"],
+    ["the original document", "das Originaldokument", "noun"],
+    ["the missing document", "die fehlende Unterlage", "noun"],
+    ["the certified copy", "die beglaubigte Kopie", "noun"],
+    ["the sworn translation", "die beglaubigte Übersetzung", "noun"],
+    ["to submit later", "nachreichen", "verb"],
+    ["to make an objection", "Widerspruch einlegen", "phrase"],
+    ["to extend a deadline", "eine Frist verlängern", "phrase"],
+    ["to book an appointment", "einen Termin buchen", "phrase"],
+    ["to upload documents", "Unterlagen hochladen", "phrase"],
+    ["to prove identity", "die Identität nachweisen", "phrase"],
+    ["to authorize someone", "jemanden bevollmächtigen", "phrase"],
+    ["to register a car", "ein Auto zulassen", "phrase"],
+    ["to pay a fine", "ein Bußgeld bezahlen", "phrase"],
+    ["subject to approval", "genehmigungspflichtig", "adjective"],
+    ["liable to pay contributions", "beitragspflichtig", "adjective"],
+    ["taxable", "steuerpflichtig", "adjective"],
+    ["valid until", "gültig bis", "phrase"],
+    ["retroactive", "rückwirkend", "adjective"],
+    ["legally binding", "rechtsverbindlich", "adjective"],
+    ["responsible authority", "zuständige Behörde", "phrase"],
+  ]),
+  ...packStarterWords("freizeit", "B2", [
+    ["the event", "die Veranstaltung", "noun"],
+    ["the guided tour", "die Führung", "noun"],
+    ["the entrance fee", "der Eintritt", "noun"],
+    ["the ticket reservation", "die Kartenreservierung", "noun"],
+    ["the seat", "der Sitzplatz", "noun"],
+    ["the standing room", "der Stehplatz", "noun"],
+    ["the stage", "die Bühne", "noun"],
+    ["the audience", "das Publikum", "noun"],
+    ["the performance", "die Aufführung", "noun"],
+    ["the review", "die Bewertung", "noun"],
+    ["the recommendation", "die Empfehlung", "noun"],
+    ["the destination", "das Reiseziel", "noun"],
+    ["the luggage", "das Gepäck", "noun"],
+    ["the suitcase", "der Koffer", "noun"],
+    ["the backpack", "der Rucksack", "noun"],
+    ["the boarding pass", "die Bordkarte", "noun"],
+    ["the accommodation booking", "die Unterkunftsbuchung", "noun"],
+    ["the cancellation fee", "die Stornogebühr", "noun"],
+    ["the travel insurance", "die Reiseversicherung", "noun"],
+    ["the sightseeing", "die Besichtigung", "noun"],
+    ["the menu", "die Speisekarte", "noun"],
+    ["the starter", "die Vorspeise", "noun"],
+    ["the main course", "das Hauptgericht", "noun"],
+    ["the dessert", "die Nachspeise", "noun"],
+    ["the tip", "das Trinkgeld", "noun"],
+    ["the ingredient", "die Zutat", "noun"],
+    ["the allergy information", "der Allergiehinweis", "noun"],
+    ["to attend an event", "eine Veranstaltung besuchen", "phrase"],
+    ["to reserve seats", "Sitzplätze reservieren", "phrase"],
+    ["to recommend", "empfehlen", "verb"],
+    ["to rate", "bewerten", "verb"],
+    ["to cancel a booking", "eine Buchung stornieren", "phrase"],
+    ["to check in", "einchecken", "verb"],
+    ["to check out", "auschecken", "verb"],
+    ["to pack", "packen", "verb"],
+    ["to unpack", "auspacken", "verb"],
+    ["to order food", "Essen bestellen", "phrase"],
+    ["to split the bill", "die Rechnung teilen", "phrase"],
+    ["to leave a tip", "Trinkgeld geben", "phrase"],
+    ["included", "inbegriffen", "adjective"],
+    ["not included", "nicht inbegriffen", "phrase"],
+    ["recommended", "empfehlenswert", "adjective"],
+    ["worth seeing", "sehenswert", "adjective"],
+    ["fully booked out", "ausverkauft", "adjective"],
+  ]),
+  ...packStarterWords("abstrakt", "B2", [
+    ["the argument", "das Argument", "noun"],
+    ["the counterargument", "das Gegenargument", "noun"],
+    ["the claim", "die Behauptung", "noun"],
+    ["the assumption", "die Annahme", "noun"],
+    ["the conclusion", "die Schlussfolgerung", "noun"],
+    ["the perspective", "die Perspektive", "noun"],
+    ["the point of view", "der Standpunkt", "noun"],
+    ["the compromise", "der Kompromiss", "noun"],
+    ["the conflict", "der Konflikt", "noun"],
+    ["the influence", "der Einfluss", "noun"],
+    ["the impact", "die Auswirkung", "noun"],
+    ["the measure", "die Maßnahme", "noun"],
+    ["the risk", "das Risiko", "noun"],
+    ["the chance", "die Chance", "noun"],
+    ["the challenge", "die Herausforderung", "noun"],
+    ["the demand", "die Forderung", "noun"],
+    ["the supply", "das Angebot", "noun"],
+    ["the need", "der Bedarf", "noun"],
+    ["the society", "die Gesellschaft", "noun"],
+    ["the population", "die Bevölkerung", "noun"],
+    ["the integration", "die Integration", "noun"],
+    ["the education", "die Bildung", "noun"],
+    ["the equality", "die Gleichberechtigung", "noun"],
+    ["the sustainability", "die Nachhaltigkeit", "noun"],
+    ["the climate protection", "der Klimaschutz", "noun"],
+    ["the energy", "die Energie", "noun"],
+    ["the renewable energy", "die erneuerbare Energie", "noun"],
+    ["the consumption", "der Verbrauch", "noun"],
+    ["the resource", "die Ressource", "noun"],
+    ["the waste", "der Abfall", "noun"],
+    ["the pollution", "die Verschmutzung", "noun"],
+    ["the responsibility in society", "die Verantwortung", "noun"],
+    ["the participation", "die Beteiligung", "noun"],
+    ["the decision making", "die Entscheidungsfindung", "noun"],
+    ["the requirement in general", "die Anforderung", "noun"],
+    ["to claim", "behaupten", "verb"],
+    ["to assume", "annehmen", "verb"],
+    ["to conclude", "schlussfolgern", "verb"],
+    ["to point out", "hinweisen auf", "phrase"],
+    ["to emphasize", "betonen", "verb"],
+    ["to criticize", "kritisieren", "verb"],
+    ["to support", "unterstützen", "verb"],
+    ["to demand", "fordern", "verb"],
+    ["to promote", "fördern", "verb"],
+    ["to prevent", "verhindern", "verb"],
+    ["to enable", "ermöglichen", "verb"],
+    ["to limit", "einschränken", "verb"],
+    ["to increase", "erhöhen", "verb"],
+    ["to reduce", "verringern", "verb"],
+    ["to replace", "ersetzen", "verb"],
+    ["to participate", "sich beteiligen", "verb"],
+    ["to contribute", "beitragen", "verb"],
+    ["to take into account", "berücksichtigen", "verb"],
+    ["to distinguish", "unterscheiden", "verb"],
+    ["to relate to", "sich beziehen auf", "phrase"],
+    ["convincing", "überzeugend", "adjective"],
+    ["controversial", "umstritten", "adjective"],
+    ["sustainable", "nachhaltig", "adjective"],
+    ["social", "sozial", "adjective"],
+    ["economic", "wirtschaftlich", "adjective"],
+    ["political", "politisch", "adjective"],
+    ["legal", "rechtlich", "adjective"],
+    ["environmentally friendly", "umweltfreundlich", "adjective"],
+    ["limited", "begrenzt", "adjective"],
+    ["necessary in general", "erforderlich", "adjective"],
+    ["on the one hand", "einerseits", "adverb"],
+    ["on the other hand", "andererseits", "adverb"],
+    ["in addition", "außerdem", "adverb"],
+    ["however", "allerdings", "adverb"],
+    ["nevertheless", "dennoch", "adverb"],
+    ["consequently", "folglich", "adverb"],
+  ]),
+  ...packStarterWords("alltag", "B1", [
+    ["the appointment reminder", "die Terminerinnerung", "noun"],
+    ["the waiting room", "das Wartezimmer", "noun"],
+    ["the entrance", "der Eingang", "noun"],
+    ["the exit from a building", "der Ausgang", "noun"],
+    ["the floor in a building", "die Etage", "noun"],
+    ["the stairs", "die Treppe", "noun"],
+    ["the information desk", "die Information", "noun"],
+    ["the sign", "das Schild", "noun"],
+    ["the instruction", "die Anweisung", "noun"],
+    ["the notice", "der Hinweis", "noun"],
+    ["the opening time", "die Öffnungszeit", "noun"],
+    ["the closing time", "die Schließzeit", "noun"],
+    ["the lost property office", "das Fundbüro", "noun"],
+    ["the lost item", "der verlorene Gegenstand", "noun"],
+    ["the emergency exit", "der Notausgang", "noun"],
+    ["the meeting point", "der Treffpunkt", "noun"],
+    ["to stand in line", "sich anstellen", "verb"],
+    ["to ask for directions", "nach dem Weg fragen", "phrase"],
+    ["to follow a sign", "einem Schild folgen", "phrase"],
+    ["to show an ID", "einen Ausweis zeigen", "phrase"],
+    ["to pick something up", "etwas abholen", "phrase"],
+    ["to drop something off", "etwas abgeben", "phrase"],
+    ["to be on time", "rechtzeitig da sein", "phrase"],
+    ["nearby", "in der Nähe", "phrase"],
+    ["on the left", "auf der linken Seite", "phrase"],
+    ["on the right", "auf der rechten Seite", "phrase"],
+  ]),
 ];
 
 const memoryTricks = [
@@ -372,6 +1290,8 @@ const dailyPhrases = [
 
 let db = loadDb();
 let activeRound = null;
+let activeStatusFilter = "learning";
+let lastStatusMoveMessage = "";
 
 const els = {
   appShell: document.querySelector(".app-shell"),
@@ -398,6 +1318,14 @@ const els = {
   statusNewCount: document.querySelector("#statusNewCount"),
   statusLearningCount: document.querySelector("#statusLearningCount"),
   statusMasteredCount: document.querySelector("#statusMasteredCount"),
+  wordManagerSummary: document.querySelector("#wordManagerSummary"),
+  statusLearningBtn: document.querySelector("#statusLearningBtn"),
+  statusMasteredBtn: document.querySelector("#statusMasteredBtn"),
+  statusNewBtn: document.querySelector("#statusNewBtn"),
+  learningListCount: document.querySelector("#learningListCount"),
+  masteredListCount: document.querySelector("#masteredListCount"),
+  newListCount: document.querySelector("#newListCount"),
+  statusWordList: document.querySelector("#statusWordList"),
   sessionBars: document.querySelector("#sessionBars"),
   dashboardPanel: document.querySelector("#dashboardPanel"),
   recapPanel: document.querySelector("#recapPanel"),
@@ -444,9 +1372,9 @@ const els = {
 function createSeedDb() {
   const now = new Date().toISOString();
   return {
-    version: 1,
+    version: STARTER_BANK_VERSION,
     created_at: now,
-    words: starterWords.map((row, index) => ({
+    words: getStarterWordRows().map((row, index) => ({
       id: `seed-${String(index + 1).padStart(3, "0")}`,
       word_en: row[0],
       word_de: row[1],
@@ -500,6 +1428,10 @@ function loadDb() {
     const parsed = JSON.parse(raw);
     parsed.words = (parsed.words || []).map(normalizeWordRecord);
     parsed.sessions = parsed.sessions || [];
+    const addedStarterWords = mergeStarterWords(parsed);
+    const shouldPersistUpgrade = addedStarterWords || Number(parsed.version || 0) < STARTER_BANK_VERSION;
+    parsed.version = STARTER_BANK_VERSION;
+    if (shouldPersistUpgrade) storage.set(JSON.stringify(parsed));
     return parsed;
   } catch {
     const seeded = createSeedDb();
@@ -526,6 +1458,48 @@ function normalizeWordRecord(word) {
     notes: word.notes || "",
     created_at: word.created_at || new Date().toISOString(),
   };
+}
+
+function getStarterWordRows() {
+  const rows = [...starterWords, ...supplementalStarterWords];
+  const seen = new Set();
+  return rows.filter((row) => {
+    const key = normalizeAnswer(`${row[0]}|${row[1]}`);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function mergeStarterWords(database) {
+  const existingKeys = new Set(database.words.map((word) => normalizeAnswer(`${word.word_en}|${word.word_de}`)));
+  let added = 0;
+  getStarterWordRows().forEach((row, index) => {
+    const key = normalizeAnswer(`${row[0]}|${row[1]}`);
+    if (existingKeys.has(key)) return;
+    database.words.push(
+      normalizeWordRecord({
+        id: `seed-${String(index + 1).padStart(3, "0")}`,
+        word_en: row[0],
+        word_de: row[1],
+        part_of_speech: row[2],
+        topic: row[3],
+        status: "new",
+        correct_streak: 0,
+        times_seen: 0,
+        wrong_count: 0,
+        half_count: 0,
+        last_seen: "",
+        last_result: "",
+        difficulty: row[4],
+        notes: row[5],
+        created_at: new Date().toISOString(),
+      })
+    );
+    existingKeys.add(key);
+    added += 1;
+  });
+  return added;
 }
 
 function saveDb() {
@@ -808,6 +1782,20 @@ function toggleRecap() {
   const shouldOpen = els.recapPanel.hidden;
   closeUtilityPanels();
   els.recapPanel.hidden = !shouldOpen;
+}
+
+function handleOutsidePanelClick(event) {
+  const hasOpenPanel = !els.dashboardPanel.hidden || !els.recapPanel.hidden;
+  if (!hasOpenPanel) return;
+
+  const target = event.target;
+  const clickedPanel = els.dashboardPanel.contains(target) || els.recapPanel.contains(target);
+  const clickedToggle = els.dashboardToggleBtn.contains(target) || els.recapToggleBtn.contains(target);
+  if (!clickedPanel && !clickedToggle) closeUtilityPanels();
+}
+
+function handleEscapeKey(event) {
+  if (event.key === "Escape") closeUtilityPanels();
 }
 
 function toPrompt(text) {
@@ -1219,8 +2207,8 @@ function renderDashboard() {
   els.choiceBestScore.textContent = getBestScoreLabel("choice", 10);
   els.streakCount.textContent = String(getCurrentStreak());
   els.storageStatus.textContent = storage.persistent
-    ? "Progress is saved locally in this browser."
-    : "Temporary mode: this browser blocked persistent storage. Use CSV export/import for backup.";
+    ? `Progress is saved locally in this browser. Word bank: ${db.words.length}/${getStarterWordRows().length}.`
+    : `Temporary mode: this browser blocked persistent storage. Word bank: ${db.words.length}/${getStarterWordRows().length}. Use CSV export/import for backup.`;
   els.storageStatus.classList.toggle("warning", !storage.persistent);
   els.masteryLabel.textContent = `${masteryPercent}%`;
   els.masteryBar.style.width = `${masteryPercent}%`;
@@ -1236,6 +2224,7 @@ function renderDashboard() {
   els.statusLearningCount.textContent = String(learning);
   els.statusMasteredCount.textContent = String(mastered);
   renderSessionBars();
+  renderStatusWordList();
   renderHardWords();
 }
 
@@ -1323,6 +2312,149 @@ function renderDailyPhrase() {
   els.phraseGerman.textContent = `"${phrase.de}"`;
   els.phraseMeaning.textContent = phrase.en;
   els.phraseNote.textContent = phrase.note;
+}
+
+function setStatusFilter(status) {
+  activeStatusFilter = status;
+  lastStatusMoveMessage = "";
+  renderStatusWordList();
+}
+
+function renderStatusWordList() {
+  const counts = {
+    learning: db.words.filter((word) => word.status === "learning").length,
+    mastered: db.words.filter((word) => word.status === "mastered").length,
+    new: db.words.filter((word) => word.status === "new").length,
+  };
+  const buttons = [
+    ["learning", els.statusLearningBtn],
+    ["mastered", els.statusMasteredBtn],
+    ["new", els.statusNewBtn],
+  ];
+
+  els.learningListCount.textContent = String(counts.learning);
+  els.masteredListCount.textContent = String(counts.mastered);
+  els.newListCount.textContent = String(counts.new);
+
+  buttons.forEach(([status, button]) => {
+    const active = activeStatusFilter === status;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
+
+  const words = sortStatusWords(db.words.filter((word) => word.status === activeStatusFilter), activeStatusFilter);
+  const meta = getStatusMeta(activeStatusFilter);
+  els.wordManagerSummary.textContent =
+    lastStatusMoveMessage
+      ? lastStatusMoveMessage
+      : `${counts[activeStatusFilter]} ${meta.label.toLowerCase()} word${counts[activeStatusFilter] === 1 ? "" : "s"}`;
+
+  if (!words.length) {
+    els.statusWordList.innerHTML = `<p class="mini-status">${meta.empty}</p>`;
+    return;
+  }
+
+  els.statusWordList.innerHTML = words
+    .map((word) => {
+      const lastResult = word.last_result ? ` · last: ${word.last_result}` : "";
+      const notes = word.notes ? `<small>${escapeHtml(word.notes)}</small>` : "";
+      return `
+        <article class="status-word-row">
+          <div>
+            <strong>${escapeHtml(toPrompt(word.word_en))} → ${escapeHtml(word.word_de)}</strong>
+            <span>${escapeHtml(word.topic)} · ${escapeHtml(word.difficulty)} · streak ${word.correct_streak} · seen ${word.times_seen}${lastResult}</span>
+            ${notes}
+          </div>
+          <button class="${meta.buttonClass}" type="button" data-word-action="status" data-word-id="${escapeHtml(word.id)}" data-target-status="${meta.target}">
+            ${meta.action}
+          </button>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function sortStatusWords(words, status) {
+  const sorted = [...words];
+  if (status === "learning") {
+    return sorted.sort(
+      (a, b) =>
+        Number(b.wrong_count || 0) - Number(a.wrong_count || 0) ||
+        Number(a.correct_streak || 0) - Number(b.correct_streak || 0) ||
+        Number(b.times_seen || 0) - Number(a.times_seen || 0) ||
+        a.word_en.localeCompare(b.word_en)
+    );
+  }
+  if (status === "mastered") {
+    return sorted.sort(
+      (a, b) =>
+        (b.last_seen || "").localeCompare(a.last_seen || "") ||
+        Number(b.correct_streak || 0) - Number(a.correct_streak || 0) ||
+        a.word_en.localeCompare(b.word_en)
+    );
+  }
+  return sorted.sort(
+    (a, b) =>
+      TOPIC_PRIORITY.indexOf(a.topic) - TOPIC_PRIORITY.indexOf(b.topic) ||
+      a.difficulty.localeCompare(b.difficulty) ||
+      a.word_en.localeCompare(b.word_en)
+  );
+}
+
+function getStatusMeta(status) {
+  if (status === "mastered") {
+    return {
+      label: "Mastered",
+      action: "Move to learning",
+      target: "learning",
+      buttonClass: "secondary-button status-move-button",
+      empty: "No mastered words yet. They graduate after a solid streak.",
+    };
+  }
+  if (status === "new") {
+    return {
+      label: "New",
+      action: "Start learning",
+      target: "learning",
+      buttonClass: "secondary-button status-move-button",
+      empty: "No new words waiting. The bank is fully in play.",
+    };
+  }
+  return {
+    label: "Learning",
+    action: "Mark mastered",
+    target: "mastered",
+    buttonClass: "primary-button status-move-button",
+    empty: "No learning words right now. Start a round and some words will enter the arena.",
+  };
+}
+
+function handleStatusWordAction(event) {
+  const button = event.target.closest("[data-word-action='status']");
+  if (!button) return;
+  event.stopPropagation();
+
+  const word = db.words.find((item) => item.id === button.dataset.wordId);
+  if (!word) return;
+
+  const targetStatus = button.dataset.targetStatus;
+  const oldStatus = word.status;
+  moveWordToStatus(word, targetStatus);
+  lastStatusMoveMessage = `${word.word_de} moved from ${oldStatus} to ${targetStatus}.`;
+  els.coachMessage.textContent = `${word.word_de} moved from ${oldStatus} to ${targetStatus}.`;
+  saveDb();
+}
+
+function moveWordToStatus(word, targetStatus) {
+  if (targetStatus === "mastered") {
+    word.status = "mastered";
+    word.correct_streak = Math.max(3, Number(word.correct_streak || 0));
+    return;
+  }
+  if (targetStatus === "learning") {
+    word.status = "learning";
+    word.correct_streak = 0;
+  }
 }
 
 function renderHardWords() {
@@ -1604,12 +2736,28 @@ els.dashboardToggleBtn.addEventListener("click", toggleDashboard);
 els.recapToggleBtn.addEventListener("click", toggleRecap);
 els.closeDashboardBtn.addEventListener("click", closeUtilityPanels);
 els.closeRecapBtn.addEventListener("click", closeUtilityPanels);
+els.statusLearningBtn.addEventListener("click", () => setStatusFilter("learning"));
+els.statusMasteredBtn.addEventListener("click", () => setStatusFilter("mastered"));
+els.statusNewBtn.addEventListener("click", () => setStatusFilter("new"));
+els.statusWordList.addEventListener("click", handleStatusWordAction);
+els.dashboardPanel.addEventListener("click", (event) => event.stopPropagation());
+els.recapPanel.addEventListener("click", (event) => event.stopPropagation());
 els.quizForm.addEventListener("submit", submitAnswers);
 els.addWordsBtn.addEventListener("click", addWordsFromText);
 els.exportCsvBtn.addEventListener("click", exportCsv);
 els.importCsvInput.addEventListener("change", importCsv);
 els.sampleCsvBtn.addEventListener("click", showSampleCsv);
 els.resetBtn.addEventListener("click", resetDb);
+document.addEventListener("click", handleOutsidePanelClick);
+document.addEventListener("keydown", handleEscapeKey);
 
 renderDailyPhrase();
 renderDashboard();
+
+if ("serviceWorker" in window.navigator) {
+  window.addEventListener("load", () => {
+    window.navigator.serviceWorker.register("./service-worker.js").catch(() => {
+      // The app still works without offline caching, so registration failures stay quiet.
+    });
+  });
+}
