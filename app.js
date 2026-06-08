@@ -1,7 +1,10 @@
 const STORAGE_KEY = "vinay_german_vocab_coach_v1";
 const ROUND_SIZE = 20;
-const STARTER_BANK_VERSION = 3;
+const STARTER_BANK_VERSION = 4;
 const LEGACY_PROFILE_NAME = "Vinay";
+const DEFAULT_LEVEL = "B1";
+const DEFAULT_WEEKLY_GOAL = 30;
+const LEVELS = ["A1", "A2", "B1", "B2"];
 const TOPIC_PRIORITY = ["alltag", "haushalt", "arbeit", "transport", "gefühle", "gesundheit", "freizeit", "behörden", "abstrakt"];
 const TODAY = () => new Date().toISOString().slice(0, 10);
 const storage = createStorageAdapter();
@@ -141,6 +144,60 @@ function packStarterWords(topic, difficulty, rows) {
 }
 
 const supplementalStarterWords = [
+  ...packStarterWords("alltag", "A1", [
+    ["the apple", "der Apfel", "noun"],
+    ["the bread", "das Brot", "noun"],
+    ["the water", "das Wasser", "noun"],
+    ["the coffee", "der Kaffee", "noun"],
+    ["the milk", "die Milch", "noun"],
+    ["the cheese", "der Käse", "noun"],
+    ["the egg", "das Ei", "noun"],
+    ["the rice", "der Reis", "noun"],
+    ["the money", "das Geld", "noun"],
+    ["the house", "das Haus", "noun"],
+    ["the street", "die Straße", "noun"],
+    ["the city", "die Stadt", "noun"],
+    ["the day", "der Tag", "noun"],
+    ["the week", "die Woche", "noun"],
+    ["the morning", "der Morgen", "noun"],
+    ["the evening", "der Abend", "noun"],
+    ["the name", "der Name", "noun"],
+    ["the person", "die Person", "noun"],
+    ["the child", "das Kind", "noun"],
+    ["the woman", "die Frau", "noun"],
+    ["the man", "der Mann", "noun"],
+    ["to eat", "essen", "verb"],
+    ["to drink", "trinken", "verb"],
+    ["to buy", "kaufen", "verb"],
+    ["to have", "haben", "verb"],
+    ["to be", "sein", "verb"],
+    ["to live", "wohnen", "verb"],
+    ["to come", "kommen", "verb"],
+    ["to go", "gehen", "verb"],
+    ["good", "gut", "adjective"],
+    ["bad", "schlecht", "adjective"],
+    ["small", "klein", "adjective"],
+    ["big", "groß", "adjective"],
+    ["new", "neu", "adjective"],
+    ["old", "alt", "adjective"],
+    ["today", "heute", "adverb"],
+    ["tomorrow", "morgen", "adverb"],
+  ]),
+  ...packStarterWords("transport", "A1", [
+    ["the bicycle", "das Fahrrad", "noun"],
+    ["the taxi", "das Taxi", "noun"],
+    ["the ticket", "die Fahrkarte", "noun"],
+    ["to walk", "laufen", "verb"],
+    ["left", "links", "adverb"],
+    ["right", "rechts", "adverb"],
+  ]),
+  ...packStarterWords("gesundheit", "A1", [
+    ["the doctor", "der Arzt", "noun", "Female: die Ärztin."],
+    ["the head", "der Kopf", "noun"],
+    ["the stomach", "der Bauch", "noun"],
+    ["sick", "krank", "adjective"],
+    ["healthy", "gesund", "adjective"],
+  ]),
   ...packStarterWords("arbeit", "B1", [
     ["the workplace", "der Arbeitsplatz", "noun"],
     ["the working hours", "die Arbeitszeit", "noun"],
@@ -1289,8 +1346,228 @@ const dailyPhrases = [
   { de: "Komm gut nach Hause.", en: "Get home safely.", note: "Warm and useful." },
 ];
 
+const storyBank = [
+  {
+    id: "a1-supermarkt",
+    level: "A1",
+    topic: "alltag",
+    title: "Mira im Supermarkt",
+    intro: "A tiny shopping story with the words you actually need.",
+    vocab: [
+      ["the supermarket", "der Supermarkt"],
+      ["the bread", "das Brot"],
+      ["the cheese", "der Käse"],
+      ["the water", "das Wasser"],
+      ["to buy", "kaufen"],
+      ["the money", "das Geld"],
+    ],
+    paragraphs: [
+      "Mira geht am Morgen in den Supermarkt. Sie braucht Brot, Käse und Wasser.",
+      "An der Kasse sucht Mira ihr Geld. Der Kassierer wartet ruhig.",
+      "Mira findet das Geld in ihrer Tasche. Sie bezahlt und geht nach Hause.",
+    ],
+    questions: [
+      { q: "Where does Mira go?", options: ["To the supermarket", "To the doctor", "To work", "To the station"], answer: 0 },
+      { q: "What does Mira need?", options: ["Bread, cheese, and water", "Coffee and a ticket", "A form", "A new phone"], answer: 0 },
+      { q: "What does Mira look for at the checkout?", options: ["Her money", "Her key", "Her ticket", "Her phone"], answer: 0 },
+      { q: "Where is the money?", options: ["In her bag", "In the fridge", "At home", "On the bus"], answer: 0 },
+    ],
+  },
+  {
+    id: "a1-cafe",
+    level: "A1",
+    topic: "freizeit",
+    title: "Ein Kaffee nach der Arbeit",
+    intro: "A small cafe moment, simple and useful.",
+    vocab: [
+      ["the coffee", "der Kaffee"],
+      ["the water", "das Wasser"],
+      ["the friend", "der Freund"],
+      ["the evening", "der Abend"],
+      ["good", "gut"],
+      ["to drink", "trinken"],
+    ],
+    paragraphs: [
+      "Am Abend trifft Tom seinen Freund im Café. Tom trinkt Kaffee, sein Freund trinkt Wasser.",
+      "Das Café ist klein, aber sehr gut. Die Musik ist ruhig.",
+      "Tom sagt: \"Der Abend ist schön.\" Sein Freund lacht.",
+    ],
+    questions: [
+      { q: "Who does Tom meet?", options: ["His friend", "His doctor", "His boss", "His landlord"], answer: 0 },
+      { q: "What does Tom drink?", options: ["Coffee", "Milk", "Tea", "Juice"], answer: 0 },
+      { q: "How is the cafe?", options: ["Small but good", "Big and loud", "Closed", "Very expensive"], answer: 0 },
+      { q: "When does the story happen?", options: ["In the evening", "In the morning", "At night", "On Monday morning"], answer: 0 },
+    ],
+  },
+  {
+    id: "a2-key",
+    level: "A2",
+    topic: "alltag",
+    title: "Der verlorene Schlüssel",
+    intro: "The classic panic: key missing, appointment soon.",
+    vocab: [
+      ["the key", "der Schlüssel"],
+      ["the appointment", "der Termin"],
+      ["to search for", "suchen"],
+      ["to find again", "wiederfinden"],
+      ["the bag", "die Tasche"],
+      ["nearby", "in der Nähe"],
+    ],
+    paragraphs: [
+      "Nina hat um zehn Uhr einen Termin. Aber ihr Schlüssel ist nicht in der Tasche.",
+      "Sie sucht im Flur, in der Küche und im Wohnzimmer. Dann ruft sie ihre Nachbarin an.",
+      "Die Nachbarin sagt: \"Schau mal neben der Tür.\" Dort liegt der Schlüssel. Nina ist erleichtert.",
+    ],
+    questions: [
+      { q: "What problem does Nina have?", options: ["She cannot find her key", "She missed the train", "She lost her wallet", "She is sick"], answer: 0 },
+      { q: "Where does Nina search?", options: ["In several rooms", "Only outside", "At the station", "At work"], answer: 0 },
+      { q: "Who does Nina call?", options: ["Her neighbor", "Her doctor", "Her landlord", "Her colleague"], answer: 0 },
+      { q: "Where is the key?", options: ["Next to the door", "In the supermarket", "In the bus", "Under the bed"], answer: 0 },
+    ],
+  },
+  {
+    id: "a2-doctor",
+    level: "A2",
+    topic: "gesundheit",
+    title: "Ein Termin beim Hausarzt",
+    intro: "Simple doctor-visit language without drama.",
+    vocab: [
+      ["the doctor appointment", "der Arzttermin"],
+      ["the fever", "das Fieber"],
+      ["to cough", "husten"],
+      ["the prescription", "das Rezept"],
+      ["the pharmacy", "die Apotheke"],
+      ["tired", "müde"],
+    ],
+    paragraphs: [
+      "Leo ist seit zwei Tagen krank. Er hat Fieber, hustet viel und ist sehr müde.",
+      "Am Nachmittag hat er einen Arzttermin. Der Arzt untersucht Leo und gibt ihm ein Rezept.",
+      "Danach geht Leo zur Apotheke. Zu Hause trinkt er Tee und ruht sich aus.",
+    ],
+    questions: [
+      { q: "How long has Leo been sick?", options: ["Two days", "One week", "One month", "Since yesterday evening only"], answer: 0 },
+      { q: "What symptoms does he have?", options: ["Fever and cough", "Back pain only", "A broken arm", "A toothache"], answer: 0 },
+      { q: "What does the doctor give him?", options: ["A prescription", "A train ticket", "A contract", "A receipt"], answer: 0 },
+      { q: "Where does Leo go after the appointment?", options: ["To the pharmacy", "To the office", "To the cinema", "To the Bürgeramt"], answer: 0 },
+    ],
+  },
+  {
+    id: "b1-heizung",
+    level: "B1",
+    topic: "haushalt",
+    title: "Die Heizung funktioniert nicht",
+    intro: "Apartment life in Germany: polite, practical, slightly cold.",
+    vocab: [
+      ["the heating", "die Heizung"],
+      ["the landlord", "der Vermieter"],
+      ["to repair", "reparieren"],
+      ["the appointment", "der Termin"],
+      ["the rent", "die Miete"],
+      ["the complaint", "die Beschwerde"],
+    ],
+    paragraphs: [
+      "Am Montagmorgen merkt Samira, dass die Heizung nicht funktioniert. Draußen sind es nur drei Grad, und die Wohnung ist sehr kalt.",
+      "Sie schreibt ihrem Vermieter eine höfliche Nachricht: \"Könnten Sie bitte jemanden schicken? Die Heizung ist seit gestern Abend aus.\"",
+      "Der Vermieter antwortet schnell und vereinbart einen Termin mit einem Handwerker. Samira ist erleichtert, weil sie keine Beschwerde schreiben muss.",
+      "Am nächsten Tag wird die Heizung repariert. Danach ist die Wohnung wieder warm.",
+    ],
+    questions: [
+      { q: "What is the main problem?", options: ["The heating is not working", "The rent is too high", "The window is broken", "The landlord is moving out"], answer: 0 },
+      { q: "How does Samira contact the landlord?", options: ["She writes a polite message", "She sends a complaint immediately", "She calls the police", "She ignores it"], answer: 0 },
+      { q: "Who comes to fix the problem?", options: ["A repair worker", "A neighbor", "A doctor", "A colleague"], answer: 0 },
+      { q: "How does Samira feel after the answer?", options: ["Relieved", "Embarrassed", "Angry", "Jealous"], answer: 0 },
+      { q: "When is the heating repaired?", options: ["The next day", "In three weeks", "Immediately at midnight", "Never"], answer: 0 },
+    ],
+  },
+  {
+    id: "b1-zug",
+    level: "B1",
+    topic: "transport",
+    title: "Verspätung am Bahnsteig",
+    intro: "A train story, because Germany insists.",
+    vocab: [
+      ["the train station", "der Bahnhof"],
+      ["the platform", "der Bahnsteig"],
+      ["the delay", "die Verspätung"],
+      ["to change trains", "umsteigen"],
+      ["the connection", "die Verbindung"],
+      ["the replacement bus", "der Ersatzbus"],
+    ],
+    paragraphs: [
+      "Jonas steht am Bahnsteig und wartet auf den Zug nach Köln. Auf der Anzeige steht plötzlich: 25 Minuten Verspätung.",
+      "Er schaut in der App nach einer anderen Verbindung. Wenn er in Düsseldorf umsteigt, kommt er vielleicht noch rechtzeitig an.",
+      "Dann kommt eine Durchsage: Wegen einer Baustelle fährt ab dem nächsten Bahnhof ein Ersatzbus. Jonas atmet tief durch und schreibt seinem Kollegen eine Nachricht.",
+      "\"Ich komme später, aber ich bin unterwegs.\" Sein Kollege antwortet: \"Alles gut. Komm sicher an.\"",
+    ],
+    questions: [
+      { q: "How late is the train?", options: ["25 minutes", "5 minutes", "One hour", "It is cancelled"], answer: 0 },
+      { q: "What does Jonas check?", options: ["Another connection", "A restaurant bill", "His rental contract", "A doctor appointment"], answer: 0 },
+      { q: "Why is there a replacement bus?", options: ["Because of construction work", "Because of snow", "Because Jonas missed his ticket", "Because the platform is closed forever"], answer: 0 },
+      { q: "Who does Jonas message?", options: ["His colleague", "His landlord", "His doctor", "His neighbor"], answer: 0 },
+      { q: "What is the colleague's reaction?", options: ["Calm and understanding", "Very angry", "Confused", "Silent"], answer: 0 },
+    ],
+  },
+  {
+    id: "b2-besprechung",
+    level: "B2",
+    topic: "arbeit",
+    title: "Die schwierige Besprechung",
+    intro: "Workplace German: disagreement without setting the room on fire.",
+    vocab: [
+      ["the meeting", "die Besprechung"],
+      ["to take responsibility", "Verantwortung übernehmen"],
+      ["to clarify", "klären"],
+      ["binding", "verbindlich"],
+      ["the proposal", "der Vorschlag"],
+      ["to implement", "umsetzen"],
+    ],
+    paragraphs: [
+      "In der Besprechung merkt Aylin, dass zwei Kollegen unterschiedliche Erwartungen haben. Beide glauben, dass der andere die Verantwortung übernimmt.",
+      "Aylin bleibt ruhig und schlägt vor, die Aufgaben verbindlich zu klären. Sie sagt: \"Lasst uns kurz festhalten, wer was bis Freitag umsetzt.\"",
+      "Zuerst wirkt die Stimmung angespannt. Dann schreiben alle ihre Aufgaben in die Projektliste. Der Vorschlag hilft, weil niemand mehr raten muss.",
+      "Nach der Besprechung bedankt sich ihr Chef. Aylin findet: Gute Kommunikation spart später viel Stress.",
+    ],
+    questions: [
+      { q: "What is the core problem in the meeting?", options: ["Unclear responsibility", "A missing document", "A cancelled train", "A broken printer"], answer: 0 },
+      { q: "What does Aylin suggest?", options: ["Clarifying tasks in a binding way", "Ending the project", "Writing a complaint", "Ignoring the conflict"], answer: 0 },
+      { q: "Why does the proposal help?", options: ["Nobody has to guess responsibilities", "It makes the meeting longer", "It avoids all future meetings", "It changes the deadline to next year"], answer: 0 },
+      { q: "How is the mood at first?", options: ["Tense", "Playful", "Bored but happy", "Completely relaxed"], answer: 0 },
+      { q: "What is Aylin's conclusion?", options: ["Good communication saves stress", "Meetings are always useless", "The boss should decide everything", "Projects do not need lists"], answer: 0 },
+    ],
+  },
+  {
+    id: "b2-buergeramt",
+    level: "B2",
+    topic: "behörden",
+    title: "Der fehlende Nachweis",
+    intro: "A very German micro-drama: one missing document.",
+    vocab: [
+      ["the registration office", "das Bürgeramt"],
+      ["the proof", "der Nachweis"],
+      ["to submit later", "nachreichen"],
+      ["complete", "vollständig"],
+      ["the processing time", "die Bearbeitungszeit"],
+      ["the confirmation", "die Bestätigung"],
+    ],
+    paragraphs: [
+      "Ravi hat einen Termin im Bürgeramt. Er bringt seinen Ausweis, das Formular und eine Kopie seines Mietvertrags mit.",
+      "Die Sachbearbeiterin prüft die Unterlagen und sagt freundlich: \"Es fehlt noch ein Nachweis. Sie können ihn aber online nachreichen.\"",
+      "Ravi ist kurz frustriert, fragt aber nach der Bearbeitungszeit. Die Sachbearbeiterin erklärt, dass der Antrag erst vollständig ist, wenn der Nachweis angekommen ist.",
+      "Zu Hause lädt Ravi das Dokument hoch. Am nächsten Morgen bekommt er eine Bestätigung per E-Mail.",
+    ],
+    questions: [
+      { q: "Where does Ravi have an appointment?", options: ["At the Bürgeramt", "At the hospital", "At the train station", "At a restaurant"], answer: 0 },
+      { q: "What is missing?", options: ["A proof/document", "His ID card", "His phone", "The application form"], answer: 0 },
+      { q: "How can Ravi submit the missing item?", options: ["Online", "Only by post", "Only in person next year", "By calling a friend"], answer: 0 },
+      { q: "When is the application complete?", options: ["When the proof has arrived", "When Ravi leaves the office", "When the email address is changed", "Before the appointment starts"], answer: 0 },
+      { q: "What happens the next morning?", options: ["He receives an email confirmation", "He gets a fine", "The office loses everything", "He cancels the appointment"], answer: 0 },
+    ],
+  },
+];
+
 let db = loadDb();
 let activeRound = null;
+let activeStory = null;
 let activeStatusFilter = "learning";
 let lastStatusMoveMessage = "";
 
@@ -1310,6 +1587,14 @@ const els = {
   masteryBar: document.querySelector("#masteryBar"),
   masteryCaption: document.querySelector("#masteryCaption"),
   dayStreak: document.querySelector("#dayStreak"),
+  todayMissionCard: document.querySelector("#todayMissionCard"),
+  missionTitle: document.querySelector("#missionTitle"),
+  missionDetails: document.querySelector("#missionDetails"),
+  startMissionBtn: document.querySelector("#startMissionBtn"),
+  weeklyGoalTitle: document.querySelector("#weeklyGoalTitle"),
+  weeklyGoalDaysLeft: document.querySelector("#weeklyGoalDaysLeft"),
+  weeklyGoalBar: document.querySelector("#weeklyGoalBar"),
+  weeklyGoalCaption: document.querySelector("#weeklyGoalCaption"),
   wordsSeen: document.querySelector("#wordsSeen"),
   dashboardAccuracy: document.querySelector("#dashboardAccuracy"),
   masteredGoal: document.querySelector("#masteredGoal"),
@@ -1342,6 +1627,7 @@ const els = {
   fullRoundBtn: document.querySelector("#fullRoundBtn"),
   retryBtn: document.querySelector("#retryBtn"),
   multipleChoiceBtn: document.querySelector("#multipleChoiceBtn"),
+  storyModeBtn: document.querySelector("#storyModeBtn"),
   exitRoundBtn: document.querySelector("#exitRoundBtn"),
   refreshPhraseBtn: document.querySelector("#refreshPhraseBtn"),
   phraseGerman: document.querySelector("#phraseGerman"),
@@ -1351,9 +1637,15 @@ const els = {
   profileNameForm: document.querySelector("#profileNameForm"),
   profileNameInput: document.querySelector("#profileNameInput"),
   profileNameStatus: document.querySelector("#profileNameStatus"),
+  levelButtons: document.querySelector("#levelButtons"),
+  profileLevelStatus: document.querySelector("#profileLevelStatus"),
+  weeklyGoalForm: document.querySelector("#weeklyGoalForm"),
+  weeklyGoalInput: document.querySelector("#weeklyGoalInput"),
+  weeklyGoalStatus: document.querySelector("#weeklyGoalStatus"),
   profilePrompt: document.querySelector("#profilePrompt"),
   profilePromptForm: document.querySelector("#profilePromptForm"),
   profilePromptInput: document.querySelector("#profilePromptInput"),
+  profilePromptLevel: document.querySelector("#profilePromptLevel"),
   quizTitle: document.querySelector("#quizTitle"),
   roundMeta: document.querySelector("#roundMeta"),
   coachMessage: document.querySelector("#coachMessage"),
@@ -1364,6 +1656,7 @@ const els = {
   choicePrompt: document.querySelector("#choicePrompt"),
   choiceOptions: document.querySelector("#choiceOptions"),
   dontKnowChoiceBtn: document.querySelector("#dontKnowChoiceBtn"),
+  storyPanel: document.querySelector("#storyPanel"),
   promptList: document.querySelector("#promptList"),
   resultsPanel: document.querySelector("#resultsPanel"),
   addWordsText: document.querySelector("#addWordsText"),
@@ -1392,12 +1685,14 @@ function createSeedDb() {
       correct_streak: 0,
       times_seen: 0,
       wrong_count: 0,
-      half_count: 0,
-      last_seen: "",
-      last_result: "",
-      difficulty: row[4],
-      notes: row[5],
-      created_at: now,
+    half_count: 0,
+    last_seen: "",
+    last_result: "",
+    last_missed_at: "",
+    last_missed_round_id: "",
+    difficulty: row[4],
+    notes: row[5],
+    created_at: now,
     })),
     sessions: [],
     profile: createProfile(),
@@ -1466,28 +1761,47 @@ function normalizeWordRecord(word) {
     half_count: Number(word.half_count || 0),
     last_seen: word.last_seen || "",
     last_result: word.last_result || "",
-    difficulty: ["A2", "B1", "B2"].includes(word.difficulty) ? word.difficulty : "B1",
+    last_missed_at: word.last_missed_at || "",
+    last_missed_round_id: word.last_missed_round_id || "",
+    difficulty: LEVELS.includes(word.difficulty) ? word.difficulty : DEFAULT_LEVEL,
     notes: word.notes || "",
     created_at: word.created_at || new Date().toISOString(),
   };
 }
 
-function createProfile(name = "", hasChosenName = false) {
+function createProfile(name = "", hasChosenName = false, level = DEFAULT_LEVEL, weeklyGoal = DEFAULT_WEEKLY_GOAL, hasChosenLevel = false) {
   const cleanName = sanitizeProfileName(name);
+  const cleanLevel = normalizeLevel(level);
+  const cleanWeeklyGoal = normalizeWeeklyGoal(weeklyGoal);
   return {
     name: cleanName,
     hasChosenName: Boolean(cleanName && hasChosenName),
+    level: cleanLevel,
+    hasChosenLevel: Boolean(hasChosenLevel),
+    weeklyGoal: cleanWeeklyGoal,
   };
 }
 
 function normalizeProfile(profile, useLegacyName = false) {
-  if (!profile && useLegacyName) return createProfile(LEGACY_PROFILE_NAME, true);
+  if (!profile && useLegacyName) return createProfile(LEGACY_PROFILE_NAME, true, DEFAULT_LEVEL, DEFAULT_WEEKLY_GOAL, true);
   const cleanName = sanitizeProfileName(profile?.name || "");
-  return createProfile(cleanName, Boolean(profile?.hasChosenName || cleanName));
+  const hasChosenName = Boolean(profile?.hasChosenName || cleanName);
+  const hasChosenLevel = Boolean(profile?.hasChosenLevel || cleanName || useLegacyName);
+  return createProfile(cleanName, hasChosenName, profile?.level || DEFAULT_LEVEL, profile?.weeklyGoal || DEFAULT_WEEKLY_GOAL, hasChosenLevel);
 }
 
 function sanitizeProfileName(value) {
   return String(value || "").replace(/\s+/g, " ").trim().slice(0, 32);
+}
+
+function normalizeLevel(value) {
+  return LEVELS.includes(value) ? value : DEFAULT_LEVEL;
+}
+
+function normalizeWeeklyGoal(value) {
+  const goal = Number(value || DEFAULT_WEEKLY_GOAL);
+  if (!Number.isFinite(goal)) return DEFAULT_WEEKLY_GOAL;
+  return Math.max(5, Math.min(100, Math.round(goal / 5) * 5));
 }
 
 function getStarterWordRows() {
@@ -1521,6 +1835,8 @@ function mergeStarterWords(database) {
         half_count: 0,
         last_seen: "",
         last_result: "",
+        last_missed_at: "",
+        last_missed_round_id: "",
         difficulty: row[4],
         notes: row[5],
         created_at: new Date().toISOString(),
@@ -1545,7 +1861,7 @@ function saveProfileName(rawName, { fromPrompt = false } = {}) {
     return false;
   }
 
-  db.profile = createProfile(name, true);
+  db.profile = createProfile(name, true, db.profile?.level, db.profile?.weeklyGoal, db.profile?.hasChosenLevel);
   storage.set(JSON.stringify(db));
   renderProfile();
   if (els.profileNameStatus) els.profileNameStatus.textContent = `Saved. Hello ${name}.`;
@@ -1553,14 +1869,48 @@ function saveProfileName(rawName, { fromPrompt = false } = {}) {
   return true;
 }
 
+function saveProfileSetup(rawName, level) {
+  const name = sanitizeProfileName(rawName);
+  if (!name) return false;
+  db.profile = createProfile(name, true, level, db.profile?.weeklyGoal, true);
+  storage.set(JSON.stringify(db));
+  renderProfile();
+  renderDashboard();
+  closeProfilePrompt();
+  return true;
+}
+
+function saveProfileLevel(level) {
+  db.profile = createProfile(db.profile?.name, db.profile?.hasChosenName, level, db.profile?.weeklyGoal, true);
+  storage.set(JSON.stringify(db));
+  renderProfile();
+  renderHomeProgress();
+  els.profileLevelStatus.textContent = `${db.profile.level} mode active. The app will choose words at that level.`;
+}
+
+function saveWeeklyGoal(rawGoal) {
+  db.profile = createProfile(db.profile?.name, db.profile?.hasChosenName, db.profile?.level, rawGoal, db.profile?.hasChosenLevel);
+  storage.set(JSON.stringify(db));
+  renderProfile();
+  renderDashboard();
+  els.weeklyGoalStatus.textContent = `Weekly goal set to ${db.profile.weeklyGoal} words.`;
+}
+
 function renderProfile() {
   const name = db.profile?.name || "there";
   els.greetingName.textContent = name;
   els.profileNameInput.value = db.profile?.name || "";
+  els.weeklyGoalInput.value = String(db.profile?.weeklyGoal || DEFAULT_WEEKLY_GOAL);
+  els.profilePromptLevel.value = normalizeLevel(db.profile?.level);
+  [...els.levelButtons.querySelectorAll("[data-level-option]")].forEach((button) => {
+    const active = button.dataset.levelOption === normalizeLevel(db.profile?.level);
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
 }
 
 function shouldAskForProfileName() {
-  return !db.profile?.hasChosenName || !db.profile?.name;
+  return !db.profile?.hasChosenName || !db.profile?.name || !db.profile?.hasChosenLevel;
 }
 
 function openProfilePrompt() {
@@ -1575,12 +1925,23 @@ function closeProfilePrompt() {
 
 function handleProfilePromptSubmit(event) {
   event.preventDefault();
-  saveProfileName(els.profilePromptInput.value, { fromPrompt: true });
+  saveProfileSetup(els.profilePromptInput.value, els.profilePromptLevel.value);
 }
 
 function handleProfileNameSubmit(event) {
   event.preventDefault();
   saveProfileName(els.profileNameInput.value);
+}
+
+function handleLevelClick(event) {
+  const button = event.target.closest("[data-level-option]");
+  if (!button) return;
+  saveProfileLevel(button.dataset.levelOption);
+}
+
+function handleWeeklyGoalSubmit(event) {
+  event.preventDefault();
+  saveWeeklyGoal(els.weeklyGoalInput.value);
 }
 
 function makeId() {
@@ -1600,7 +1961,8 @@ function getSessionMode(session) {
   return "full";
 }
 
-function getRoundMode({ mode, retryOnly, roundSize }) {
+function getRoundMode({ mode, retryOnly, roundSize, mission }) {
+  if (mission) return "mission";
   if (mode === "choice") return "choice";
   if (retryOnly) return "retry";
   return Number(roundSize || 0) <= 5 ? "quick" : "full";
@@ -1642,13 +2004,40 @@ function getRecentWordIds(sessionCount) {
   );
 }
 
-function pickRound({ retryOnly = false, size = ROUND_SIZE } = {}) {
+function getUserLevel() {
+  return normalizeLevel(db.profile?.level);
+}
+
+function levelIndex(level) {
+  const index = LEVELS.indexOf(normalizeLevel(level));
+  return index < 0 ? LEVELS.indexOf(DEFAULT_LEVEL) : index;
+}
+
+function wordLevelIndex(word) {
+  return levelIndex(word.difficulty);
+}
+
+function isNewWordLevelEligible(word) {
+  return wordLevelIndex(word) <= Math.min(LEVELS.length - 1, levelIndex(getUserLevel()) + 1);
+}
+
+function levelFitScore(word) {
+  const userIndex = levelIndex(getUserLevel());
+  const wordIndex = wordLevelIndex(word);
+  if (wordIndex === userIndex) return 14;
+  if (wordIndex === userIndex - 1) return 8;
+  if (wordIndex === userIndex + 1) return 5;
+  if (wordIndex < userIndex - 1) return 2;
+  return -16;
+}
+
+function pickRound({ retryOnly = false, size = ROUND_SIZE, mission = false } = {}) {
   const targetSize = Math.max(1, Math.min(size, db.words.length || size));
   const selected = [];
   const selectedIds = new Set();
   const recentTwo = getRecentWordIds(2);
   const recentFive = getRecentWordIds(5);
-  const quotas = getRoundQuotas(targetSize);
+  const quotas = getRoundQuotas(targetSize, mission);
 
   const addFrom = (words, limit) => {
     for (const word of words) {
@@ -1662,7 +2051,7 @@ function pickRound({ retryOnly = false, size = ROUND_SIZE } = {}) {
   const learning = db.words
     .filter((word) => word.status === "learning")
     .map((word) => ({ ...word, bucket: "learning" }))
-    .sort((a, b) => difficultyScore(b, recentTwo) - difficultyScore(a, recentTwo));
+    .sort((a, b) => difficultyScore(b, recentTwo) + levelFitScore(b) - (difficultyScore(a, recentTwo) + levelFitScore(a)));
 
   if (retryOnly) {
     addFrom(learning, targetSize);
@@ -1670,14 +2059,14 @@ function pickRound({ retryOnly = false, size = ROUND_SIZE } = {}) {
   }
 
   const newWords = db.words
-    .filter((word) => word.status === "new")
+    .filter((word) => word.status === "new" && isNewWordLevelEligible(word))
     .map((word) => ({ ...word, bucket: "new" }))
     .sort((a, b) => newWordScore(b, recentTwo) - newWordScore(a, recentTwo));
 
   const mastered = db.words
     .filter((word) => word.status === "mastered" && !recentFive.has(word.id))
     .map((word) => ({ ...word, bucket: "mastered" }))
-    .sort((a, b) => (a.last_seen || "").localeCompare(b.last_seen || ""));
+    .sort((a, b) => levelFitScore(b) - levelFitScore(a) || (a.last_seen || "").localeCompare(b.last_seen || ""));
 
   addFrom(learning, quotas.learning);
   addFrom(newWords, quotas.new);
@@ -1685,13 +2074,16 @@ function pickRound({ retryOnly = false, size = ROUND_SIZE } = {}) {
 
   const fillers = [...learning, ...newWords, ...mastered, ...db.words.map((word) => ({ ...word, bucket: word.status }))]
     .filter((word) => !recentTwo.has(word.id) || db.words.length < targetSize * 2)
-    .sort((a, b) => fillScore(b) - fillScore(a));
+    .sort((a, b) => fillScore(b) + levelFitScore(b) - (fillScore(a) + levelFitScore(a)));
 
   addFrom(fillers, targetSize);
   return shuffle(selected).slice(0, targetSize);
 }
 
-function getRoundQuotas(size) {
+function getRoundQuotas(size, mission = false) {
+  if (mission) {
+    return { learning: 3, new: 3, mastered: 2 };
+  }
   if (size <= 5) {
     return { learning: 2, new: 3, mastered: 0 };
   }
@@ -1727,7 +2119,7 @@ function newWordScore(word, recentSet) {
     behörden: 7,
   };
   const difficultyBoost = word.difficulty === "B1" ? 7 : word.difficulty === "A2" ? 4 : 3;
-  return (topicBoosts[word.topic] || 4) + difficultyBoost - (recentSet.has(word.id) ? 6 : 0);
+  return (topicBoosts[word.topic] || 4) + difficultyBoost + levelFitScore(word) - (recentSet.has(word.id) ? 6 : 0);
 }
 
 function fillScore(word) {
@@ -1756,6 +2148,7 @@ function startRound(options = {}) {
     id: `round-${Date.now()}`,
     roundNumber: getSessionNumber(),
     retryOnly: Boolean(options.retryOnly),
+    mission: Boolean(options.mission),
     mode: options.mode || "typed",
     roundSize: words.length,
     words,
@@ -1767,23 +2160,30 @@ function startRound(options = {}) {
     mode: activeRound.mode,
     retryOnly: activeRound.retryOnly,
     roundSize: activeRound.roundSize,
+    mission: activeRound.mission,
   });
 
+  activeStory = null;
   setQuizMode(true);
   els.resultsPanel.innerHTML = "";
   els.quizForm.hidden = activeRound.mode !== "typed";
   els.choiceQuiz.hidden = activeRound.mode !== "choice";
+  els.storyPanel.hidden = true;
   els.promptList.innerHTML = "";
   els.choiceOptions.innerHTML = "";
   els.quizTitle.textContent =
-    activeRound.mode === "choice"
+    activeRound.mission
+      ? "Today's Mission"
+      : activeRound.mode === "choice"
       ? "Multiple choice"
       : options.retryOnly
         ? "Retry round: hard words only"
         : `Translate these ${activeRound.roundSize} words`;
   els.roundMeta.textContent = `Round ${activeRound.roundNumber} · Score to beat: ${getBestScoreLabel(activeRound.sessionMode, activeRound.roundSize)}`;
   els.coachMessage.textContent =
-    activeRound.mode === "choice"
+    activeRound.mission
+      ? `${getUserLevel()} mission: 8 words, no noise, just progress.`
+      : activeRound.mode === "choice"
       ? "Pick the German answer. Four doors, one correct exit."
       : "English → German. Nouns need their article. No hints, no mercy, let's cook.";
 
@@ -1819,6 +2219,7 @@ function setResultsMode() {
   els.welcomeCard.hidden = true;
   els.roundMenu.hidden = false;
   els.quizHeader.hidden = true;
+  els.storyPanel.hidden = true;
   closeUtilityPanels();
 }
 
@@ -1828,12 +2229,15 @@ function setHomeMode() {
   els.welcomeCard.hidden = false;
   els.roundMenu.hidden = false;
   els.quizHeader.hidden = true;
+  els.storyPanel.hidden = true;
 }
 
 function exitRound() {
   activeRound = null;
+  activeStory = null;
   els.quizForm.hidden = true;
   els.choiceQuiz.hidden = true;
+  els.storyPanel.hidden = true;
   els.promptList.innerHTML = "";
   els.choiceOptions.innerHTML = "";
   els.dontKnowChoiceBtn.disabled = false;
@@ -2045,6 +2449,8 @@ function applyResults(graded) {
   const scoreCorrect = graded.filter((item) => item.result === "correct").length;
   const wordsById = new Map(db.words.map((word) => [word.id, word]));
   const today = TODAY();
+  const nowIso = new Date().toISOString();
+  const missedItems = graded.filter((item) => item.result === "wrong" || item.result === "half");
 
   graded.forEach((item) => {
     const word = wordsById.get(item.word.id);
@@ -2058,10 +2464,14 @@ function applyResults(graded) {
       if (word.correct_streak >= 3) word.status = "mastered";
     } else if (item.result === "half") {
       word.half_count += 1;
+      word.last_missed_at = nowIso;
+      word.last_missed_round_id = activeRound.id;
       if (word.status === "new") word.status = "learning";
     } else {
       word.correct_streak = 0;
       word.wrong_count += 1;
+      word.last_missed_at = nowIso;
+      word.last_missed_round_id = activeRound.id;
       word.status = "learning";
     }
   });
@@ -2084,8 +2494,12 @@ function applyResults(graded) {
     count_new: counts.new || 0,
     count_learning: counts.learning || 0,
     count_mastered_review: counts.mastered || 0,
+    missed_word_ids: missedItems.map((item) => item.word.id),
+    wrong_word_ids: graded.filter((item) => item.result === "wrong").map((item) => item.word.id),
+    half_word_ids: graded.filter((item) => item.result === "half").map((item) => item.word.id),
     retry_only: activeRound.retryOnly,
     mode: activeRound.sessionMode,
+    level: getUserLevel(),
   });
 }
 
@@ -2302,6 +2716,7 @@ function renderDashboard() {
   renderSessionBars();
   renderStatusWordList();
   renderHardWords();
+  renderHomeProgress();
 }
 
 function getOverallAccuracy() {
@@ -2338,6 +2753,70 @@ function getDayStreak() {
     }
   }
   return streak;
+}
+
+function hasCompletedTodayMission() {
+  const today = TODAY();
+  return db.sessions.some((session) => !session.skipped && getSessionMode(session) === "mission" && toDateKey(session.date) === today);
+}
+
+function startMissionRound() {
+  if (hasCompletedTodayMission()) {
+    els.coachMessage.textContent = "Today's mission is already complete. Nice. Pick another mode if you want extra reps.";
+    renderHomeProgress();
+    return;
+  }
+  startRound({ size: 8, mission: true });
+}
+
+function renderHomeProgress() {
+  renderTodayMission();
+  renderWeeklyGoal();
+}
+
+function renderTodayMission() {
+  const complete = hasCompletedTodayMission();
+  els.todayMissionCard.hidden = complete;
+  if (complete) return;
+
+  const quotas = getRoundQuotas(8, true);
+  els.missionTitle.textContent = `Practice 8 ${getUserLevel()}-smart words`;
+  els.missionDetails.textContent = `${quotas.new} new · ${quotas.learning} weak · ${quotas.mastered} review. Finish it once today and this card disappears.`;
+}
+
+function getWeekStart(date = new Date()) {
+  const start = startOfDay(date);
+  const day = start.getDay();
+  const offset = day === 0 ? -6 : 1 - day;
+  start.setDate(start.getDate() + offset);
+  return start;
+}
+
+function getWeeklyTouchedWordIds() {
+  const weekStart = getWeekStart();
+  return new Set(
+    db.sessions
+      .filter((session) => !session.skipped && parseDateKey(toDateKey(session.date)) >= weekStart)
+      .flatMap((session) => session.words_ids || [])
+  );
+}
+
+function renderWeeklyGoal() {
+  const goal = normalizeWeeklyGoal(db.profile?.weeklyGoal);
+  const touched = getWeeklyTouchedWordIds().size;
+  const percent = goal ? Math.min(100, Math.round((touched / goal) * 100)) : 0;
+  const today = startOfDay(new Date());
+  const weekEnd = getWeekStart();
+  weekEnd.setDate(weekEnd.getDate() + 6);
+  const daysLeft = Math.max(0, dayDiff(today, weekEnd));
+
+  els.weeklyGoalTitle.textContent = `${touched} / ${goal} words touched`;
+  els.weeklyGoalBar.style.width = `${percent}%`;
+  els.weeklyGoalDaysLeft.textContent = daysLeft === 0 ? "Last day" : `${daysLeft} day${daysLeft === 1 ? "" : "s"} left`;
+  els.weeklyGoalCaption.textContent =
+    touched >= goal
+      ? "Weekly goal complete. That is the kind of boring consistency that wins."
+      : `${Math.max(0, goal - touched)} more word${goal - touched === 1 ? "" : "s"} to hit this week's target.`;
 }
 
 function toDateKey(value) {
@@ -2388,6 +2867,226 @@ function renderDailyPhrase() {
   els.phraseGerman.textContent = `"${phrase.de}"`;
   els.phraseMeaning.textContent = phrase.en;
   els.phraseNote.textContent = phrase.note;
+}
+
+function startStoryMode() {
+  const story = pickStoryForLevel();
+  if (!story) {
+    els.coachMessage.textContent = "No story is available for this level yet. Tiny plot hole. Try another level.";
+    return;
+  }
+
+  activeRound = null;
+  activeStory = prepareStory(story);
+  setQuizMode(true);
+  els.quizForm.hidden = true;
+  els.choiceQuiz.hidden = true;
+  els.storyPanel.hidden = false;
+  els.resultsPanel.innerHTML = "";
+  els.quizTitle.textContent = "Story Mode";
+  els.roundMeta.textContent = `${activeStory.level} · ${activeStory.topic}`;
+  els.coachMessage.textContent = "Scan the vocab first, then read the story and prove you understood it.";
+  renderStoryIntro();
+}
+
+function pickStoryForLevel() {
+  const userIndex = levelIndex(getUserLevel());
+  const recentStoryIds = db.sessions
+    .filter((session) => getSessionMode(session) === "story")
+    .slice(-3)
+    .map((session) => session.story_id);
+  const eligible = storyBank.filter((story) => {
+    const storyIndex = levelIndex(story.level);
+    return storyIndex <= userIndex && storyIndex >= Math.max(0, userIndex - 1);
+  });
+  const fresh = eligible.filter((story) => !recentStoryIds.includes(story.id));
+  return shuffle(fresh.length ? fresh : eligible)[0];
+}
+
+function prepareStory(story) {
+  return {
+    ...story,
+    answers: Array(story.questions.length).fill(null),
+    questions: story.questions.map((question) => {
+      const shuffled = shuffle(question.options.map((text, index) => ({ text, originalIndex: index })));
+      return {
+        q: question.q,
+        options: shuffled.map((option) => option.text),
+        answer: shuffled.findIndex((option) => option.originalIndex === question.answer),
+      };
+    }),
+  };
+}
+
+function renderStoryIntro() {
+  if (!activeStory) return;
+  els.storyPanel.innerHTML = `
+    <article class="story-card">
+      <div class="story-heading">
+        <p class="eyebrow">${escapeHtml(activeStory.level)} Story</p>
+        <h3>${escapeHtml(activeStory.title)}</h3>
+        <p>${escapeHtml(activeStory.intro)}</p>
+      </div>
+      <div class="story-vocab-grid">
+        ${activeStory.vocab
+          .map(
+            ([word_en, word_de]) => `
+              <div class="story-vocab-item">
+                <strong>${escapeHtml(word_de)}</strong>
+                <span>${escapeHtml(word_en)}</span>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+      <button class="primary-button story-action-button" type="button" data-story-action="read">Read story</button>
+    </article>
+  `;
+}
+
+function renderStoryQuiz() {
+  if (!activeStory) return;
+  els.storyPanel.innerHTML = `
+    <article class="story-card">
+      <div class="story-heading">
+        <p class="eyebrow">${escapeHtml(activeStory.level)} Story</p>
+        <h3>${escapeHtml(activeStory.title)}</h3>
+      </div>
+      <div class="story-text">
+        ${activeStory.paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
+      </div>
+      <div class="story-questions">
+        ${activeStory.questions
+          .map(
+            (question, questionIndex) => `
+              <fieldset class="story-question">
+                <legend>${questionIndex + 1}. ${escapeHtml(question.q)}</legend>
+                <div class="story-options">
+                  ${question.options
+                    .map(
+                      (option, optionIndex) => `
+                        <button class="story-option ${activeStory.answers[questionIndex] === optionIndex ? "selected" : ""}" type="button" data-story-question="${questionIndex}" data-story-option="${optionIndex}">
+                          ${escapeHtml(option)}
+                        </button>
+                      `
+                    )
+                    .join("")}
+                </div>
+              </fieldset>
+            `
+          )
+          .join("")}
+      </div>
+      <div class="story-actions">
+        <button class="secondary-button" type="button" data-story-action="intro">Back to vocab</button>
+        <button class="primary-button" type="button" data-story-action="submit">Check story</button>
+      </div>
+    </article>
+  `;
+}
+
+function handleStoryPanelClick(event) {
+  const actionButton = event.target.closest("[data-story-action]");
+  if (actionButton) {
+    const action = actionButton.dataset.storyAction;
+    if (action === "read") renderStoryQuiz();
+    if (action === "intro") renderStoryIntro();
+    if (action === "submit") finishStoryMode();
+    return;
+  }
+
+  const optionButton = event.target.closest("[data-story-question]");
+  if (!optionButton || !activeStory) return;
+  const questionIndex = Number(optionButton.dataset.storyQuestion);
+  const optionIndex = Number(optionButton.dataset.storyOption);
+  activeStory.answers[questionIndex] = optionIndex;
+  renderStoryQuiz();
+}
+
+function finishStoryMode() {
+  if (!activeStory) return;
+  const unanswered = activeStory.answers.some((answer) => answer === null);
+  if (unanswered) {
+    els.coachMessage.textContent = "Answer every story question first. No mystery blanks today.";
+    return;
+  }
+
+  const score = activeStory.questions.filter((question, index) => activeStory.answers[index] === question.answer).length;
+  const total = activeStory.questions.length;
+  const accuracy = Math.round((score / total) * 100);
+  const storyWords = getStoryWordRecords(activeStory);
+  applyStoryExposure(storyWords, accuracy);
+  db.sessions.push({
+    round_id: `story-${Date.now()}`,
+    date: new Date().toISOString(),
+    score_correct: score,
+    score_total: total,
+    accuracy,
+    words_ids: storyWords.map((word) => word.id),
+    count_new: 0,
+    count_learning: storyWords.length,
+    count_mastered_review: 0,
+    retry_only: false,
+    mode: "story",
+    level: getUserLevel(),
+    story_id: activeStory.id,
+  });
+
+  renderStoryResults(score, total);
+  activeStory = null;
+  els.storyPanel.hidden = true;
+  setResultsMode();
+  saveDb();
+}
+
+function getStoryWordRecords(story) {
+  const wordsByKey = new Map(db.words.map((word) => [normalizeAnswer(`${word.word_en}|${word.word_de}`), word]));
+  const wordsByGerman = new Map(db.words.map((word) => [normalizeAnswer(word.word_de), word]));
+  return story.vocab
+    .map(([word_en, word_de]) => wordsByKey.get(normalizeAnswer(`${word_en}|${word_de}`)) || wordsByGerman.get(normalizeAnswer(word_de)))
+    .filter(Boolean);
+}
+
+function applyStoryExposure(words, accuracy) {
+  const result = accuracy >= 70 ? "correct" : accuracy >= 50 ? "half" : "wrong";
+  const today = TODAY();
+  words.forEach((word) => {
+    word.times_seen += 1;
+    word.last_seen = today;
+    word.last_result = result;
+    if (word.status === "new") word.status = "learning";
+  });
+}
+
+function renderStoryResults(score, total) {
+  const story = activeStory;
+  const accuracy = Math.round((score / total) * 100);
+  els.coachMessage.textContent =
+    accuracy >= 80
+      ? "Story understood. That vocab has context now."
+      : accuracy >= 60
+        ? "You got the story shape. A few details need another look."
+        : "Story was slippery. Good news: now we know where to practice.";
+  els.resultsPanel.innerHTML = `
+    <div class="result-summary">
+      <article><small>Story</small><strong>${score}/${total}</strong></article>
+      <article><small>Accuracy</small><strong>${accuracy}%</strong></article>
+      <article><small>Level</small><strong>${escapeHtml(story.level)}</strong></article>
+      <article><small>Vocab touched</small><strong>${getStoryWordRecords(story).length}</strong></article>
+    </div>
+    <section class="result-group">
+      <h3>${escapeHtml(story.title)}</h3>
+      <ol class="result-list">
+        ${story.questions
+          .map((question, index) => {
+            const chosen = story.answers[index];
+            const correct = chosen === question.answer;
+            return `<li class="${correct ? "correct" : "wrong"}">${index + 1}. ${escapeHtml(question.q)}<br><strong>${escapeHtml(question.options[question.answer])}</strong>${correct ? " ✓" : ` · you chose ${escapeHtml(question.options[chosen])}`}</li>`;
+          })
+          .join("")}
+      </ol>
+    </section>
+  `;
 }
 
 function setStatusFilter(status) {
@@ -2534,30 +3233,82 @@ function moveWordToStatus(word, targetStatus) {
 }
 
 function renderHardWords() {
-  const hard = [...db.words]
-    .filter((word) => Number(word.wrong_count || 0) > 0 || Number(word.half_count || 0) > 0)
+  const wordsById = new Map(db.words.map((word) => [word.id, word]));
+  const latestSession = [...db.sessions].reverse().find((session) => !session.skipped);
+  const latestMissedIds = latestSession?.missed_word_ids || [];
+  const freshMisses = latestMissedIds.map((id) => wordsById.get(id)).filter(Boolean);
+  const freshMissIds = new Set(freshMisses.map((word) => word.id));
+  const trickyWords = [...db.words]
+    .filter((word) => !freshMissIds.has(word.id))
+    .filter((word) => Number(word.wrong_count || 0) > 0 || Number(word.half_count || 0) > 0 || ["wrong", "half"].includes(word.last_result))
     .sort((a, b) => hardScore(b) - hardScore(a))
-    .slice(0, 10);
+    .slice(0, 12);
 
-  if (!hard.length) {
+  if (!freshMisses.length && !trickyWords.length) {
     els.hardWordsList.innerHTML = `<p class="mini-status">Nothing to recap yet. Miss a word in a round and it will show up here.</p>`;
     return;
   }
 
-  els.hardWordsList.innerHTML = hard
-    .map(
-      (word) => `
-        <div class="hard-item">
-          <strong>${escapeHtml(toPrompt(word.word_en))} → ${escapeHtml(word.word_de)}</strong>
-          <small>Missed ${word.wrong_count || 0}x · half ${word.half_count || 0}x · streak ${word.correct_streak || 0}</small>
-        </div>
-      `
-    )
-    .join("");
+  const freshSection = freshMisses.length
+    ? `
+      <section class="recap-section">
+        <h3>Fresh from last round</h3>
+        ${freshMisses.map((word) => renderRecapWord(word, true)).join("")}
+      </section>
+    `
+    : latestSession
+      ? `<p class="mini-status">Last round was clean. Older tricky words are below.</p>`
+      : "";
+  const trickySection = trickyWords.length
+    ? `
+      <section class="recap-section">
+        <h3>Still tricky</h3>
+        ${trickyWords.map((word) => renderRecapWord(word)).join("")}
+      </section>
+    `
+    : "";
+
+  els.hardWordsList.innerHTML = `${freshSection}${trickySection}`;
+}
+
+function renderRecapWord(word, isFresh = false) {
+  const label = word.last_result === "wrong" ? "missed" : word.last_result === "half" ? "half" : "review";
+  const when = word.last_missed_at ? ` · ${formatRecapTime(word.last_missed_at)}` : "";
+  return `
+    <div class="hard-item ${isFresh ? "fresh-miss" : ""}">
+      <strong>${escapeHtml(toPrompt(word.word_en))} → ${escapeHtml(word.word_de)}</strong>
+      <small>${escapeHtml(label)}${when} · missed ${word.wrong_count || 0}x · half ${word.half_count || 0}x · streak ${word.correct_streak || 0}</small>
+    </div>
+  `;
+}
+
+function formatRecapTime(value) {
+  const missedAt = new Date(value);
+  if (Number.isNaN(missedAt.getTime())) return "recent";
+  const ageMinutes = Math.max(0, Math.round((Date.now() - missedAt.getTime()) / 60000));
+  if (ageMinutes < 2) return "just now";
+  if (ageMinutes < 60) return `${ageMinutes} min ago`;
+  const ageHours = Math.round(ageMinutes / 60);
+  if (ageHours < 24) return `${ageHours}h ago`;
+  const ageDays = Math.round(ageHours / 24);
+  return `${ageDays}d ago`;
 }
 
 function hardScore(word) {
-  return Number(word.wrong_count || 0) * 5 + Number(word.half_count || 0) * 2 + Number(word.times_seen || 0) - Number(word.correct_streak || 0) * 2;
+  const lastMissedAt = word.last_missed_at ? new Date(word.last_missed_at).getTime() : 0;
+  const ageHours = lastMissedAt ? Math.max(0, (Date.now() - lastMissedAt) / 3600000) : Infinity;
+  const recencyBoost = ageHours < 1 ? 50 : ageHours < 24 ? 36 : ageHours < 72 ? 24 : ageHours < 168 ? 14 : 4;
+  const resultBoost = word.last_result === "wrong" ? 28 : word.last_result === "half" ? 18 : 0;
+  const statusBoost = word.status === "learning" ? 6 : word.status === "mastered" ? -8 : 0;
+  return (
+    Number(word.wrong_count || 0) * 6 +
+    Number(word.half_count || 0) * 3 +
+    Number(word.times_seen || 0) +
+    recencyBoost +
+    resultBoost +
+    statusBoost -
+    Number(word.correct_streak || 0) * 2
+  );
 }
 
 function addWordsFromText() {
@@ -2657,6 +3408,7 @@ function guessTopic(en, de) {
 function guessDifficulty(en, de) {
   const text = `${en} ${de}`.toLowerCase();
   if (/posting|permit|insurance|requirement|submit|authority|ausschreibung|aufenthalt|voraussetzung|einreichen|versicherung/.test(text)) return "B2";
+  if (/apple|bread|water|coffee|milk|cheese|egg|money|house|street|city|day|week|eat|drink|buy|apfel|brot|wasser|kaffee|milch|käse|ei|geld|haus|straße|stadt/.test(text)) return "A1";
   if (/apple|bread|water|train station|müll|bahnhof|apotheke|fieber/.test(text)) return "A2";
   return "B1";
 }
@@ -2787,7 +3539,10 @@ function resetDb() {
   db.profile = profile;
   saveDb();
   activeRound = null;
+  activeStory = null;
   els.quizForm.hidden = true;
+  els.choiceQuiz.hidden = true;
+  els.storyPanel.hidden = true;
   els.resultsPanel.innerHTML = "";
   els.quizTitle.textContent = "Start a 20-word round";
   els.roundMeta.textContent = "Ready when you are";
@@ -2807,11 +3562,15 @@ els.quickRoundBtn.addEventListener("click", () => startRound({ size: 5 }));
 els.fullRoundBtn.addEventListener("click", () => startRound({ size: 20 }));
 els.retryBtn.addEventListener("click", () => startRound({ retryOnly: true, size: 20 }));
 els.multipleChoiceBtn.addEventListener("click", () => startRound({ mode: "choice", size: 10 }));
+els.storyModeBtn.addEventListener("click", startStoryMode);
+els.startMissionBtn.addEventListener("click", startMissionRound);
 els.dontKnowChoiceBtn.addEventListener("click", () => handleChoiceAnswer(null, els.dontKnowChoiceBtn));
 els.exitRoundBtn.addEventListener("click", exitRound);
 els.refreshPhraseBtn.addEventListener("click", renderDailyPhrase);
 els.profilePromptForm.addEventListener("submit", handleProfilePromptSubmit);
 els.profileNameForm.addEventListener("submit", handleProfileNameSubmit);
+els.levelButtons.addEventListener("click", handleLevelClick);
+els.weeklyGoalForm.addEventListener("submit", handleWeeklyGoalSubmit);
 els.dashboardToggleBtn.addEventListener("click", toggleDashboard);
 els.recapToggleBtn.addEventListener("click", toggleRecap);
 els.closeDashboardBtn.addEventListener("click", closeUtilityPanels);
@@ -2822,6 +3581,7 @@ els.statusNewBtn.addEventListener("click", () => setStatusFilter("new"));
 els.statusWordList.addEventListener("click", handleStatusWordAction);
 els.dashboardPanel.addEventListener("click", (event) => event.stopPropagation());
 els.recapPanel.addEventListener("click", (event) => event.stopPropagation());
+els.storyPanel.addEventListener("click", handleStoryPanelClick);
 els.quizForm.addEventListener("submit", submitAnswers);
 els.addWordsBtn.addEventListener("click", addWordsFromText);
 els.exportCsvBtn.addEventListener("click", exportCsv);

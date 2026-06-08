@@ -1,9 +1,9 @@
-const CACHE_NAME = "german-vocab-coach-pwa-v5";
+const CACHE_NAME = "german-vocab-coach-pwa-v8";
 const APP_ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=20260604-profile2",
-  "./app.js?v=20260604-profile2",
+  "./styles.css?v=20260608-recap1",
+  "./app.js?v=20260608-recap1",
   "./manifest.webmanifest",
   "./icons/logo.png",
   "./icons/icon-180.png",

@@ -12,7 +12,7 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="icons/icon-180.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
-    <link rel="stylesheet" href="styles.css?v=20260604-profile2" />
+    <link rel="stylesheet" href="styles.css?v=20260608-recap1" />
   </head>
   <body>
     <main class="app-shell">
@@ -136,17 +136,45 @@
 
         <section class="profile-settings" aria-label="Profile settings">
           <div class="section-title">
-            <h3>Your name</h3>
-            <small>used on the welcome screen</small>
+            <h3>Your setup</h3>
+            <small>level and weekly target</small>
           </div>
-          <form id="profileNameForm" class="profile-name-form">
-            <label>
-              <span class="sr-only">Name</span>
-              <input id="profileNameInput" type="text" autocomplete="name" maxlength="32" placeholder="Your name" />
-            </label>
-            <button id="saveNameBtn" class="secondary-button" type="submit">Save</button>
-          </form>
-          <p id="profileNameStatus" class="mini-status" aria-live="polite"></p>
+          <div class="profile-settings-grid">
+            <div class="profile-setting">
+              <h4>Name</h4>
+              <form id="profileNameForm" class="profile-name-form">
+                <label>
+                  <span class="sr-only">Name</span>
+                  <input id="profileNameInput" type="text" autocomplete="name" maxlength="32" placeholder="Your name" />
+                </label>
+                <button id="saveNameBtn" class="secondary-button" type="submit">Save</button>
+              </form>
+              <p id="profileNameStatus" class="mini-status" aria-live="polite"></p>
+            </div>
+
+            <div class="profile-setting">
+              <h4>German level</h4>
+              <div id="levelButtons" class="segmented-control" role="group" aria-label="German level">
+                <button type="button" data-level-option="A1">A1</button>
+                <button type="button" data-level-option="A2">A2</button>
+                <button type="button" data-level-option="B1">B1</button>
+                <button type="button" data-level-option="B2">B2</button>
+              </div>
+              <p id="profileLevelStatus" class="mini-status" aria-live="polite"></p>
+            </div>
+
+            <div class="profile-setting">
+              <h4>Weekly goal</h4>
+              <form id="weeklyGoalForm" class="weekly-goal-form">
+                <label>
+                  <span class="sr-only">Words per week</span>
+                  <input id="weeklyGoalInput" type="number" min="5" max="100" step="5" />
+                </label>
+                <button class="secondary-button" type="submit">Set goal</button>
+              </form>
+              <p id="weeklyGoalStatus" class="mini-status" aria-live="polite"></p>
+            </div>
+          </div>
         </section>
 
         <section class="word-manager" aria-label="Word status manager">
@@ -228,6 +256,29 @@
               </figure>
             </div>
 
+            <section id="todayMissionCard" class="today-mission-card" aria-label="Today's mission">
+              <div>
+                <p class="eyebrow">Today's Mission</p>
+                <h3 id="missionTitle">Practice 8 words</h3>
+                <p id="missionDetails">Level-aware sprint with new, weak, and review words.</p>
+              </div>
+              <button id="startMissionBtn" class="primary-button" type="button">Start mission</button>
+            </section>
+
+            <section id="weeklyGoalCard" class="weekly-goal-card" aria-label="Weekly goal">
+              <div class="section-title">
+                <div>
+                  <p class="eyebrow">This week</p>
+                  <h3 id="weeklyGoalTitle">0 / 30 words touched</h3>
+                </div>
+                <small id="weeklyGoalDaysLeft">Goal resets Monday</small>
+              </div>
+              <div class="progress-track" aria-hidden="true">
+                <span id="weeklyGoalBar"></span>
+              </div>
+              <p id="weeklyGoalCaption">Touch words in any quiz or story to move this.</p>
+            </section>
+
             <div id="roundMenu" class="round-menu">
               <button id="quickRoundBtn" class="primary-button round-button" type="button">
                 <strong>Quick Sprint</strong>
@@ -245,7 +296,16 @@
                 <strong>Multiple Choice</strong>
                 <span>Pick 1 of 4</span>
               </button>
+              <button id="storyModeBtn" class="secondary-button round-button story-mode-button" type="button">
+                <strong>Story Mode</strong>
+                <span>Read + answer questions</span>
+              </button>
             </div>
+
+            <p class="home-attribution">
+              Developed by Vinay ·
+              <a href="https://www.linkedin.com/in/vinaynaik432" target="_blank" rel="noopener noreferrer">Say hi?</a>
+            </p>
           </section>
 
           <div class="quiz-header" id="quizHeader" hidden>
@@ -279,6 +339,8 @@
             <button id="dontKnowChoiceBtn" class="choice-dont-know" type="button">I don't know</button>
           </section>
 
+          <section id="storyPanel" class="story-panel" hidden></section>
+
           <section id="resultsPanel" class="results-panel" aria-live="polite"></section>
         </section>
 
@@ -294,6 +356,15 @@
           <span>Name</span>
           <input id="profilePromptInput" type="text" autocomplete="name" maxlength="32" placeholder="Alex" required />
         </label>
+        <label>
+          <span>German level</span>
+          <select id="profilePromptLevel">
+            <option value="A1">A1 Beginner</option>
+            <option value="A2">A2 Basic</option>
+            <option value="B1" selected>B1 Intermediate</option>
+            <option value="B2">B2 Upper Intermediate</option>
+          </select>
+        </label>
         <button class="primary-button" type="submit">Start learning</button>
       </form>
     </section>
@@ -307,6 +378,6 @@
       </li>
     </template>
 
-    <script src="app.js?v=20260604-profile2" defer></script>
+    <script src="app.js?v=20260608-recap1" defer></script>
   </body>
 </html>
