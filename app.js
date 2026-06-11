@@ -1565,6 +1565,1001 @@ const storyBank = [
   },
 ];
 
+const legacyStoryQuestionTranslations = {
+  "Where does Mira go?": {
+    q_de: "Wohin geht Mira?",
+    q_en: "Where does Mira go?",
+    options_de: ["In den Supermarkt", "Zum Arzt", "Zur Arbeit", "Zum Bahnhof"],
+    options_en: ["To the supermarket", "To the doctor", "To work", "To the station"],
+  },
+  "What does Mira need?": {
+    q_de: "Was braucht Mira?",
+    q_en: "What does Mira need?",
+    options_de: ["Brot, Käse und Wasser", "Kaffee und eine Fahrkarte", "Ein Formular", "Ein neues Handy"],
+    options_en: ["Bread, cheese, and water", "Coffee and a ticket", "A form", "A new phone"],
+  },
+  "What does Mira look for at the checkout?": {
+    q_de: "Was sucht Mira an der Kasse?",
+    q_en: "What does Mira look for at the checkout?",
+    options_de: ["Ihr Geld", "Ihren Schlüssel", "Ihre Fahrkarte", "Ihr Handy"],
+    options_en: ["Her money", "Her key", "Her ticket", "Her phone"],
+  },
+  "Where is the money?": {
+    q_de: "Wo ist das Geld?",
+    q_en: "Where is the money?",
+    options_de: ["In ihrer Tasche", "Im Kühlschrank", "Zu Hause", "Im Bus"],
+    options_en: ["In her bag", "In the fridge", "At home", "On the bus"],
+  },
+  "Who does Tom meet?": {
+    q_de: "Wen trifft Tom?",
+    q_en: "Who does Tom meet?",
+    options_de: ["Seinen Freund", "Seinen Arzt", "Seinen Chef", "Seinen Vermieter"],
+    options_en: ["His friend", "His doctor", "His boss", "His landlord"],
+  },
+  "What does Tom drink?": {
+    q_de: "Was trinkt Tom?",
+    q_en: "What does Tom drink?",
+    options_de: ["Kaffee", "Milch", "Tee", "Saft"],
+    options_en: ["Coffee", "Milk", "Tea", "Juice"],
+  },
+  "How is the cafe?": {
+    q_de: "Wie ist das Café?",
+    q_en: "How is the cafe?",
+    options_de: ["Klein, aber gut", "Groß und laut", "Geschlossen", "Sehr teuer"],
+    options_en: ["Small but good", "Big and loud", "Closed", "Very expensive"],
+  },
+  "When does the story happen?": {
+    q_de: "Wann passiert die Geschichte?",
+    q_en: "When does the story happen?",
+    options_de: ["Am Abend", "Am Morgen", "In der Nacht", "Am Montagmorgen"],
+    options_en: ["In the evening", "In the morning", "At night", "On Monday morning"],
+  },
+  "What problem does Nina have?": {
+    q_de: "Welches Problem hat Nina?",
+    q_en: "What problem does Nina have?",
+    options_de: ["Sie findet ihren Schlüssel nicht", "Sie hat den Zug verpasst", "Sie hat ihre Geldbörse verloren", "Sie ist krank"],
+    options_en: ["She cannot find her key", "She missed the train", "She lost her wallet", "She is sick"],
+  },
+  "Where does Nina search?": {
+    q_de: "Wo sucht Nina?",
+    q_en: "Where does Nina search?",
+    options_de: ["In mehreren Zimmern", "Nur draußen", "Am Bahnhof", "Bei der Arbeit"],
+    options_en: ["In several rooms", "Only outside", "At the station", "At work"],
+  },
+  "Who does Nina call?": {
+    q_de: "Wen ruft Nina an?",
+    q_en: "Who does Nina call?",
+    options_de: ["Ihre Nachbarin", "Ihren Arzt", "Ihren Vermieter", "Ihren Kollegen"],
+    options_en: ["Her neighbor", "Her doctor", "Her landlord", "Her colleague"],
+  },
+  "Where is the key?": {
+    q_de: "Wo ist der Schlüssel?",
+    q_en: "Where is the key?",
+    options_de: ["Neben der Tür", "Im Supermarkt", "Im Bus", "Unter dem Bett"],
+    options_en: ["Next to the door", "In the supermarket", "In the bus", "Under the bed"],
+  },
+  "How long has Leo been sick?": {
+    q_de: "Wie lange ist Leo schon krank?",
+    q_en: "How long has Leo been sick?",
+    options_de: ["Zwei Tage", "Eine Woche", "Einen Monat", "Nur seit gestern Abend"],
+    options_en: ["Two days", "One week", "One month", "Since yesterday evening only"],
+  },
+  "What symptoms does he have?": {
+    q_de: "Welche Symptome hat er?",
+    q_en: "What symptoms does he have?",
+    options_de: ["Fieber und Husten", "Nur Rückenschmerzen", "Einen gebrochenen Arm", "Zahnschmerzen"],
+    options_en: ["Fever and cough", "Back pain only", "A broken arm", "A toothache"],
+  },
+  "What does the doctor give him?": {
+    q_de: "Was gibt ihm der Arzt?",
+    q_en: "What does the doctor give him?",
+    options_de: ["Ein Rezept", "Eine Fahrkarte", "Einen Vertrag", "Einen Kassenzettel"],
+    options_en: ["A prescription", "A train ticket", "A contract", "A receipt"],
+  },
+  "Where does Leo go after the appointment?": {
+    q_de: "Wohin geht Leo nach dem Termin?",
+    q_en: "Where does Leo go after the appointment?",
+    options_de: ["Zur Apotheke", "Ins Büro", "Ins Kino", "Zum Bürgeramt"],
+    options_en: ["To the pharmacy", "To the office", "To the cinema", "To the Bürgeramt"],
+  },
+  "What is the main problem?": {
+    q_de: "Was ist das Hauptproblem?",
+    q_en: "What is the main problem?",
+    options_de: ["Die Heizung funktioniert nicht", "Die Miete ist zu hoch", "Das Fenster ist kaputt", "Der Vermieter zieht aus"],
+    options_en: ["The heating is not working", "The rent is too high", "The window is broken", "The landlord is moving out"],
+  },
+  "How does Samira contact the landlord?": {
+    q_de: "Wie kontaktiert Samira den Vermieter?",
+    q_en: "How does Samira contact the landlord?",
+    options_de: ["Sie schreibt eine höfliche Nachricht", "Sie schickt sofort eine Beschwerde", "Sie ruft die Polizei", "Sie ignoriert es"],
+    options_en: ["She writes a polite message", "She sends a complaint immediately", "She calls the police", "She ignores it"],
+  },
+  "Who comes to fix the problem?": {
+    q_de: "Wer kommt, um das Problem zu reparieren?",
+    q_en: "Who comes to fix the problem?",
+    options_de: ["Ein Handwerker", "Eine Nachbarin", "Ein Arzt", "Ein Kollege"],
+    options_en: ["A repair worker", "A neighbor", "A doctor", "A colleague"],
+  },
+  "How does Samira feel after the answer?": {
+    q_de: "Wie fühlt sich Samira nach der Antwort?",
+    q_en: "How does Samira feel after the answer?",
+    options_de: ["Erleichtert", "Peinlich berührt", "Wütend", "Eifersüchtig"],
+    options_en: ["Relieved", "Embarrassed", "Angry", "Jealous"],
+  },
+  "When is the heating repaired?": {
+    q_de: "Wann wird die Heizung repariert?",
+    q_en: "When is the heating repaired?",
+    options_de: ["Am nächsten Tag", "In drei Wochen", "Sofort um Mitternacht", "Nie"],
+    options_en: ["The next day", "In three weeks", "Immediately at midnight", "Never"],
+  },
+  "How late is the train?": {
+    q_de: "Wie viel Verspätung hat der Zug?",
+    q_en: "How late is the train?",
+    options_de: ["25 Minuten", "5 Minuten", "Eine Stunde", "Er fällt aus"],
+    options_en: ["25 minutes", "5 minutes", "One hour", "It is cancelled"],
+  },
+  "What does Jonas check?": {
+    q_de: "Was prüft Jonas?",
+    q_en: "What does Jonas check?",
+    options_de: ["Eine andere Verbindung", "Eine Restaurantrechnung", "Seinen Mietvertrag", "Einen Arzttermin"],
+    options_en: ["Another connection", "A restaurant bill", "His rental contract", "A doctor appointment"],
+  },
+  "Why is there a replacement bus?": {
+    q_de: "Warum fährt ein Ersatzbus?",
+    q_en: "Why is there a replacement bus?",
+    options_de: ["Wegen einer Baustelle", "Wegen Schnee", "Weil Jonas seine Fahrkarte verpasst hat", "Weil der Bahnsteig für immer geschlossen ist"],
+    options_en: ["Because of construction work", "Because of snow", "Because Jonas missed his ticket", "Because the platform is closed forever"],
+  },
+  "Who does Jonas message?": {
+    q_de: "Wem schreibt Jonas?",
+    q_en: "Who does Jonas message?",
+    options_de: ["Seinem Kollegen", "Seinem Vermieter", "Seinem Arzt", "Seiner Nachbarin"],
+    options_en: ["His colleague", "His landlord", "His doctor", "His neighbor"],
+  },
+  "What is the colleague's reaction?": {
+    q_de: "Wie reagiert der Kollege?",
+    q_en: "What is the colleague's reaction?",
+    options_de: ["Ruhig und verständnisvoll", "Sehr wütend", "Verwirrt", "Gar nicht"],
+    options_en: ["Calm and understanding", "Very angry", "Confused", "Silent"],
+  },
+  "What is the core problem in the meeting?": {
+    q_de: "Was ist das zentrale Problem in der Besprechung?",
+    q_en: "What is the core problem in the meeting?",
+    options_de: ["Unklare Verantwortung", "Ein fehlendes Dokument", "Ein ausgefallener Zug", "Ein kaputter Drucker"],
+    options_en: ["Unclear responsibility", "A missing document", "A cancelled train", "A broken printer"],
+  },
+  "What does Aylin suggest?": {
+    q_de: "Was schlägt Aylin vor?",
+    q_en: "What does Aylin suggest?",
+    options_de: ["Die Aufgaben verbindlich zu klären", "Das Projekt zu beenden", "Eine Beschwerde zu schreiben", "Den Konflikt zu ignorieren"],
+    options_en: ["Clarifying tasks in a binding way", "Ending the project", "Writing a complaint", "Ignoring the conflict"],
+  },
+  "Why does the proposal help?": {
+    q_de: "Warum hilft der Vorschlag?",
+    q_en: "Why does the proposal help?",
+    options_de: ["Niemand muss die Verantwortlichkeiten erraten", "Er macht die Besprechung länger", "Er verhindert alle zukünftigen Besprechungen", "Er verschiebt die Frist auf nächstes Jahr"],
+    options_en: ["Nobody has to guess responsibilities", "It makes the meeting longer", "It avoids all future meetings", "It changes the deadline to next year"],
+  },
+  "How is the mood at first?": {
+    q_de: "Wie ist die Stimmung am Anfang?",
+    q_en: "How is the mood at first?",
+    options_de: ["Angespannt", "Spielerisch", "Gelangweilt, aber glücklich", "Völlig entspannt"],
+    options_en: ["Tense", "Playful", "Bored but happy", "Completely relaxed"],
+  },
+  "What is Aylin's conclusion?": {
+    q_de: "Was ist Aylins Fazit?",
+    q_en: "What is Aylin's conclusion?",
+    options_de: ["Gute Kommunikation spart Stress", "Besprechungen sind immer nutzlos", "Der Chef sollte alles entscheiden", "Projekte brauchen keine Listen"],
+    options_en: ["Good communication saves stress", "Meetings are always useless", "The boss should decide everything", "Projects do not need lists"],
+  },
+  "Where does Ravi have an appointment?": {
+    q_de: "Wo hat Ravi einen Termin?",
+    q_en: "Where does Ravi have an appointment?",
+    options_de: ["Im Bürgeramt", "Im Krankenhaus", "Am Bahnhof", "In einem Restaurant"],
+    options_en: ["At the Bürgeramt", "At the hospital", "At the train station", "At a restaurant"],
+  },
+  "What is missing?": {
+    q_de: "Was fehlt?",
+    q_en: "What is missing?",
+    options_de: ["Ein Nachweis", "Sein Ausweis", "Sein Handy", "Das Antragsformular"],
+    options_en: ["A proof/document", "His ID card", "His phone", "The application form"],
+  },
+  "How can Ravi submit the missing item?": {
+    q_de: "Wie kann Ravi den fehlenden Nachweis einreichen?",
+    q_en: "How can Ravi submit the missing item?",
+    options_de: ["Online", "Nur per Post", "Nur nächstes Jahr persönlich", "Durch einen Anruf bei einem Freund"],
+    options_en: ["Online", "Only by post", "Only in person next year", "By calling a friend"],
+  },
+  "When is the application complete?": {
+    q_de: "Wann ist der Antrag vollständig?",
+    q_en: "When is the application complete?",
+    options_de: ["Wenn der Nachweis angekommen ist", "Wenn Ravi das Amt verlässt", "Wenn die E-Mail-Adresse geändert wird", "Bevor der Termin beginnt"],
+    options_en: ["When the proof has arrived", "When Ravi leaves the office", "When the email address is changed", "Before the appointment starts"],
+  },
+  "What happens the next morning?": {
+    q_de: "Was passiert am nächsten Morgen?",
+    q_en: "What happens the next morning?",
+    options_de: ["Er bekommt eine Bestätigung per E-Mail", "Er bekommt ein Bußgeld", "Das Amt verliert alles", "Er sagt den Termin ab"],
+    options_en: ["He receives an email confirmation", "He gets a fine", "The office loses everything", "He cancels the appointment"],
+  },
+};
+
+storyBank.push(
+  {
+    id: "a1-bus-ticket",
+    level: "A1",
+    topic: "transport",
+    title: "Der Bus kommt gleich",
+    intro: "A simple public transport moment.",
+    vocab: [
+      ["the bus", "der Bus", "noun"],
+      ["the ticket", "die Fahrkarte", "noun"],
+      ["the stop", "die Haltestelle", "noun"],
+      ["to wait", "warten", "verb"],
+      ["late", "spät", "adjective"],
+      ["to arrive", "ankommen", "verb"],
+    ],
+    paragraphs: [
+      "Lena steht an der Haltestelle. Sie wartet auf den Bus.",
+      "Sie hat eine Fahrkarte in der Tasche. Der Bus kommt fünf Minuten spät.",
+      "Lena steigt ein und setzt sich ans Fenster. Sie kommt pünktlich in der Schule an.",
+    ],
+    questions: [
+      { q_de: "Wo wartet Lena?", q_en: "Where does Lena wait?", options_de: ["An der Haltestelle", "Im Supermarkt", "In der Küche", "Beim Arzt"], options_en: ["At the stop", "In the supermarket", "In the kitchen", "At the doctor"], answer: 0 },
+      { q_de: "Was hat Lena in der Tasche?", q_en: "What does Lena have in her bag?", options_de: ["Eine Fahrkarte", "Ein Brot", "Ein Rezept", "Einen Schlüssel"], options_en: ["A ticket", "Bread", "A prescription", "A key"], answer: 0 },
+      { q_de: "Wie spät kommt der Bus?", q_en: "How late is the bus?", options_de: ["Fünf Minuten", "Eine Stunde", "Einen Tag", "Gar nicht"], options_en: ["Five minutes", "One hour", "One day", "Not at all"], answer: 0 },
+      { q_de: "Wo sitzt Lena?", q_en: "Where does Lena sit?", options_de: ["Am Fenster", "Neben dem Fahrer", "Auf dem Boden", "Draußen"], options_en: ["By the window", "Next to the driver", "On the floor", "Outside"], answer: 0 },
+    ],
+  },
+  {
+    id: "a1-regen",
+    level: "A1",
+    topic: "alltag",
+    title: "Regen am Morgen",
+    intro: "Tiny weather story, very Germany-coded.",
+    vocab: [
+      ["the rain", "der Regen", "noun"],
+      ["the umbrella", "der Regenschirm", "noun"],
+      ["the jacket", "die Jacke", "noun"],
+      ["wet", "nass", "adjective"],
+      ["cold", "kalt", "adjective"],
+      ["to take", "nehmen", "verb"],
+    ],
+    paragraphs: [
+      "Am Morgen sieht Emil aus dem Fenster. Es regnet.",
+      "Er nimmt seinen Regenschirm und zieht eine Jacke an. Draußen ist es kalt.",
+      "Seine Schuhe werden nass, aber Emil lacht. Im Büro trinkt er warmen Tee.",
+    ],
+    questions: [
+      { q_de: "Wie ist das Wetter?", q_en: "How is the weather?", options_de: ["Es regnet", "Es schneit", "Es ist sehr heiß", "Es ist sonnig"], options_en: ["It is raining", "It is snowing", "It is very hot", "It is sunny"], answer: 0 },
+      { q_de: "Was nimmt Emil mit?", q_en: "What does Emil take with him?", options_de: ["Einen Regenschirm", "Einen Koffer", "Eine Rechnung", "Ein Fahrrad"], options_en: ["An umbrella", "A suitcase", "An invoice", "A bicycle"], answer: 0 },
+      { q_de: "Was wird nass?", q_en: "What gets wet?", options_de: ["Seine Schuhe", "Sein Handy", "Sein Brot", "Sein Bett"], options_en: ["His shoes", "His phone", "His bread", "His bed"], answer: 0 },
+      { q_de: "Was trinkt Emil im Büro?", q_en: "What does Emil drink at the office?", options_de: ["Warmen Tee", "Kaltes Wasser", "Kaffee mit Eis", "Milch"], options_en: ["Warm tea", "Cold water", "Iced coffee", "Milk"], answer: 0 },
+    ],
+  },
+  {
+    id: "a1-nachbar",
+    level: "A1",
+    topic: "alltag",
+    title: "Eine nette Nachbarin",
+    intro: "Simple neighbor vocabulary with a warm tone.",
+    vocab: [
+      ["the neighbor", "die Nachbarin", "noun"],
+      ["the door", "die Tür", "noun"],
+      ["to help", "helfen", "verb"],
+      ["friendly", "freundlich", "adjective"],
+      ["the bag", "die Tasche", "noun"],
+      ["heavy", "schwer", "adjective"],
+    ],
+    paragraphs: [
+      "Sofia kommt nach Hause. Ihre Tasche ist sehr schwer.",
+      "Vor der Tür trifft sie ihre Nachbarin. Die Nachbarin ist freundlich und hilft Sofia.",
+      "Zusammen tragen sie die Tasche in die Wohnung. Sofia sagt: \"Vielen Dank!\"",
+    ],
+    questions: [
+      { q_de: "Was ist schwer?", q_en: "What is heavy?", options_de: ["Sofias Tasche", "Die Tür", "Die Wohnung", "Der Kaffee"], options_en: ["Sofia's bag", "The door", "The apartment", "The coffee"], answer: 0 },
+      { q_de: "Wen trifft Sofia?", q_en: "Who does Sofia meet?", options_de: ["Ihre Nachbarin", "Ihren Chef", "Einen Arzt", "Einen Busfahrer"], options_en: ["Her neighbor", "Her boss", "A doctor", "A bus driver"], answer: 0 },
+      { q_de: "Wie ist die Nachbarin?", q_en: "How is the neighbor?", options_de: ["Freundlich", "Laut", "Krank", "Spät"], options_en: ["Friendly", "Loud", "Sick", "Late"], answer: 0 },
+      { q_de: "Wobei hilft die Nachbarin?", q_en: "What does the neighbor help with?", options_de: ["Beim Tragen der Tasche", "Beim Kochen", "Beim Lernen", "Beim Reparieren"], options_en: ["Carrying the bag", "Cooking", "Studying", "Repairing"], answer: 0 },
+    ],
+  },
+  {
+    id: "a1-fruehstueck",
+    level: "A1",
+    topic: "alltag",
+    title: "Frühstück vor Deutschkurs",
+    intro: "Morning routine before language class.",
+    vocab: [
+      ["the breakfast", "das Frühstück", "noun"],
+      ["the course", "der Kurs", "noun"],
+      ["the banana", "die Banane", "noun"],
+      ["the bus", "der Bus", "noun"],
+      ["early", "früh", "adjective"],
+      ["to learn", "lernen", "verb"],
+    ],
+    paragraphs: [
+      "Noah steht früh auf. Er hat heute Deutschkurs.",
+      "Zum Frühstück isst er eine Banane und trinkt Kaffee.",
+      "Dann nimmt er den Bus. Im Kurs lernt er neue Wörter.",
+    ],
+    questions: [
+      { q_de: "Warum steht Noah früh auf?", q_en: "Why does Noah get up early?", options_de: ["Er hat Deutschkurs", "Er fliegt nach Berlin", "Er ist krank", "Er sucht eine Wohnung"], options_en: ["He has German class", "He flies to Berlin", "He is sick", "He is looking for an apartment"], answer: 0 },
+      { q_de: "Was isst Noah?", q_en: "What does Noah eat?", options_de: ["Eine Banane", "Ein Ei", "Käse", "Reis"], options_en: ["A banana", "An egg", "Cheese", "Rice"], answer: 0 },
+      { q_de: "Wie fährt Noah zum Kurs?", q_en: "How does Noah go to class?", options_de: ["Mit dem Bus", "Mit dem Taxi", "Mit dem Fahrrad", "Zu Fuß"], options_en: ["By bus", "By taxi", "By bicycle", "On foot"], answer: 0 },
+      { q_de: "Was lernt Noah im Kurs?", q_en: "What does Noah learn in class?", options_de: ["Neue Wörter", "Kochen", "Autofahren", "Schwimmen"], options_en: ["New words", "Cooking", "Driving", "Swimming"], answer: 0 },
+    ],
+  },
+  {
+    id: "a1-handy",
+    level: "A1",
+    topic: "alltag",
+    title: "Die Nachricht von Mama",
+    intro: "Short phone story with family language.",
+    vocab: [
+      ["the phone", "das Handy", "noun"],
+      ["the message", "die Nachricht", "noun"],
+      ["the mother", "die Mutter", "noun"],
+      ["to call", "anrufen", "verb"],
+      ["soon", "bald", "adverb"],
+      ["happy", "glücklich", "adjective"],
+    ],
+    paragraphs: [
+      "Ava sitzt im Park. Ihr Handy macht ein Geräusch.",
+      "Sie liest eine Nachricht von ihrer Mutter: \"Ruf mich bitte bald an.\"",
+      "Ava ruft ihre Mutter an. Danach ist sie glücklich.",
+    ],
+    questions: [
+      { q_de: "Wo sitzt Ava?", q_en: "Where is Ava sitting?", options_de: ["Im Park", "Im Zug", "Im Supermarkt", "Im Bad"], options_en: ["In the park", "On the train", "In the supermarket", "In the bathroom"], answer: 0 },
+      { q_de: "Von wem ist die Nachricht?", q_en: "Who is the message from?", options_de: ["Von ihrer Mutter", "Von ihrem Chef", "Von ihrem Arzt", "Von ihrem Vermieter"], options_en: ["From her mother", "From her boss", "From her doctor", "From her landlord"], answer: 0 },
+      { q_de: "Was soll Ava tun?", q_en: "What should Ava do?", options_de: ["Ihre Mutter anrufen", "Einkaufen gehen", "Eine Rechnung bezahlen", "Den Bus nehmen"], options_en: ["Call her mother", "Go shopping", "Pay an invoice", "Take the bus"], answer: 0 },
+      { q_de: "Wie fühlt sich Ava danach?", q_en: "How does Ava feel afterward?", options_de: ["Glücklich", "Ärgerlich", "Müde", "Kalt"], options_en: ["Happy", "Annoyed", "Tired", "Cold"], answer: 0 },
+    ],
+  },
+  {
+    id: "a1-sport",
+    level: "A1",
+    topic: "freizeit",
+    title: "Laufen im Park",
+    intro: "Very simple fitness story.",
+    vocab: [
+      ["the park", "der Park", "noun"],
+      ["to run", "laufen", "verb"],
+      ["tired", "müde", "adjective"],
+      ["the water", "das Wasser", "noun"],
+      ["the bench", "die Bank", "noun"],
+      ["slowly", "langsam", "adverb"],
+    ],
+    paragraphs: [
+      "Ben läuft am Samstag im Park. Am Anfang läuft er schnell.",
+      "Nach zehn Minuten ist er müde. Er setzt sich auf eine Bank.",
+      "Ben trinkt Wasser und läuft dann langsam nach Hause.",
+    ],
+    questions: [
+      { q_de: "Wann läuft Ben?", q_en: "When does Ben run?", options_de: ["Am Samstag", "Am Montagmorgen", "In der Nacht", "Am Mittwoch"], options_en: ["On Saturday", "On Monday morning", "At night", "On Wednesday"], answer: 0 },
+      { q_de: "Wo läuft Ben?", q_en: "Where does Ben run?", options_de: ["Im Park", "Im Büro", "Im Café", "Im Supermarkt"], options_en: ["In the park", "In the office", "In the cafe", "In the supermarket"], answer: 0 },
+      { q_de: "Was macht Ben nach zehn Minuten?", q_en: "What does Ben do after ten minutes?", options_de: ["Er setzt sich auf eine Bank", "Er kauft Käse", "Er ruft den Arzt an", "Er fährt Zug"], options_en: ["He sits on a bench", "He buys cheese", "He calls the doctor", "He takes the train"], answer: 0 },
+      { q_de: "Was trinkt Ben?", q_en: "What does Ben drink?", options_de: ["Wasser", "Kaffee", "Milch", "Saft"], options_en: ["Water", "Coffee", "Milk", "Juice"], answer: 0 },
+    ],
+  },
+  {
+    id: "a2-paket",
+    level: "A2",
+    topic: "alltag",
+    title: "Das Paket im Paketshop",
+    intro: "Real-life package pickup vocabulary.",
+    vocab: [
+      ["the package", "das Paket", "noun"],
+      ["the pickup note", "die Abholkarte", "noun"],
+      ["the ID card", "der Ausweis", "noun"],
+      ["to pick up", "abholen", "verb"],
+      ["the opening hours", "die Öffnungszeiten", "noun"],
+      ["nearby", "in der Nähe", "phrase"],
+    ],
+    paragraphs: [
+      "Mina findet eine Abholkarte im Briefkasten. Ihr Paket liegt im Paketshop in der Nähe.",
+      "Nach der Arbeit schaut sie die Öffnungszeiten an. Der Shop ist bis acht Uhr geöffnet.",
+      "Mina nimmt ihren Ausweis mit und holt das Paket ab. Zu Hause öffnet sie es sofort.",
+    ],
+    questions: [
+      { q_de: "Was findet Mina im Briefkasten?", q_en: "What does Mina find in the mailbox?", options_de: ["Eine Abholkarte", "Eine Rechnung", "Eine Fahrkarte", "Ein Rezept"], options_en: ["A pickup note", "An invoice", "A ticket", "A prescription"], answer: 0 },
+      { q_de: "Wo liegt das Paket?", q_en: "Where is the package?", options_de: ["Im Paketshop", "Im Büro", "Im Zug", "Beim Arzt"], options_en: ["At the package shop", "At the office", "On the train", "At the doctor"], answer: 0 },
+      { q_de: "Was nimmt Mina mit?", q_en: "What does Mina take with her?", options_de: ["Ihren Ausweis", "Einen Regenschirm", "Eine Banane", "Eine Kündigung"], options_en: ["Her ID card", "An umbrella", "A banana", "A resignation"], answer: 0 },
+      { q_de: "Wann öffnet sie das Paket?", q_en: "When does she open the package?", options_de: ["Sofort zu Hause", "Erst nächste Woche", "Im Paketshop", "Im Bus"], options_en: ["Immediately at home", "Only next week", "At the package shop", "On the bus"], answer: 0 },
+    ],
+  },
+  {
+    id: "a2-waesche",
+    level: "A2",
+    topic: "haushalt",
+    title: "Die Waschmaschine ist besetzt",
+    intro: "Shared laundry room drama, gentle version.",
+    vocab: [
+      ["the washing machine", "die Waschmaschine", "noun"],
+      ["the laundry room", "der Waschraum", "noun"],
+      ["occupied", "besetzt", "adjective"],
+      ["to wait", "warten", "verb"],
+      ["the neighbor", "der Nachbar", "noun"],
+      ["to apologize", "sich entschuldigen", "verb"],
+    ],
+    paragraphs: [
+      "Am Sonntag will Karim seine Wäsche waschen. Im Waschraum ist die Waschmaschine besetzt.",
+      "Auf der Maschine liegt ein Korb. Karim wartet zehn Minuten und trifft dann seinen Nachbarn.",
+      "Der Nachbar entschuldigt sich und nimmt die Wäsche heraus. Karim kann endlich waschen.",
+    ],
+    questions: [
+      { q_de: "Was will Karim machen?", q_en: "What does Karim want to do?", options_de: ["Wäsche waschen", "Einkaufen gehen", "Eine Bewerbung schreiben", "Zum Arzt gehen"], options_en: ["Do laundry", "Go shopping", "Write an application", "Go to the doctor"], answer: 0 },
+      { q_de: "Was ist besetzt?", q_en: "What is occupied?", options_de: ["Die Waschmaschine", "Der Bus", "Die Küche", "Der Balkon"], options_en: ["The washing machine", "The bus", "The kitchen", "The balcony"], answer: 0 },
+      { q_de: "Wen trifft Karim?", q_en: "Who does Karim meet?", options_de: ["Seinen Nachbarn", "Seinen Chef", "Seine Ärztin", "Eine Verkäuferin"], options_en: ["His neighbor", "His boss", "His doctor", "A saleswoman"], answer: 0 },
+      { q_de: "Was macht der Nachbar?", q_en: "What does the neighbor do?", options_de: ["Er entschuldigt sich", "Er repariert das Fahrrad", "Er ruft die Polizei", "Er kauft Brot"], options_en: ["He apologizes", "He repairs the bicycle", "He calls the police", "He buys bread"], answer: 0 },
+    ],
+  },
+  {
+    id: "a2-fahrrad",
+    level: "A2",
+    topic: "transport",
+    title: "Ein platter Reifen",
+    intro: "Bike problem, repair shop, everyday useful.",
+    vocab: [
+      ["the tire", "der Reifen", "noun"],
+      ["flat", "platt", "adjective"],
+      ["the repair shop", "die Werkstatt", "noun"],
+      ["to repair", "reparieren", "verb"],
+      ["the receipt", "der Kassenzettel", "noun"],
+      ["cheap", "günstig", "adjective"],
+    ],
+    paragraphs: [
+      "Julia will mit dem Fahrrad zur Arbeit fahren. Aber ein Reifen ist platt.",
+      "Sie schiebt das Fahrrad zur Werkstatt um die Ecke. Der Mitarbeiter kann den Reifen sofort reparieren.",
+      "Die Reparatur ist günstig. Julia bekommt einen Kassenzettel und fährt weiter zur Arbeit.",
+    ],
+    questions: [
+      { q_de: "Was ist kaputt?", q_en: "What is broken?", options_de: ["Ein Reifen", "Der Sattel", "Die Klingel", "Das Licht"], options_en: ["A tire", "The saddle", "The bell", "The light"], answer: 0 },
+      { q_de: "Wohin bringt Julia das Fahrrad?", q_en: "Where does Julia bring the bicycle?", options_de: ["Zur Werkstatt", "Zum Bürgeramt", "Zur Apotheke", "Zum Café"], options_en: ["To the repair shop", "To the Bürgeramt", "To the pharmacy", "To the cafe"], answer: 0 },
+      { q_de: "Wie ist die Reparatur?", q_en: "How is the repair?", options_de: ["Günstig", "Sehr teuer", "Unmöglich", "Zu spät"], options_en: ["Cheap", "Very expensive", "Impossible", "Too late"], answer: 0 },
+      { q_de: "Was bekommt Julia?", q_en: "What does Julia receive?", options_de: ["Einen Kassenzettel", "Ein Rezept", "Eine Einladung", "Eine Monatskarte"], options_en: ["A receipt", "A prescription", "An invitation", "A monthly pass"], answer: 0 },
+    ],
+  },
+  {
+    id: "a2-bibliothek",
+    level: "A2",
+    topic: "freizeit",
+    title: "Ein Buch ausleihen",
+    intro: "Library story for quiet weekend vibes.",
+    vocab: [
+      ["the library", "die Bibliothek", "noun"],
+      ["to borrow", "ausleihen", "verb"],
+      ["the library card", "der Bibliotheksausweis", "noun"],
+      ["quiet", "ruhig", "adjective"],
+      ["to return", "zurückgeben", "verb"],
+      ["the novel", "der Roman", "noun"],
+    ],
+    paragraphs: [
+      "Am Samstag geht Omar in die Bibliothek. Dort ist es ruhig.",
+      "Er möchte einen Roman ausleihen, aber er findet seinen Bibliotheksausweis nicht sofort.",
+      "Eine Mitarbeiterin hilft ihm. Am Ende leiht Omar zwei Bücher aus und muss sie in vier Wochen zurückgeben.",
+    ],
+    questions: [
+      { q_de: "Wo ist Omar am Samstag?", q_en: "Where is Omar on Saturday?", options_de: ["In der Bibliothek", "Im Fitnessstudio", "Im Rathaus", "Im Supermarkt"], options_en: ["In the library", "At the gym", "At city hall", "In the supermarket"], answer: 0 },
+      { q_de: "Was möchte Omar ausleihen?", q_en: "What does Omar want to borrow?", options_de: ["Einen Roman", "Ein Fahrrad", "Eine Jacke", "Einen Schlüssel"], options_en: ["A novel", "A bicycle", "A jacket", "A key"], answer: 0 },
+      { q_de: "Was findet Omar nicht sofort?", q_en: "What does Omar not find immediately?", options_de: ["Seinen Bibliotheksausweis", "Seinen Pass", "Seine Schuhe", "Seine Wohnung"], options_en: ["His library card", "His passport", "His shoes", "His apartment"], answer: 0 },
+      { q_de: "Wann muss er die Bücher zurückgeben?", q_en: "When must he return the books?", options_de: ["In vier Wochen", "Morgen", "In einem Jahr", "Heute Abend"], options_en: ["In four weeks", "Tomorrow", "In one year", "Tonight"], answer: 0 },
+    ],
+  },
+  {
+    id: "a2-abendessen",
+    level: "A2",
+    topic: "freizeit",
+    title: "Ein Abendessen bei Freunden",
+    intro: "Invitations, bringing something, small talk.",
+    vocab: [
+      ["the invitation", "die Einladung", "noun"],
+      ["to bring", "mitbringen", "verb"],
+      ["the dessert", "der Nachtisch", "noun"],
+      ["to taste good", "schmecken", "verb"],
+      ["the kitchen", "die Küche", "noun"],
+      ["the guest", "der Gast", "noun"],
+    ],
+    paragraphs: [
+      "Elif bekommt eine Einladung zum Abendessen. Ihre Freunde wohnen in der Nähe.",
+      "Sie fragt: \"Soll ich etwas mitbringen?\" Ihr Freund sagt: \"Vielleicht einen Nachtisch.\"",
+      "Elif macht einen kleinen Kuchen. Beim Abendessen schmeckt allen der Nachtisch sehr gut.",
+    ],
+    questions: [
+      { q_de: "Wozu bekommt Elif eine Einladung?", q_en: "What does Elif receive an invitation to?", options_de: ["Zum Abendessen", "Zu einem Arzttermin", "Zu einer Wohnungsbesichtigung", "Zu einer Besprechung"], options_en: ["To dinner", "To a doctor appointment", "To an apartment viewing", "To a meeting"], answer: 0 },
+      { q_de: "Was soll Elif mitbringen?", q_en: "What should Elif bring?", options_de: ["Einen Nachtisch", "Eine Fahrkarte", "Ein Formular", "Einen Regenschirm"], options_en: ["A dessert", "A ticket", "A form", "An umbrella"], answer: 0 },
+      { q_de: "Was macht Elif?", q_en: "What does Elif make?", options_de: ["Einen kleinen Kuchen", "Eine Suppe", "Einen Salat", "Ein Brot"], options_en: ["A small cake", "A soup", "A salad", "A bread"], answer: 0 },
+      { q_de: "Wie finden die Gäste den Nachtisch?", q_en: "How do the guests find the dessert?", options_de: ["Er schmeckt sehr gut", "Er ist zu kalt", "Er ist vergessen", "Er ist kaputt"], options_en: ["It tastes very good", "It is too cold", "It is forgotten", "It is broken"], answer: 0 },
+    ],
+  },
+  {
+    id: "a2-fitnesskurs",
+    level: "A2",
+    topic: "gesundheit",
+    title: "Der erste Fitnesskurs",
+    intro: "Useful for hobbies and health routines.",
+    vocab: [
+      ["the gym", "das Fitnessstudio", "noun"],
+      ["the course", "der Kurs", "noun"],
+      ["to register", "sich anmelden", "verb"],
+      ["the trainer", "der Trainer", "noun"],
+      ["the towel", "das Handtuch", "noun"],
+      ["exhausted", "erschöpft", "adjective"],
+    ],
+    paragraphs: [
+      "Rosa meldet sich für einen Kurs im Fitnessstudio an. Der Kurs beginnt um siebzehn Uhr.",
+      "Der Trainer ist freundlich und erklärt jede Übung langsam. Rosa hat ein Handtuch und Wasser dabei.",
+      "Nach dem Kurs ist sie erschöpft, aber zufrieden. Sie möchte nächste Woche wiederkommen.",
+    ],
+    questions: [
+      { q_de: "Wofür meldet sich Rosa an?", q_en: "What does Rosa register for?", options_de: ["Für einen Fitnesskurs", "Für einen Sprachtest", "Für eine Wohnung", "Für eine Versicherung"], options_en: ["For a fitness course", "For a language test", "For an apartment", "For insurance"], answer: 0 },
+      { q_de: "Wann beginnt der Kurs?", q_en: "When does the course begin?", options_de: ["Um siebzehn Uhr", "Um acht Uhr", "Um Mitternacht", "Um sechs Uhr morgens"], options_en: ["At five p.m.", "At eight", "At midnight", "At six a.m."], answer: 0 },
+      { q_de: "Was hat Rosa dabei?", q_en: "What does Rosa have with her?", options_de: ["Ein Handtuch und Wasser", "Einen Vertrag", "Eine Rechnung", "Einen Blumenstrauß"], options_en: ["A towel and water", "A contract", "An invoice", "A bouquet"], answer: 0 },
+      { q_de: "Wie fühlt sich Rosa nach dem Kurs?", q_en: "How does Rosa feel after the class?", options_de: ["Erschöpft, aber zufrieden", "Krank und wütend", "Langweilig und kalt", "Nervös und traurig"], options_en: ["Exhausted but satisfied", "Sick and angry", "Bored and cold", "Nervous and sad"], answer: 0 },
+    ],
+  },
+  {
+    id: "b1-ueberweisung",
+    level: "B1",
+    topic: "alltag",
+    title: "Die falsche Überweisung",
+    intro: "Banking stress without the full panic.",
+    vocab: [
+      ["the invoice", "die Rechnung", "noun"],
+      ["the bank transfer", "die Überweisung", "noun"],
+      ["the account number", "die Kontonummer", "noun"],
+      ["to check", "überprüfen", "verb"],
+      ["the mistake", "der Fehler", "noun"],
+      ["to correct", "korrigieren", "verb"],
+    ],
+    paragraphs: [
+      "Nadia bekommt eine Rechnung für ihren Internetvertrag. Sie macht sofort eine Überweisung.",
+      "Am Abend merkt sie, dass eine Zahl in der Kontonummer falsch ist. Sie überprüft alles noch einmal und wird nervös.",
+      "Am nächsten Morgen ruft sie bei der Bank an. Die Mitarbeiterin kann die Überweisung stoppen.",
+      "Nadia korrigiert den Fehler und speichert die richtige Kontonummer für das nächste Mal.",
+    ],
+    questions: [
+      { q_de: "Wofür bekommt Nadia eine Rechnung?", q_en: "What does Nadia receive an invoice for?", options_de: ["Für ihren Internetvertrag", "Für eine Zugfahrt", "Für eine Reparatur", "Für den Deutschkurs"], options_en: ["For her internet contract", "For a train ride", "For a repair", "For the German course"], answer: 0 },
+      { q_de: "Was ist falsch?", q_en: "What is wrong?", options_de: ["Eine Zahl in der Kontonummer", "Ihr Name", "Die Adresse der Bank", "Das Datum"], options_en: ["One digit in the account number", "Her name", "The bank's address", "The date"], answer: 0 },
+      { q_de: "Was macht die Bankmitarbeiterin?", q_en: "What does the bank employee do?", options_de: ["Sie stoppt die Überweisung", "Sie erhöht die Rechnung", "Sie kündigt den Vertrag", "Sie schließt das Konto"], options_en: ["She stops the transfer", "She increases the invoice", "She cancels the contract", "She closes the account"], answer: 0 },
+      { q_de: "Was speichert Nadia?", q_en: "What does Nadia save?", options_de: ["Die richtige Kontonummer", "Eine neue Fahrkarte", "Den Mietvertrag", "Eine Beschwerde"], options_en: ["The correct account number", "A new ticket", "The rental contract", "A complaint"], answer: 0 },
+    ],
+  },
+  {
+    id: "b1-lauter-nachbar",
+    level: "B1",
+    topic: "haushalt",
+    title: "Musik nach zehn",
+    intro: "Neighbor noise, polite German conflict.",
+    vocab: [
+      ["the house rules", "die Hausordnung", "noun"],
+      ["quiet hours", "die Ruhezeit", "noun"],
+      ["to disturb", "stören", "verb"],
+      ["consideration", "die Rücksicht", "noun"],
+      ["to ring the bell", "klingeln", "verb"],
+      ["the volume", "die Lautstärke", "noun"],
+    ],
+    paragraphs: [
+      "Um halb elf hört Alex laute Musik aus der Nachbarwohnung. Laut Hausordnung beginnt die Ruhezeit um zehn.",
+      "Alex will keinen Streit. Er klingelt freundlich und sagt: \"Entschuldigung, die Musik ist ziemlich laut.\"",
+      "Der Nachbar wirkt überrascht, aber er reduziert sofort die Lautstärke. Er hatte die Zeit vergessen.",
+      "Am nächsten Tag bedankt sich Alex für die Rücksicht. Danach grüßen sich beide entspannter im Treppenhaus.",
+    ],
+    questions: [
+      { q_de: "Wann hört Alex laute Musik?", q_en: "When does Alex hear loud music?", options_de: ["Um halb elf", "Um acht Uhr morgens", "Am Nachmittag", "Um zehn vor sieben"], options_en: ["At 10:30", "At eight in the morning", "In the afternoon", "At 6:50"], answer: 0 },
+      { q_de: "Wann beginnt die Ruhezeit?", q_en: "When do quiet hours begin?", options_de: ["Um zehn", "Um Mitternacht", "Um sechs", "Um halb zwölf"], options_en: ["At ten", "At midnight", "At six", "At 11:30"], answer: 0 },
+      { q_de: "Wie spricht Alex mit dem Nachbarn?", q_en: "How does Alex speak with the neighbor?", options_de: ["Freundlich", "Aggressiv", "Gar nicht", "Nur per Brief"], options_en: ["Politely", "Aggressively", "Not at all", "Only by letter"], answer: 0 },
+      { q_de: "Was macht der Nachbar?", q_en: "What does the neighbor do?", options_de: ["Er reduziert die Lautstärke", "Er ruft die Polizei", "Er zieht aus", "Er macht die Musik lauter"], options_en: ["He lowers the volume", "He calls the police", "He moves out", "He makes the music louder"], answer: 0 },
+    ],
+  },
+  {
+    id: "b1-vorstellungsgespraech",
+    level: "B1",
+    topic: "arbeit",
+    title: "Das Vorstellungsgespräch",
+    intro: "Interview nerves with practical work words.",
+    vocab: [
+      ["the job interview", "das Vorstellungsgespräch", "noun"],
+      ["the experience", "die Erfahrung", "noun"],
+      ["the strength", "die Stärke", "noun"],
+      ["reliable", "zuverlässig", "adjective"],
+      ["to describe", "beschreiben", "verb"],
+      ["the team", "das Team", "noun"],
+    ],
+    paragraphs: [
+      "Mara hat ein Vorstellungsgespräch in einer kleinen Firma. Sie ist nervös, aber gut vorbereitet.",
+      "Der Personaler fragt nach ihrer Erfahrung und ihren Stärken. Mara beschreibt ein Projekt aus ihrer alten Arbeit.",
+      "Sie sagt, dass sie zuverlässig ist und gern im Team arbeitet. Am Ende fühlt sie sich viel sicherer.",
+      "Zwei Tage später bekommt sie eine Einladung zu einem zweiten Gespräch.",
+    ],
+    questions: [
+      { q_de: "Wo hat Mara ein Vorstellungsgespräch?", q_en: "Where does Mara have an interview?", options_de: ["In einer kleinen Firma", "Im Bürgeramt", "In einer Arztpraxis", "Im Bahnhof"], options_en: ["At a small company", "At the Bürgeramt", "At a doctor's office", "At the station"], answer: 0 },
+      { q_de: "Wonach fragt der Personaler?", q_en: "What does the HR person ask about?", options_de: ["Nach Erfahrung und Stärken", "Nach ihrer Miete", "Nach ihrer Monatskarte", "Nach einem Rezept"], options_en: ["Experience and strengths", "Her rent", "Her monthly pass", "A prescription"], answer: 0 },
+      { q_de: "Wie beschreibt sich Mara?", q_en: "How does Mara describe herself?", options_de: ["Zuverlässig und teamorientiert", "Müde und krank", "Unpünktlich und laut", "Unsicher und wütend"], options_en: ["Reliable and team-oriented", "Tired and sick", "Unpunctual and loud", "Unsure and angry"], answer: 0 },
+      { q_de: "Was bekommt Mara später?", q_en: "What does Mara receive later?", options_de: ["Eine Einladung zu einem zweiten Gespräch", "Eine Kündigung", "Eine Rechnung", "Eine Beschwerde"], options_en: ["An invitation to a second interview", "A termination", "An invoice", "A complaint"], answer: 0 },
+    ],
+  },
+  {
+    id: "b1-muelltrennung",
+    level: "B1",
+    topic: "haushalt",
+    title: "Der gelbe Sack",
+    intro: "Waste separation, because yes, this is daily German life.",
+    vocab: [
+      ["waste separation", "die Mülltrennung", "noun"],
+      ["the yellow bag", "der gelbe Sack", "noun"],
+      ["the bottle deposit", "das Pfand", "noun"],
+      ["the paper bin", "die Papiertonne", "noun"],
+      ["to separate", "trennen", "verb"],
+      ["the packaging", "die Verpackung", "noun"],
+    ],
+    paragraphs: [
+      "Nach dem Umzug ist Pablo bei der Mülltrennung unsicher. In seiner Küche stehen drei verschiedene Behälter.",
+      "Seine Nachbarin erklärt: Papier kommt in die Papiertonne, Verpackungen in den gelben Sack und Flaschen mit Pfand zurück in den Laden.",
+      "Pablo schreibt sich eine kleine Liste an den Kühlschrank. Nach einer Woche ist es schon Routine.",
+      "Er merkt: Mülltrennung klingt kompliziert, aber mit System geht es schnell.",
+    ],
+    questions: [
+      { q_de: "Warum ist Pablo unsicher?", q_en: "Why is Pablo unsure?", options_de: ["Wegen der Mülltrennung", "Wegen seines Arbeitsvertrags", "Wegen einer Verspätung", "Wegen seines Rezepts"], options_en: ["Because of waste separation", "Because of his work contract", "Because of a delay", "Because of his prescription"], answer: 0 },
+      { q_de: "Wohin kommt Papier?", q_en: "Where does paper go?", options_de: ["In die Papiertonne", "In den gelben Sack", "In den Supermarkt", "In die Waschmaschine"], options_en: ["Into the paper bin", "Into the yellow bag", "Into the supermarket", "Into the washing machine"], answer: 0 },
+      { q_de: "Was macht Pablo mit der Liste?", q_en: "What does Pablo do with the list?", options_de: ["Er hängt sie an den Kühlschrank", "Er gibt sie beim Bürgeramt ab", "Er schickt sie seinem Chef", "Er wirft sie sofort weg"], options_en: ["He puts it on the fridge", "He submits it at the Bürgeramt", "He sends it to his boss", "He throws it away immediately"], answer: 0 },
+      { q_de: "Wie findet Pablo die Mülltrennung nach einer Woche?", q_en: "How does Pablo find waste separation after one week?", options_de: ["Sie ist Routine", "Sie ist unmöglich", "Sie ist verboten", "Sie ist teuer"], options_en: ["It is routine", "It is impossible", "It is forbidden", "It is expensive"], answer: 0 },
+    ],
+  },
+  {
+    id: "b1-projektfrist",
+    level: "B1",
+    topic: "arbeit",
+    title: "Freitag ist Fristtag",
+    intro: "Team deadline without corporate stiffness.",
+    vocab: [
+      ["the deadline", "die Frist", "noun"],
+      ["the task list", "die Aufgabenliste", "noun"],
+      ["urgent", "dringend", "adjective"],
+      ["to prioritize", "priorisieren", "verb"],
+      ["to finish", "erledigen", "verb"],
+      ["the update", "das Update", "noun"],
+    ],
+    paragraphs: [
+      "Im Team von Leila ist die Frist am Freitag. Einige Aufgaben sind noch offen.",
+      "Leila schaut in die Aufgabenliste und markiert, was dringend ist. Danach priorisiert sie drei Punkte.",
+      "Am Nachmittag gibt sie ihrem Team ein kurzes Update. Alle wissen jetzt, was zuerst erledigt werden muss.",
+      "Am Freitag schaffen sie die wichtigsten Aufgaben. Nicht perfekt, aber rechtzeitig.",
+    ],
+    questions: [
+      { q_de: "Wann ist die Frist?", q_en: "When is the deadline?", options_de: ["Am Freitag", "Am Montag", "Heute Abend", "Nächsten Monat"], options_en: ["On Friday", "On Monday", "Tonight", "Next month"], answer: 0 },
+      { q_de: "Was markiert Leila?", q_en: "What does Leila mark?", options_de: ["Dringende Aufgaben", "Neue Kollegen", "Alte Rechnungen", "Freie Wohnungen"], options_en: ["Urgent tasks", "New colleagues", "Old invoices", "Available apartments"], answer: 0 },
+      { q_de: "Was gibt Leila dem Team?", q_en: "What does Leila give the team?", options_de: ["Ein kurzes Update", "Eine Beschwerde", "Eine Fahrkarte", "Ein Rezept"], options_en: ["A short update", "A complaint", "A ticket", "A prescription"], answer: 0 },
+      { q_de: "Was schaffen sie bis Freitag?", q_en: "What do they manage by Friday?", options_de: ["Die wichtigsten Aufgaben", "Alle Aufgaben perfekt", "Gar nichts", "Nur die Pause"], options_en: ["The most important tasks", "All tasks perfectly", "Nothing", "Only the break"], answer: 0 },
+    ],
+  },
+  {
+    id: "b1-ueberweisung-arzt",
+    level: "B1",
+    topic: "gesundheit",
+    title: "Die Überweisung zum Facharzt",
+    intro: "Doctor referral vocabulary, useful in Germany.",
+    vocab: [
+      ["the referral", "die Überweisung", "noun", "gesundheit", "B1", "Medical referral, also bank transfer in another context."],
+      ["the specialist", "der Facharzt", "noun"],
+      ["the health insurance card", "die Gesundheitskarte", "noun"],
+      ["the waiting time", "die Wartezeit", "noun"],
+      ["to make an appointment", "einen Termin vereinbaren", "phrase"],
+      ["the practice", "die Praxis", "noun"],
+    ],
+    paragraphs: [
+      "Timo hat seit Wochen Rückenschmerzen. Sein Hausarzt gibt ihm eine Überweisung zum Facharzt.",
+      "Zu Hause ruft Timo in einer Praxis an. Die Mitarbeiterin fragt nach seiner Gesundheitskarte und erklärt die Wartezeit.",
+      "Der nächste freie Termin ist in drei Wochen. Timo nimmt den Termin, weil die Praxis gut erreichbar ist.",
+      "Er legt die Überweisung in seinen Kalender, damit er sie nicht vergisst.",
+    ],
+    questions: [
+      { q_de: "Warum braucht Timo einen Facharzt?", q_en: "Why does Timo need a specialist?", options_de: ["Wegen Rückenschmerzen", "Wegen Fieber", "Wegen eines Fahrradunfalls", "Wegen Zahnschmerzen"], options_en: ["Because of back pain", "Because of fever", "Because of a bicycle accident", "Because of toothache"], answer: 0 },
+      { q_de: "Was gibt ihm der Hausarzt?", q_en: "What does the family doctor give him?", options_de: ["Eine Überweisung", "Eine Monatskarte", "Eine Rechnung", "Einen Mietvertrag"], options_en: ["A referral", "A monthly pass", "An invoice", "A rental contract"], answer: 0 },
+      { q_de: "Wonach fragt die Mitarbeiterin?", q_en: "What does the employee ask about?", options_de: ["Nach der Gesundheitskarte", "Nach seiner Miete", "Nach seiner Kündigung", "Nach seinem Fahrrad"], options_en: ["The health insurance card", "His rent", "His termination", "His bicycle"], answer: 0 },
+      { q_de: "Warum nimmt Timo den Termin?", q_en: "Why does Timo take the appointment?", options_de: ["Die Praxis ist gut erreichbar", "Der Termin ist morgen", "Die Wartezeit ist null", "Er will nicht zum Arzt"], options_en: ["The practice is easy to reach", "The appointment is tomorrow", "The waiting time is zero", "He does not want to go to the doctor"], answer: 0 },
+    ],
+  },
+  {
+    id: "b2-versicherung-schaden",
+    level: "B2",
+    topic: "alltag",
+    title: "Der Wasserschaden",
+    intro: "Insurance vocabulary through a realistic apartment problem.",
+    vocab: [
+      ["the water damage", "der Wasserschaden", "noun"],
+      ["liability insurance", "die Haftpflichtversicherung", "noun"],
+      ["the claim report", "die Schadensmeldung", "noun"],
+      ["to document", "dokumentieren", "verb"],
+      ["the evidence photo", "das Beweisfoto", "noun"],
+      ["to reimburse", "erstatten", "verb"],
+    ],
+    paragraphs: [
+      "Beim Blumengießen kippt Lea aus Versehen eine Vase um. Wasser läuft auf den Boden und in die Wohnung darunter.",
+      "Der Nachbar meldet einen kleinen Wasserschaden an der Decke. Lea bleibt ruhig und ruft ihre Haftpflichtversicherung an.",
+      "Die Versicherung bittet sie, den Schaden zu dokumentieren und Beweisfotos zu schicken. Lea füllt die Schadensmeldung online aus.",
+      "Nach zwei Wochen bekommt sie die Nachricht, dass die Reparaturkosten erstattet werden.",
+    ],
+    questions: [
+      { q_de: "Wie entsteht der Wasserschaden?", q_en: "How does the water damage happen?", options_de: ["Lea kippt eine Vase um", "Ein Rohr platzt", "Der Nachbar vergisst den Wasserhahn", "Die Heizung explodiert"], options_en: ["Lea knocks over a vase", "A pipe bursts", "The neighbor forgets the tap", "The heating explodes"], answer: 0 },
+      { q_de: "Welche Versicherung ruft Lea an?", q_en: "Which insurance does Lea call?", options_de: ["Die Haftpflichtversicherung", "Die Krankenversicherung", "Die Rentenversicherung", "Die Reiseversicherung"], options_en: ["Liability insurance", "Health insurance", "Pension insurance", "Travel insurance"], answer: 0 },
+      { q_de: "Was soll Lea schicken?", q_en: "What should Lea send?", options_de: ["Beweisfotos", "Eine Bewerbung", "Eine Fahrkarte", "Einen Arbeitsvertrag"], options_en: ["Evidence photos", "A job application", "A ticket", "A work contract"], answer: 0 },
+      { q_de: "Was wird erstattet?", q_en: "What is reimbursed?", options_de: ["Die Reparaturkosten", "Die Miete für ein Jahr", "Leas Urlaub", "Der neue Teppich von Lea"], options_en: ["The repair costs", "Rent for a year", "Lea's vacation", "Lea's new carpet"], answer: 0 },
+    ],
+  },
+  {
+    id: "b2-mietvertrag-klausel",
+    level: "B2",
+    topic: "alltag",
+    title: "Die Klausel im Mietvertrag",
+    intro: "Reading contracts without losing your soul.",
+    vocab: [
+      ["the clause", "die Klausel", "noun"],
+      ["the notice period", "die Kündigungsfrist", "noun"],
+      ["to clarify", "klären", "verb"],
+      ["binding", "verbindlich", "adjective"],
+      ["the additional cost", "die Nebenkosten", "noun"],
+      ["unclear", "unklar", "adjective"],
+    ],
+    paragraphs: [
+      "Vor der Unterschrift liest Daniel seinen neuen Mietvertrag genau durch. Eine Klausel zu den Nebenkosten wirkt unklar.",
+      "Er möchte nicht einfach unterschreiben und später überrascht werden. Deshalb schreibt er der Hausverwaltung eine kurze E-Mail.",
+      "Er fragt, ob die Heizkosten schon in den Nebenkosten enthalten sind und welche Kündigungsfrist verbindlich gilt.",
+      "Am nächsten Tag bekommt er eine klare Antwort. Erst danach unterschreibt er den Vertrag.",
+    ],
+    questions: [
+      { q_de: "Warum schreibt Daniel der Hausverwaltung?", q_en: "Why does Daniel write to property management?", options_de: ["Eine Klausel ist unklar", "Er will sofort kündigen", "Er hat den Schlüssel verloren", "Die Heizung ist kaputt"], options_en: ["A clause is unclear", "He wants to terminate immediately", "He lost the key", "The heating is broken"], answer: 0 },
+      { q_de: "Wozu fragt Daniel nach?", q_en: "What does Daniel ask about?", options_de: ["Nebenkosten und Kündigungsfrist", "Mülltrennung und Fahrräder", "Internet und Fernsehen", "Möbel und Pflanzen"], options_en: ["Additional costs and notice period", "Waste separation and bicycles", "Internet and television", "Furniture and plants"], answer: 0 },
+      { q_de: "Wann unterschreibt Daniel?", q_en: "When does Daniel sign?", options_de: ["Nach der klaren Antwort", "Vor dem Lesen", "Während der Besichtigung", "Nie"], options_en: ["After the clear answer", "Before reading", "During the viewing", "Never"], answer: 0 },
+      { q_de: "Was möchte Daniel vermeiden?", q_en: "What does Daniel want to avoid?", options_de: ["Spätere Überraschungen", "Eine Einladung", "Eine Gehaltserhöhung", "Einen Arzttermin"], options_en: ["Later surprises", "An invitation", "A salary increase", "A doctor appointment"], answer: 0 },
+    ],
+  },
+  {
+    id: "b2-feedback",
+    level: "B2",
+    topic: "arbeit",
+    title: "Feedback ohne Drama",
+    intro: "Workplace feedback with nuance.",
+    vocab: [
+      ["the feedback", "das Feedback", "noun"],
+      ["the expectation", "die Erwartung", "noun"],
+      ["to address", "ansprechen", "verb"],
+      ["appreciative", "wertschätzend", "adjective"],
+      ["specific", "konkret", "adjective"],
+      ["to improve", "verbessern", "verb"],
+    ],
+    paragraphs: [
+      "Im Monatsgespräch möchte Nils ein Problem ansprechen. Er findet, dass die Erwartungen im Projekt oft zu spät kommuniziert werden.",
+      "Er beginnt wertschätzend und nennt ein konkretes Beispiel. Dadurch klingt sein Feedback nicht wie ein Angriff.",
+      "Seine Teamleiterin hört zu und fragt, welche Lösung er vorschlägt. Nils schlägt ein kurzes Update jeden Mittwoch vor.",
+      "Eine Woche später merkt das Team, dass die Zusammenarbeit klarer geworden ist.",
+    ],
+    questions: [
+      { q_de: "Welches Problem spricht Nils an?", q_en: "Which problem does Nils address?", options_de: ["Zu spät kommunizierte Erwartungen", "Zu hohe Miete", "Zu laute Nachbarn", "Zu wenig Urlaub"], options_en: ["Expectations communicated too late", "Rent that is too high", "Neighbors that are too loud", "Too little vacation"], answer: 0 },
+      { q_de: "Wie beginnt Nils das Gespräch?", q_en: "How does Nils begin the conversation?", options_de: ["Wertschätzend und konkret", "Laut und ungeduldig", "Ironisch und kalt", "Völlig schweigend"], options_en: ["Appreciatively and specifically", "Loudly and impatiently", "Ironically and coldly", "Completely silently"], answer: 0 },
+      { q_de: "Was schlägt Nils vor?", q_en: "What does Nils suggest?", options_de: ["Ein kurzes Update jeden Mittwoch", "Eine längere Pause", "Einen neuen Chef", "Eine sofortige Kündigung"], options_en: ["A short update every Wednesday", "A longer break", "A new boss", "Immediate termination"], answer: 0 },
+      { q_de: "Was verbessert sich?", q_en: "What improves?", options_de: ["Die Zusammenarbeit", "Die Miete", "Die Bahnverbindung", "Die Versicherung"], options_en: ["Collaboration", "Rent", "The train connection", "Insurance"], answer: 0 },
+    ],
+  },
+  {
+    id: "b2-frist-behoerde",
+    level: "B2",
+    topic: "behörden",
+    title: "Eine Frist beim Amt",
+    intro: "Authority vocabulary with deadline pressure.",
+    vocab: [
+      ["the deadline", "die Frist", "noun"],
+      ["the application", "der Antrag", "noun"],
+      ["to extend", "verlängern", "verb"],
+      ["the reason", "die Begründung", "noun"],
+      ["to process", "bearbeiten", "verb"],
+      ["complete", "vollständig", "adjective"],
+    ],
+    paragraphs: [
+      "Sana merkt am Abend, dass für ihren Antrag noch ein Dokument fehlt. Die Frist endet in zwei Tagen.",
+      "Sie schreibt dem Amt sofort eine Nachricht und bittet um eine Verlängerung. In der Begründung erklärt sie, dass das Dokument erst nächste Woche ausgestellt wird.",
+      "Am nächsten Morgen bekommt sie eine Antwort: Die Frist wird um zehn Tage verlängert, wenn sie den Antrag bis dahin vollständig einreicht.",
+      "Sana ist erleichtert und legt sich eine Erinnerung in den Kalender.",
+    ],
+    questions: [
+      { q_de: "Was fehlt Sana?", q_en: "What is Sana missing?", options_de: ["Ein Dokument", "Eine Fahrkarte", "Ein Rezept", "Ein Schlüssel"], options_en: ["A document", "A ticket", "A prescription", "A key"], answer: 0 },
+      { q_de: "Wann endet die Frist?", q_en: "When does the deadline end?", options_de: ["In zwei Tagen", "In zwei Monaten", "Morgen früh um sechs", "Heute Mittag"], options_en: ["In two days", "In two months", "Tomorrow at six a.m.", "Today at noon"], answer: 0 },
+      { q_de: "Worum bittet Sana?", q_en: "What does Sana ask for?", options_de: ["Um eine Verlängerung", "Um eine neue Wohnung", "Um eine Gehaltserhöhung", "Um einen Ersatzbus"], options_en: ["An extension", "A new apartment", "A salary increase", "A replacement bus"], answer: 0 },
+      { q_de: "Was muss Sana vollständig einreichen?", q_en: "What must Sana submit completely?", options_de: ["Den Antrag", "Die Monatskarte", "Die Einladung", "Die Mülltrennung"], options_en: ["The application", "The monthly pass", "The invitation", "Waste separation"], answer: 0 },
+    ],
+  },
+  {
+    id: "b2-wg-konflikt",
+    level: "B2",
+    topic: "haushalt",
+    title: "Der Putzplan in der WG",
+    intro: "Flatshare conflict with compromise language.",
+    vocab: [
+      ["the flatshare", "die WG", "noun"],
+      ["the cleaning schedule", "der Putzplan", "noun"],
+      ["the compromise", "der Kompromiss", "noun"],
+      ["to distribute", "verteilen", "verb"],
+      ["fair", "fair", "adjective"],
+      ["the agreement", "die Vereinbarung", "noun"],
+    ],
+    paragraphs: [
+      "In der WG von Fadi gibt es Streit über den Putzplan. Zwei Personen fühlen sich unfair behandelt.",
+      "Beim gemeinsamen Abendessen sprechen alle offen darüber. Fadi schlägt vor, die Aufgaben neu zu verteilen.",
+      "Nach zwanzig Minuten finden sie einen Kompromiss: Die Aufgaben wechseln jede Woche, und schwere Aufgaben werden geteilt.",
+      "Die neue Vereinbarung hängt jetzt am Kühlschrank. Die Stimmung ist deutlich entspannter.",
+    ],
+    questions: [
+      { q_de: "Worum gibt es Streit?", q_en: "What is the conflict about?", options_de: ["Um den Putzplan", "Um die Miete", "Um einen Arzttermin", "Um eine Bewerbung"], options_en: ["The cleaning schedule", "Rent", "A doctor appointment", "A job application"], answer: 0 },
+      { q_de: "Was schlägt Fadi vor?", q_en: "What does Fadi suggest?", options_de: ["Die Aufgaben neu zu verteilen", "Die WG zu verlassen", "Den Kühlschrank zu verkaufen", "Nicht mehr zu putzen"], options_en: ["Redistributing the tasks", "Leaving the flatshare", "Selling the fridge", "No longer cleaning"], answer: 0 },
+      { q_de: "Wie sieht der Kompromiss aus?", q_en: "What does the compromise look like?", options_de: ["Aufgaben wechseln jede Woche", "Eine Person macht alles", "Niemand macht mehr etwas", "Alle zahlen eine Strafe"], options_en: ["Tasks change every week", "One person does everything", "Nobody does anything anymore", "Everyone pays a fine"], answer: 0 },
+      { q_de: "Wo hängt die Vereinbarung?", q_en: "Where is the agreement posted?", options_de: ["Am Kühlschrank", "An der Haustür", "Im Bürgeramt", "Im Waschraum"], options_en: ["On the fridge", "On the front door", "At the Bürgeramt", "In the laundry room"], answer: 0 },
+    ],
+  },
+  {
+    id: "b2-weiterbildung",
+    level: "B2",
+    topic: "arbeit",
+    title: "Die Weiterbildung",
+    intro: "Career-growth vocabulary without startup fluff.",
+    vocab: [
+      ["the continuing education", "die Weiterbildung", "noun"],
+      ["the funding", "die Förderung", "noun"],
+      ["the requirement", "die Voraussetzung", "noun"],
+      ["to apply for", "beantragen", "verb"],
+      ["the certificate", "das Zertifikat", "noun"],
+      ["to prove", "nachweisen", "verb"],
+    ],
+    paragraphs: [
+      "Priya möchte eine Weiterbildung im Projektmanagement machen. Der Kurs ist teuer, aber ihre Firma bietet eine Förderung an.",
+      "Im Intranet liest sie die Voraussetzungen: Sie muss erklären, warum der Kurs zu ihrer aktuellen Rolle passt.",
+      "Priya beantragt die Förderung und fügt den Kursplan hinzu. Nach einer Woche bekommt sie die Zusage.",
+      "Nach dem Kurs erhält sie ein Zertifikat. Im nächsten Mitarbeitergespräch kann sie ihre neuen Kenntnisse nachweisen.",
+    ],
+    questions: [
+      { q_de: "Welche Weiterbildung möchte Priya machen?", q_en: "Which continuing education does Priya want to do?", options_de: ["Projektmanagement", "Erste Hilfe", "Fahrschule", "Deutsch A1"], options_en: ["Project management", "First aid", "Driving school", "German A1"], answer: 0 },
+      { q_de: "Warum ist die Förderung wichtig?", q_en: "Why is the funding important?", options_de: ["Der Kurs ist teuer", "Der Kurs ist kostenlos", "Priya hat keine Zeit", "Die Firma verbietet Kurse"], options_en: ["The course is expensive", "The course is free", "Priya has no time", "The company forbids courses"], answer: 0 },
+      { q_de: "Was muss Priya erklären?", q_en: "What must Priya explain?", options_de: ["Warum der Kurs zu ihrer Rolle passt", "Warum sie umzieht", "Warum sie krank ist", "Warum der Zug verspätet ist"], options_en: ["Why the course fits her role", "Why she is moving", "Why she is sick", "Why the train is delayed"], answer: 0 },
+      { q_de: "Was erhält Priya nach dem Kurs?", q_en: "What does Priya receive after the course?", options_de: ["Ein Zertifikat", "Eine Kündigung", "Eine Nebenkostenabrechnung", "Eine Fahrkarte"], options_en: ["A certificate", "A termination", "A utility bill", "A ticket"], answer: 0 },
+    ],
+  }
+);
+
+const generatedStoryChoicePools = {
+  places_de: ["im Supermarkt", "am Bahnhof", "in der Apotheke", "im Büro", "zu Hause", "im Bürgeramt", "im Café", "in der Werkstatt"],
+  places_en: ["in the supermarket", "at the station", "in the pharmacy", "at the office", "at home", "at the Bürgeramt", "in the cafe", "at the repair shop"],
+  problems_de: ["Ein Dokument fehlt", "Der Termin ist verschoben", "Die Verbindung ist langsam", "Die Rechnung ist falsch", "Die Tasche ist zu schwer", "Die Tür ist geschlossen", "Die Nachricht kommt zu spät", "Der Plan ist unklar"],
+  problems_en: ["A document is missing", "The appointment is postponed", "The connection is slow", "The invoice is wrong", "The bag is too heavy", "The door is closed", "The message arrives too late", "The plan is unclear"],
+  actions_de: ["Die Person fragt freundlich nach", "Die Person schreibt eine kurze Nachricht", "Die Person prüft die Unterlagen", "Die Person wartet ruhig", "Die Person ruft dort an", "Die Person bittet um Hilfe", "Die Person macht einen neuen Plan", "Die Person speichert die Information"],
+  actions_en: ["The person asks politely", "The person writes a short message", "The person checks the documents", "The person waits calmly", "The person calls there", "The person asks for help", "The person makes a new plan", "The person saves the information"],
+  endings_de: ["Alles klappt am Ende", "Die Situation ist danach klarer", "Niemand ist mehr gestresst", "Die Person fühlt sich erleichtert", "Der Termin funktioniert doch noch", "Das Problem wird gelöst", "Die Person lernt ein neues Wort", "Der Tag wird wieder ruhig"],
+  endings_en: ["Everything works out in the end", "The situation is clearer afterward", "Nobody is stressed anymore", "The person feels relieved", "The appointment works out after all", "The problem is solved", "The person learns a new word", "The day becomes calm again"],
+};
+
+const extraStorySeeds = [
+  ["a1-baeckerei", "A1", "alltag", "Früh beim Bäcker", "A simple bakery moment before work.", "Nora", "in der Bäckerei", "at the bakery", "Die Schlange ist länger als erwartet", "The line is longer than expected", "Sie wartet ruhig und bestellt zwei Brötchen", "She waits calmly and orders two rolls", "Sie bezahlt bar und geht zufrieden zur Arbeit", "She pays cash and goes to work satisfied", [["the bakery", "die Bäckerei", "noun"], ["the roll", "das Brötchen", "noun"], ["the line", "die Schlange", "noun"], ["to order", "bestellen", "verb"], ["to pay cash", "bar bezahlen", "phrase"]]],
+  ["a1-apotheke-tee", "A1", "gesundheit", "Tee aus der Apotheke", "A tiny pharmacy story for sick days.", "Luca", "in der Apotheke", "in the pharmacy", "Er hat Husten und fühlt sich müde", "He has a cough and feels tired", "Er fragt nach Tee und bekommt eine Empfehlung", "He asks for tea and gets a recommendation", "Zu Hause trinkt er den Tee und ruht sich aus", "At home he drinks the tea and rests", [["the pharmacy", "die Apotheke", "noun"], ["the cough", "der Husten", "noun"], ["the tea", "der Tee", "noun"], ["tired", "müde", "adjective"], ["to rest", "sich ausruhen", "verb"]]],
+  ["a1-bahnhof-gleis", "A1", "transport", "Das richtige Gleis", "Finding the right platform without panic.", "Mila", "am Bahnhof", "at the station", "Sie sieht ihr Gleis nicht sofort", "She does not see her platform immediately", "Sie schaut auf die Anzeige und fragt einen Mitarbeiter", "She checks the display and asks an employee", "Sie findet das Gleis und steigt pünktlich ein", "She finds the platform and boards on time", [["the platform", "das Gleis", "noun"], ["the display", "die Anzeige", "noun"], ["the employee", "der Mitarbeiter", "noun"], ["on time", "pünktlich", "adjective"], ["to board", "einsteigen", "verb"]]],
+  ["a1-kueche-salz", "A1", "haushalt", "Kein Salz in der Küche", "Small cooking problem, easy vocab.", "Ben", "in der Küche", "in the kitchen", "Beim Kochen fehlt Salz", "Salt is missing while cooking", "Er fragt seine Nachbarin und bekommt ein bisschen Salz", "He asks his neighbor and gets a little salt", "Das Essen schmeckt gut", "The food tastes good", [["the kitchen", "die Küche", "noun"], ["the salt", "das Salz", "noun"], ["to cook", "kochen", "verb"], ["the neighbor", "die Nachbarin", "noun"], ["to taste good", "schmecken", "verb"]]],
+  ["a1-markt-obst", "A1", "alltag", "Obst auf dem Markt", "Buying fruit with simple sentences.", "Sara", "auf dem Markt", "at the market", "Sie weiß nicht, welche Äpfel süß sind", "She does not know which apples are sweet", "Sie fragt den Verkäufer und probiert einen Apfel", "She asks the seller and tries an apple", "Sie kauft drei Äpfel und eine Banane", "She buys three apples and a banana", [["the market", "der Markt", "noun"], ["the apple", "der Apfel", "noun"], ["sweet", "süß", "adjective"], ["the seller", "der Verkäufer", "noun"], ["to try", "probieren", "verb"]]],
+  ["a1-deutschkurs-heft", "A1", "alltag", "Das Heft im Deutschkurs", "Language class and a forgotten notebook.", "Omar", "im Deutschkurs", "in German class", "Er hat sein Heft zu Hause vergessen", "He forgot his notebook at home", "Er schreibt die neuen Wörter auf ein Blatt", "He writes the new words on a sheet of paper", "Am Abend klebt er das Blatt in sein Heft", "In the evening he sticks the sheet into his notebook", [["the notebook", "das Heft", "noun"], ["the sheet", "das Blatt", "noun"], ["to forget", "vergessen", "verb"], ["the word", "das Wort", "noun"], ["to write down", "aufschreiben", "verb"]]],
+  ["a1-handy-akku", "A1", "alltag", "Der Akku ist leer", "Phone battery, charger, everyday stress.", "Eva", "im Café", "in the cafe", "Ihr Handy-Akku ist fast leer", "Her phone battery is almost empty", "Sie fragt freundlich nach einer Steckdose", "She politely asks for a power outlet", "Sie lädt das Handy und schreibt ihrer Freundin", "She charges the phone and messages her friend", [["the battery", "der Akku", "noun"], ["empty", "leer", "adjective"], ["the outlet", "die Steckdose", "noun"], ["to charge", "aufladen", "verb"], ["the friend", "die Freundin", "noun"]]],
+  ["a1-regenschirm-bus", "A1", "transport", "Der Regenschirm im Bus", "Forgetting something on public transport.", "Tim", "im Bus", "on the bus", "Er lässt seinen Regenschirm auf dem Sitz liegen", "He leaves his umbrella on the seat", "Er merkt es an der Haltestelle und läuft zurück", "He notices it at the stop and runs back", "Der Busfahrer gibt ihm den Regenschirm", "The bus driver gives him the umbrella", [["the umbrella", "der Regenschirm", "noun"], ["the seat", "der Sitz", "noun"], ["the stop", "die Haltestelle", "noun"], ["to run back", "zurücklaufen", "verb"], ["the bus driver", "der Busfahrer", "noun"]]],
+  ["a1-park-hund", "A1", "freizeit", "Ein Hund im Park", "Light park story with friendly small talk.", "Anna", "im Park", "in the park", "Ein kleiner Hund läuft zu ihr", "A small dog runs to her", "Sie fragt den Besitzer nach dem Namen", "She asks the owner for the name", "Anna streichelt den Hund und lächelt", "Anna pets the dog and smiles", [["the dog", "der Hund", "noun"], ["the owner", "der Besitzer", "noun"], ["small", "klein", "adjective"], ["to smile", "lächeln", "verb"], ["to pet", "streicheln", "verb"]]],
+  ["a1-putzen-zimmer", "A1", "haushalt", "Das Zimmer aufräumen", "Simple home routine story.", "Jonas", "zu Hause", "at home", "Sein Zimmer ist sehr unordentlich", "His room is very messy", "Er räumt den Tisch auf und saugt den Boden", "He clears the table and vacuums the floor", "Danach findet er seinen Schlüssel wieder", "Afterward he finds his key again", [["the room", "das Zimmer", "noun"], ["messy", "unordentlich", "adjective"], ["the floor", "der Boden", "noun"], ["to vacuum", "staubsaugen", "verb"], ["the key", "der Schlüssel", "noun"]]],
+  ["a1-fahrrad-licht", "A1", "transport", "Das Fahrradlicht", "Bike light before the evening ride.", "Lea", "vor dem Haus", "in front of the house", "Ihr Fahrradlicht geht nicht an", "Her bike light does not turn on", "Sie wechselt die Batterie und prüft das Licht", "She changes the battery and checks the light", "Dann fährt sie sicher zum Kurs", "Then she rides safely to class", [["the bicycle light", "das Fahrradlicht", "noun"], ["the battery", "die Batterie", "noun"], ["safe", "sicher", "adjective"], ["to check", "prüfen", "verb"], ["to ride", "fahren", "verb"]]],
+  ["a1-cafe-zucker", "A1", "freizeit", "Zucker im Café", "Ordering coffee and asking simply.", "Paul", "im Café", "in the cafe", "Auf dem Tisch steht kein Zucker", "There is no sugar on the table", "Er fragt die Kellnerin nach Zucker", "He asks the waitress for sugar", "Sein Kaffee schmeckt danach besser", "His coffee tastes better afterward", [["the sugar", "der Zucker", "noun"], ["the table", "der Tisch", "noun"], ["the waitress", "die Kellnerin", "noun"], ["better", "besser", "adjective"], ["to ask for", "fragen nach", "phrase"]]],
+  ["a1-arzt-karte", "A1", "gesundheit", "Die Karte beim Arzt", "Health card at reception.", "Ravi", "in der Arztpraxis", "at the doctor's office", "Er findet seine Gesundheitskarte nicht sofort", "He does not find his health card immediately", "Er sucht ruhig in seiner Tasche", "He searches calmly in his bag", "Die Karte liegt zwischen zwei Zetteln", "The card is between two notes", [["the doctor's office", "die Arztpraxis", "noun"], ["the health card", "die Gesundheitskarte", "noun"], ["the bag", "die Tasche", "noun"], ["the note", "der Zettel", "noun"], ["to search", "suchen", "verb"]]],
+  ["a1-besuch-klingel", "A1", "alltag", "Besuch an der Tür", "A friend arrives, the doorbell rings.", "Sofia", "zu Hause", "at home", "Die Klingel ist sehr laut", "The doorbell is very loud", "Sie öffnet die Tür und begrüßt ihren Freund", "She opens the door and greets her friend", "Sie trinken Tee und sprechen über den Tag", "They drink tea and talk about the day", [["the doorbell", "die Klingel", "noun"], ["loud", "laut", "adjective"], ["to open", "öffnen", "verb"], ["to greet", "begrüßen", "verb"], ["the day", "der Tag", "noun"]]],
+  ["a1-schule-brot", "A1", "alltag", "Das Brot für die Pause", "Small lunchbox story.", "Mika", "in der Schule", "at school", "Er hat sein Pausenbrot vergessen", "He forgot his snack bread", "Seine Freundin teilt einen Apfel mit ihm", "His friend shares an apple with him", "Mika bedankt sich und ist nicht mehr hungrig", "Mika says thanks and is no longer hungry", [["the break snack", "das Pausenbrot", "noun"], ["hungry", "hungrig", "adjective"], ["to share", "teilen", "verb"], ["to thank", "sich bedanken", "verb"], ["the apple", "der Apfel", "noun"]]],
+  ["a1-einkaufstasche", "A1", "alltag", "Die Einkaufstasche", "Remembering a reusable bag.", "Ida", "im Supermarkt", "in the supermarket", "Sie hat keine Einkaufstasche dabei", "She has no shopping bag with her", "Sie kauft eine Papiertüte an der Kasse", "She buys a paper bag at the checkout", "Zu Hause legt sie eine Tasche neben die Tür", "At home she puts a bag next to the door", [["the shopping bag", "die Einkaufstasche", "noun"], ["the paper bag", "die Papiertüte", "noun"], ["the checkout", "die Kasse", "noun"], ["to have with you", "dabeihaben", "verb"], ["next to", "neben", "preposition"]]],
+  ["a1-kino-platz", "A1", "freizeit", "Der Platz im Kino", "Cinema seat and simple numbers.", "Finn", "im Kino", "in the cinema", "Er findet seinen Platz nicht sofort", "He does not find his seat immediately", "Eine Mitarbeiterin zeigt ihm die Reihe", "An employee shows him the row", "Finn sitzt rechtzeitig vor dem Film", "Finn sits down on time before the movie", [["the cinema", "das Kino", "noun"], ["the seat", "der Platz", "noun"], ["the row", "die Reihe", "noun"], ["the film", "der Film", "noun"], ["on time", "rechtzeitig", "adverb"]]],
+  ["a1-freund-geburtstag", "A1", "freizeit", "Geburtstag bei einem Freund", "A simple birthday visit.", "Clara", "bei einem Freund", "at a friend's place", "Sie weiß nicht, welches Geschenk passt", "She does not know which gift fits", "Sie kauft Blumen und eine kleine Karte", "She buys flowers and a small card", "Ihr Freund freut sich sehr", "Her friend is very happy", [["the birthday", "der Geburtstag", "noun"], ["the gift", "das Geschenk", "noun"], ["the flowers", "die Blumen", "noun"], ["the card", "die Karte", "noun"], ["to be happy", "sich freuen", "verb"]]],
+  ["a2-friseur", "A2", "alltag", "Beim Friseur", "Haircut vocabulary for real appointments.", "Lena", "beim Friseur", "at the hairdresser", "Sie möchte nur die Spitzen schneiden lassen", "She only wants the ends trimmed", "Sie zeigt ein Foto und erklärt ihre Idee", "She shows a photo and explains her idea", "Der Schnitt ist kürzer, aber Lena ist zufrieden", "The cut is shorter, but Lena is satisfied", [["the hairdresser", "der Friseur", "noun"], ["the ends", "die Spitzen", "noun"], ["the cut", "der Schnitt", "noun"], ["to explain", "erklären", "verb"], ["satisfied", "zufrieden", "adjective"]]],
+  ["a2-bankkarte", "A2", "alltag", "Die Bankkarte funktioniert nicht", "Card payment problem at a store.", "Nico", "an der Kasse", "at the checkout", "Seine Bankkarte funktioniert nicht", "His bank card does not work", "Er probiert es noch einmal und bezahlt dann bar", "He tries again and then pays cash", "Zu Hause prüft er sein Konto online", "At home he checks his account online", [["the bank card", "die Bankkarte", "noun"], ["the account", "das Konto", "noun"], ["to work", "funktionieren", "verb"], ["to try", "probieren", "verb"], ["cash", "bar", "adverb"]]],
+  ["a2-wohnung-besichtigung", "A2", "alltag", "Die Wohnungsbesichtigung", "First apartment viewing story.", "Alina", "in einer kleinen Wohnung", "in a small apartment", "Sie möchte wissen, ob die Nebenkosten hoch sind", "She wants to know whether the additional costs are high", "Sie fragt die Maklerin nach Heizung und Strom", "She asks the agent about heating and electricity", "Alina schreibt sich alle Antworten ins Handy", "Alina writes all answers into her phone", [["the apartment viewing", "die Wohnungsbesichtigung", "noun"], ["additional costs", "die Nebenkosten", "noun"], ["the agent", "die Maklerin", "noun"], ["electricity", "der Strom", "noun"], ["to note down", "notieren", "verb"]]],
+  ["a2-paket-nachbar", "A2", "alltag", "Das Paket beim Nachbarn", "Delivery went somewhere else.", "Elias", "im Treppenhaus", "in the stairwell", "Sein Paket liegt bei einer Nachbarin", "His package is with a neighbor", "Er klingelt freundlich und zeigt die Benachrichtigung", "He rings politely and shows the notification", "Die Nachbarin gibt ihm das Paket", "The neighbor gives him the package", [["the notification", "die Benachrichtigung", "noun"], ["the package", "das Paket", "noun"], ["the stairwell", "das Treppenhaus", "noun"], ["to ring the bell", "klingeln", "verb"], ["friendly", "freundlich", "adjective"]]],
+  ["a2-bibliothek-ausweis", "A2", "freizeit", "Ein Ausweis für die Bibliothek", "Getting a library card.", "Maya", "in der Bibliothek", "in the library", "Sie möchte Bücher ausleihen, hat aber noch keinen Ausweis", "She wants to borrow books but does not have a card yet", "Sie füllt ein Formular aus und zeigt ihren Ausweis", "She fills out a form and shows her ID", "Nach zehn Minuten bekommt sie den Bibliotheksausweis", "After ten minutes she gets the library card", [["the library card", "der Bibliotheksausweis", "noun"], ["to borrow", "ausleihen", "verb"], ["the form", "das Formular", "noun"], ["the ID", "der Ausweis", "noun"], ["to fill out", "ausfüllen", "verb"]]],
+  ["a2-sprachtest", "A2", "alltag", "Der kleine Sprachtest", "Nerves before a language test.", "Kenan", "im Sprachzentrum", "at the language center", "Er ist nervös vor dem mündlichen Teil", "He is nervous before the oral part", "Er atmet tief und wiederholt drei wichtige Sätze", "He breathes deeply and repeats three important sentences", "Im Gespräch versteht er mehr als erwartet", "In the conversation he understands more than expected", [["the language center", "das Sprachzentrum", "noun"], ["the oral part", "der mündliche Teil", "noun"], ["nervous", "nervös", "adjective"], ["to repeat", "wiederholen", "verb"], ["to understand", "verstehen", "verb"]]],
+  ["a2-handyvertrag", "A2", "alltag", "Der neue Handyvertrag", "Phone contract basics.", "Rosa", "im Handygeschäft", "in the phone shop", "Sie versteht den Preis im Vertrag nicht ganz", "She does not fully understand the price in the contract", "Sie fragt nach Datenvolumen und Kündigungsfrist", "She asks about data volume and notice period", "Danach entscheidet sie sich für einen günstigeren Vertrag", "Afterward she chooses a cheaper contract", [["the phone contract", "der Handyvertrag", "noun"], ["data volume", "das Datenvolumen", "noun"], ["notice period", "die Kündigungsfrist", "noun"], ["cheaper", "günstiger", "adjective"], ["to decide", "sich entscheiden", "verb"]]],
+  ["a2-schuh-reparatur", "A2", "alltag", "Der kaputte Schuh", "Small repair instead of buying new.", "Ali", "in der Schuhmacherei", "at the shoe repair shop", "Die Sohle seines Schuhs ist lose", "The sole of his shoe is loose", "Er fragt, ob eine Reparatur möglich ist", "He asks whether a repair is possible", "Am nächsten Tag holt er den Schuh repariert ab", "The next day he picks up the repaired shoe", [["the sole", "die Sohle", "noun"], ["loose", "lose", "adjective"], ["possible", "möglich", "adjective"], ["to pick up", "abholen", "verb"], ["the repair", "die Reparatur", "noun"]]],
+  ["a2-kita-email", "A2", "alltag", "Eine E-Mail von der Kita", "Useful family admin vocabulary.", "Jana", "zu Hause", "at home", "Sie bekommt eine E-Mail von der Kita", "She receives an email from daycare", "Sie liest die Nachricht und füllt eine kleine Liste aus", "She reads the message and fills out a small list", "Am Morgen gibt sie die Liste bei der Erzieherin ab", "In the morning she gives the list to the educator", [["the daycare", "die Kita", "noun"], ["the educator", "die Erzieherin", "noun"], ["the list", "die Liste", "noun"], ["the email", "die E-Mail", "noun"], ["to hand in", "abgeben", "verb"]]],
+  ["a2-reise-rucksack", "A2", "freizeit", "Der Rucksack für den Ausflug", "Packing for a day trip.", "Tobias", "zu Hause", "at home", "Er weiß nicht, was er für den Ausflug einpacken soll", "He does not know what to pack for the trip", "Er nimmt Wasser, eine Jacke und ein Ladegerät mit", "He takes water, a jacket, and a charger", "Beim Wandern ist er froh über die Jacke", "While hiking he is glad about the jacket", [["the backpack", "der Rucksack", "noun"], ["the trip", "der Ausflug", "noun"], ["the charger", "das Ladegerät", "noun"], ["to pack", "einpacken", "verb"], ["glad", "froh", "adjective"]]],
+  ["a2-restaurant-reservierung", "A2", "freizeit", "Die Reservierung im Restaurant", "Dinner reservation mix-up.", "Pia", "im Restaurant", "in the restaurant", "Die Reservierung steht auf einen falschen Namen", "The reservation is under the wrong name", "Sie zeigt die Bestätigung auf dem Handy", "She shows the confirmation on her phone", "Der Kellner findet den Tisch nach kurzer Suche", "The waiter finds the table after a short search", [["the reservation", "die Reservierung", "noun"], ["the confirmation", "die Bestätigung", "noun"], ["the waiter", "der Kellner", "noun"], ["wrong", "falsch", "adjective"], ["to search", "suchen", "verb"]]],
+  ["a2-volkshochschule", "A2", "alltag", "Kurs an der Volkshochschule", "Registering for an evening course.", "Hanna", "in der Volkshochschule", "at the adult education center", "Der Kurs ist fast ausgebucht", "The course is almost fully booked", "Sie meldet sich online schnell an", "She quickly registers online", "Am Abend bekommt sie eine automatische Bestätigung", "In the evening she receives an automatic confirmation", [["the adult education center", "die Volkshochschule", "noun"], ["fully booked", "ausgebucht", "adjective"], ["to register", "sich anmelden", "verb"], ["automatic", "automatisch", "adjective"], ["the course", "der Kurs", "noun"]]],
+  ["a2-krankmeldung", "A2", "arbeit", "Krankmeldung am Morgen", "Calling in sick clearly.", "Moritz", "zu Hause", "at home", "Er hat Fieber und kann nicht arbeiten", "He has a fever and cannot work", "Er schreibt seiner Chefin eine kurze Krankmeldung", "He writes his boss a short sick note message", "Später ruft er in der Arztpraxis an", "Later he calls the doctor's office", [["the sick note message", "die Krankmeldung", "noun"], ["the boss", "die Chefin", "noun"], ["the fever", "das Fieber", "noun"], ["to call", "anrufen", "verb"], ["cannot", "kann nicht", "phrase"]]],
+  ["a2-flohmarkt", "A2", "freizeit", "Ein Tisch auf dem Flohmarkt", "Buying something used.", "Lina", "auf dem Flohmarkt", "at the flea market", "Sie findet eine schöne Lampe ohne Preisschild", "She finds a nice lamp without a price tag", "Sie fragt nach dem Preis und handelt ein bisschen", "She asks for the price and negotiates a little", "Sie kauft die Lampe günstiger als erwartet", "She buys the lamp cheaper than expected", [["the flea market", "der Flohmarkt", "noun"], ["the lamp", "die Lampe", "noun"], ["the price tag", "das Preisschild", "noun"], ["to negotiate", "handeln", "verb"], ["cheaper", "günstiger", "adjective"]]],
+  ["a2-termin-verschieben", "A2", "alltag", "Den Termin verschieben", "A common scheduling story.", "Viktor", "im Büro", "at the office", "Er schafft seinen Arzttermin um vier Uhr nicht", "He cannot make his doctor appointment at four", "Er ruft an und bittet um einen neuen Termin", "He calls and asks for a new appointment", "Die Praxis bietet ihm Freitagmorgen an", "The practice offers him Friday morning", [["the appointment", "der Termin", "noun"], ["to postpone", "verschieben", "verb"], ["to offer", "anbieten", "verb"], ["the doctor's office", "die Praxis", "noun"], ["Friday morning", "der Freitagmorgen", "noun"]]],
+  ["a2-ruckgabe", "A2", "alltag", "Die Rückgabe im Laden", "Returning a wrong-size item.", "Nina", "im Laden", "in the store", "Der Pullover ist zu klein", "The sweater is too small", "Sie zeigt den Kassenzettel und fragt nach Rückgabe", "She shows the receipt and asks about returning it", "Die Verkäuferin tauscht den Pullover um", "The saleswoman exchanges the sweater", [["the return", "die Rückgabe", "noun"], ["the sweater", "der Pullover", "noun"], ["too small", "zu klein", "adjective"], ["the receipt", "der Kassenzettel", "noun"], ["to exchange", "umtauschen", "verb"]]],
+  ["a2-praesentation-kurs", "A2", "alltag", "Eine kurze Präsentation", "Speaking practice in class.", "Sam", "im Deutschkurs", "in German class", "Er soll zwei Minuten über sein Hobby sprechen", "He should speak for two minutes about his hobby", "Er schreibt fünf Stichpunkte auf", "He writes down five bullet points", "Die Präsentation ist kurz, aber klar", "The presentation is short but clear", [["the presentation", "die Präsentation", "noun"], ["the hobby", "das Hobby", "noun"], ["bullet points", "die Stichpunkte", "noun"], ["clear", "klar", "adjective"], ["to speak", "sprechen", "verb"]]],
+  ["b1-probezeit", "B1", "arbeit", "Ende der Probezeit", "Workplace relief after a nervous month.", "Mehmet", "im Büro", "at the office", "Seine Probezeit endet diese Woche", "His probation period ends this week", "Er spricht mit seiner Teamleiterin über Feedback", "He speaks with his team lead about feedback", "Er bekommt positives Feedback und fühlt sich sicherer", "He receives positive feedback and feels more secure", [["the probation period", "die Probezeit", "noun"], ["the team lead", "die Teamleiterin", "noun"], ["feedback", "das Feedback", "noun"], ["positive", "positiv", "adjective"], ["more secure", "sicherer", "adjective"]]],
+  ["b1-nebenkosten", "B1", "alltag", "Die Nebenkostenabrechnung", "Apartment bill confusion made practical.", "Iris", "zu Hause", "at home", "Die Nebenkostenabrechnung ist höher als erwartet", "The utility bill is higher than expected", "Sie vergleicht die Zahlen mit dem letzten Jahr", "She compares the numbers with last year", "Danach schreibt sie der Hausverwaltung eine sachliche Frage", "Afterward she writes property management a factual question", [["utility bill", "die Nebenkostenabrechnung", "noun"], ["higher", "höher", "adjective"], ["to compare", "vergleichen", "verb"], ["factual", "sachlich", "adjective"], ["property management", "die Hausverwaltung", "noun"]]],
+  ["b1-kundenservice", "B1", "alltag", "Anruf beim Kundenservice", "A support call without losing patience.", "Dario", "zu Hause", "at home", "Sein Internet ist seit dem Morgen langsam", "His internet has been slow since morning", "Er ruft beim Kundenservice an und beschreibt das Problem", "He calls customer service and describes the problem", "Die Mitarbeiterin öffnet ein Ticket für die Technik", "The employee opens a ticket for the technical team", [["customer service", "der Kundenservice", "noun"], ["slow", "langsam", "adjective"], ["to describe", "beschreiben", "verb"], ["the ticket", "das Ticket", "noun"], ["technical team", "die Technik", "noun"]]],
+  ["b1-spaete-lieferung", "B1", "alltag", "Die verspätete Lieferung", "Delivery delay and polite follow-up.", "Greta", "im Homeoffice", "in the home office", "Die Lieferung für ihren Schreibtisch kommt nicht an", "The delivery for her desk does not arrive", "Sie schreibt dem Händler eine höfliche Nachfrage", "She writes the retailer a polite follow-up", "Der Händler nennt einen neuen Liefertermin", "The retailer gives a new delivery date", [["the delivery", "die Lieferung", "noun"], ["the desk", "der Schreibtisch", "noun"], ["the retailer", "der Händler", "noun"], ["follow-up question", "die Nachfrage", "noun"], ["delivery date", "der Liefertermin", "noun"]]],
+  ["b1-sprachpartner", "B1", "freizeit", "Treffen mit dem Sprachpartner", "Practice conversation outside class.", "Noah", "im Park", "in the park", "Er möchte mehr Deutsch sprechen, ist aber unsicher", "He wants to speak more German but feels unsure", "Er trifft seinen Sprachpartner und erzählt vom Wochenende", "He meets his language partner and talks about the weekend", "Nach einer Stunde fühlt er sich mutiger", "After one hour he feels braver", [["language partner", "der Sprachpartner", "noun"], ["unsure", "unsicher", "adjective"], ["to tell", "erzählen", "verb"], ["the weekend", "das Wochenende", "noun"], ["braver", "mutiger", "adjective"]]],
+  ["b1-verein", "B1", "freizeit", "Der erste Abend im Verein", "Joining a local club.", "Aylin", "im Sportverein", "at the sports club", "Sie kennt dort noch niemanden", "She does not know anyone there yet", "Sie stellt sich vor und fragt nach den Trainingszeiten", "She introduces herself and asks about training times", "Ein Mitglied lädt sie zur nächsten Gruppe ein", "A member invites her to the next group", [["the club", "der Verein", "noun"], ["training times", "die Trainingszeiten", "noun"], ["to introduce oneself", "sich vorstellen", "verb"], ["the member", "das Mitglied", "noun"], ["to invite", "einladen", "verb"]]],
+  ["b1-fundbuero", "B1", "alltag", "Im Fundbüro", "Lost item office with practical questions.", "Sven", "im Fundbüro", "at the lost and found office", "Er hat seine Tasche in der Bahn vergessen", "He forgot his bag on the train", "Er beschreibt Farbe, Größe und Inhalt", "He describes color, size, and contents", "Zwei Tage später wird die Tasche gefunden", "Two days later the bag is found", [["lost and found office", "das Fundbüro", "noun"], ["the contents", "der Inhalt", "noun"], ["the color", "die Farbe", "noun"], ["the size", "die Größe", "noun"], ["to find", "finden", "verb"]]],
+  ["b1-bewerbung-absenden", "B1", "arbeit", "Die Bewerbung abschicken", "Sending a job application carefully.", "Priya", "am Laptop", "at the laptop", "Sie möchte ihre Bewerbung abschicken, aber der Lebenslauf ist noch alt", "She wants to send her application, but the CV is still old", "Sie aktualisiert den Lebenslauf und prüft die Anhänge", "She updates the CV and checks the attachments", "Dann schickt sie die Bewerbung mit gutem Gefühl ab", "Then she sends the application with a good feeling", [["the application", "die Bewerbung", "noun"], ["the CV", "der Lebenslauf", "noun"], ["the attachment", "der Anhang", "noun"], ["to update", "aktualisieren", "verb"], ["to send", "abschicken", "verb"]]],
+  ["b1-handwerkertermin", "B1", "haushalt", "Termin mit dem Handwerker", "Scheduling a repair visit.", "Mara", "in ihrer Wohnung", "in her apartment", "Der Wasserhahn tropft seit zwei Tagen", "The tap has been dripping for two days", "Sie vereinbart einen Termin mit einem Handwerker", "She schedules an appointment with a repair worker", "Der Handwerker repariert die Dichtung am Nachmittag", "The repair worker fixes the seal in the afternoon", [["the tap", "der Wasserhahn", "noun"], ["to drip", "tropfen", "verb"], ["repair worker", "der Handwerker", "noun"], ["the seal", "die Dichtung", "noun"], ["to schedule", "vereinbaren", "verb"]]],
+  ["b1-team-mittag", "B1", "arbeit", "Mittagessen mit dem Team", "Social workplace language.", "Leo", "in der Kantine", "in the cafeteria", "Er ist neu im Team und kennt die Gespräche noch nicht", "He is new in the team and does not know the conversations yet", "Er stellt Fragen und hört aufmerksam zu", "He asks questions and listens attentively", "Nach dem Essen fühlt er sich mehr dazugehörig", "After lunch he feels more included", [["the cafeteria", "die Kantine", "noun"], ["new", "neu", "adjective"], ["attentive", "aufmerksam", "adjective"], ["to belong", "dazugehören", "verb"], ["to ask questions", "Fragen stellen", "phrase"]]],
+  ["b1-zahnarzt", "B1", "gesundheit", "Beim Zahnarzt", "Dental appointment nerves.", "Kim", "in der Zahnarztpraxis", "at the dentist's office", "Sie hat seit dem Wochenende Zahnschmerzen", "She has had tooth pain since the weekend", "Sie beschreibt den Schmerz und fragt nach der Behandlung", "She describes the pain and asks about the treatment", "Die Zahnärztin erklärt jeden Schritt ruhig", "The dentist explains every step calmly", [["dentist's office", "die Zahnarztpraxis", "noun"], ["tooth pain", "die Zahnschmerzen", "noun"], ["the treatment", "die Behandlung", "noun"], ["the step", "der Schritt", "noun"], ["calmly", "ruhig", "adverb"]]],
+  ["b1-umzugskarton", "B1", "alltag", "Kisten vor dem Umzug", "Moving apartments, very practical.", "Tara", "zwischen vielen Umzugskartons", "between many moving boxes", "Sie findet die Küchenutensilien nicht mehr", "She cannot find the kitchen utensils anymore", "Sie beschriftet die restlichen Kisten deutlicher", "She labels the remaining boxes more clearly", "Am Abend findet sie Teller und Tassen wieder", "In the evening she finds plates and cups again", [["moving box", "der Umzugskarton", "noun"], ["kitchen utensils", "die Küchenutensilien", "noun"], ["to label", "beschriften", "verb"], ["clearer", "deutlicher", "adjective"], ["the cup", "die Tasse", "noun"]]],
+  ["b1-verspaetung-chef", "B1", "transport", "Nachricht wegen Verspätung", "Telling work you will be late.", "Jakob", "in der Bahn", "on the train", "Die Bahn bleibt wegen einer Störung stehen", "The train stops because of a disruption", "Er schreibt seinem Chef sofort eine kurze Nachricht", "He immediately writes his boss a short message", "Sein Chef antwortet verständnisvoll", "His boss replies understandingly", [["the disruption", "die Störung", "noun"], ["to stop", "stehen bleiben", "verb"], ["the boss", "der Chef", "noun"], ["understanding", "verständnisvoll", "adjective"], ["immediately", "sofort", "adverb"]]],
+  ["b1-beschwerde-laden", "B1", "alltag", "Eine ruhige Beschwerde", "Complaint without sounding aggressive.", "Elif", "im Elektronikladen", "in the electronics store", "Der neue Kopfhörer funktioniert nach zwei Tagen nicht mehr", "The new headphones stop working after two days", "Sie erklärt das Problem ruhig und zeigt den Kassenzettel", "She explains the problem calmly and shows the receipt", "Der Mitarbeiter bietet einen Umtausch an", "The employee offers an exchange", [["the headphones", "der Kopfhörer", "noun"], ["electronics store", "der Elektronikladen", "noun"], ["the complaint", "die Beschwerde", "noun"], ["exchange", "der Umtausch", "noun"], ["to offer", "anbieten", "verb"]]],
+  ["b1-arbeitszeit", "B1", "arbeit", "Flexible Arbeitszeit", "Clarifying working hours.", "Oskar", "im Büro", "at the office", "Er muss einmal pro Woche früher gehen", "He has to leave earlier once a week", "Er spricht mit seiner Vorgesetzten über flexible Arbeitszeit", "He speaks with his supervisor about flexible working hours", "Sie finden eine Lösung für Mittwoch", "They find a solution for Wednesday", [["working hours", "die Arbeitszeit", "noun"], ["flexible", "flexibel", "adjective"], ["the supervisor", "die Vorgesetzte", "noun"], ["the solution", "die Lösung", "noun"], ["earlier", "früher", "adverb"]]],
+  ["b1-pruefung-anmeldung", "B1", "alltag", "Anmeldung zur Prüfung", "Exam registration admin.", "Rami", "am Computer", "at the computer", "Die Anmeldefrist endet heute Abend", "The registration deadline ends tonight", "Er lädt sein Dokument hoch und prüft die Daten", "He uploads his document and checks the data", "Kurz vor acht bekommt er die Bestätigung", "Shortly before eight he receives the confirmation", [["registration deadline", "die Anmeldefrist", "noun"], ["to upload", "hochladen", "verb"], ["the data", "die Daten", "noun"], ["the confirmation", "die Bestätigung", "noun"], ["shortly before", "kurz vor", "phrase"]]],
+  ["b1-rezept-apotheke", "B1", "gesundheit", "Das digitale Rezept", "E-prescription at the pharmacy.", "Clara", "in der Apotheke", "in the pharmacy", "Das digitale Rezept wird zuerst nicht gefunden", "The digital prescription is not found at first", "Sie zeigt ihre Gesundheitskarte und wartet kurz", "She shows her health card and waits briefly", "Dann erscheint das Rezept im System", "Then the prescription appears in the system", [["digital prescription", "das digitale Rezept", "noun"], ["health card", "die Gesundheitskarte", "noun"], ["the system", "das System", "noun"], ["to appear", "erscheinen", "verb"], ["briefly", "kurz", "adverb"]]],
+  ["b2-datenschutz", "B2", "arbeit", "Datenschutz im Newsletter", "Useful office language around privacy.", "Felix", "im Marketingteam", "in the marketing team", "Eine Kollegin möchte Kundendaten für einen Newsletter nutzen", "A colleague wants to use customer data for a newsletter", "Felix fragt nach der Einwilligung und der Datenschutzerklärung", "Felix asks about consent and the privacy policy", "Das Team prüft den Prozess, bevor die E-Mail versendet wird", "The team checks the process before the email is sent", [["data protection", "der Datenschutz", "noun"], ["consent", "die Einwilligung", "noun"], ["privacy policy", "die Datenschutzerklärung", "noun"], ["customer data", "die Kundendaten", "noun"], ["to send", "versenden", "verb"]]],
+  ["b2-gehaltsgespraech", "B2", "arbeit", "Das Gehaltsgespräch", "Negotiating without sounding pushy.", "Mina", "im Jahresgespräch", "in the annual review", "Sie möchte eine Gehaltserhöhung ansprechen", "She wants to bring up a salary raise", "Sie nennt konkrete Ergebnisse und bleibt sachlich", "She names concrete results and stays factual", "Ihr Chef schlägt einen Folgetermin mit HR vor", "Her boss suggests a follow-up appointment with HR", [["salary raise", "die Gehaltserhöhung", "noun"], ["annual review", "das Jahresgespräch", "noun"], ["concrete", "konkret", "adjective"], ["factual", "sachlich", "adjective"], ["follow-up appointment", "der Folgetermin", "noun"]]],
+  ["b2-aufenthaltstitel", "B2", "behörden", "Termin für den Aufenthaltstitel", "Residence permit paperwork.", "Arun", "in der Ausländerbehörde", "at the immigration office", "Ein Nachweis über die Krankenversicherung fehlt", "Proof of health insurance is missing", "Er fragt, ob er den Nachweis online nachreichen kann", "He asks whether he can submit the proof online later", "Die Sachbearbeiterin gibt ihm eine Frist von zwei Wochen", "The case worker gives him a deadline of two weeks", [["residence permit", "der Aufenthaltstitel", "noun"], ["immigration office", "die Ausländerbehörde", "noun"], ["proof", "der Nachweis", "noun"], ["to submit later", "nachreichen", "verb"], ["case worker", "die Sachbearbeiterin", "noun"]]],
+  ["b2-rechnung-freelance", "B2", "arbeit", "Die erste Rechnung als Freelancer", "Freelance invoice vocabulary.", "Nele", "am Schreibtisch", "at the desk", "Sie ist unsicher, welche Pflichtangaben auf die Rechnung gehören", "She is unsure which required details belong on the invoice", "Sie prüft Steuernummer, Leistungszeitraum und Zahlungsziel", "She checks tax number, service period, and payment deadline", "Danach sendet sie die Rechnung professionell an den Kunden", "Afterward she sends the invoice professionally to the client", [["freelancer", "der Freelancer", "noun"], ["required details", "die Pflichtangaben", "noun"], ["tax number", "die Steuernummer", "noun"], ["payment deadline", "das Zahlungsziel", "noun"], ["the client", "der Kunde", "noun"]]],
+  ["b2-kundin-eskalation", "B2", "arbeit", "Die unzufriedene Kundin", "De-escalating a customer issue.", "Jonas", "im Kundenservice", "in customer service", "Eine Kundin ist wegen einer Verzögerung verärgert", "A customer is upset because of a delay", "Jonas hört aktiv zu und fasst das Problem zusammen", "Jonas listens actively and summarizes the problem", "Die Kundin fühlt sich ernst genommen und akzeptiert die Lösung", "The customer feels taken seriously and accepts the solution", [["the delay", "die Verzögerung", "noun"], ["upset", "verärgert", "adjective"], ["to summarize", "zusammenfassen", "verb"], ["the solution", "die Lösung", "noun"], ["to accept", "akzeptieren", "verb"]]],
+  ["b2-steuer-id", "B2", "behörden", "Die Steuer-ID fehlt", "Payroll admin in a new job.", "Sami", "in der Personalabteilung", "in HR", "Für die Gehaltsabrechnung fehlt seine Steuer-ID", "His tax ID is missing for payroll", "Er sucht den Brief vom Bundeszentralamt und scannt ihn ein", "He searches for the letter from the federal tax office and scans it", "Die Personalabteilung kann die Abrechnung rechtzeitig vorbereiten", "HR can prepare payroll on time", [["tax ID", "die Steuer-ID", "noun"], ["payroll", "die Gehaltsabrechnung", "noun"], ["HR department", "die Personalabteilung", "noun"], ["to scan", "einscannen", "verb"], ["on time", "rechtzeitig", "adverb"]]],
+  ["b2-betreuung-platz", "B2", "behörden", "Warteliste für die Betreuung", "Childcare waiting list admin.", "Julia", "im Familienbüro", "at the family office", "Der gewünschte Betreuungsplatz ist noch nicht frei", "The desired childcare spot is not available yet", "Sie lässt sich auf die Warteliste setzen und fragt nach Alternativen", "She gets put on the waiting list and asks about alternatives", "Eine Mitarbeiterin nennt zwei andere Einrichtungen", "An employee names two other facilities", [["childcare spot", "der Betreuungsplatz", "noun"], ["waiting list", "die Warteliste", "noun"], ["alternative", "die Alternative", "noun"], ["facility", "die Einrichtung", "noun"], ["desired", "gewünscht", "adjective"]]],
+  ["b2-bahn-entschaedigung", "B2", "transport", "Entschädigung nach Zugausfall", "Passenger rights after cancellation.", "Lukas", "zu Hause", "at home", "Sein Zug ist ausgefallen und er kam zwei Stunden später an", "His train was cancelled and he arrived two hours late", "Er füllt das Formular für Fahrgastrechte online aus", "He fills out the passenger rights form online", "Nach einigen Tagen bekommt er eine Entschädigung", "After a few days he receives compensation", [["compensation", "die Entschädigung", "noun"], ["train cancellation", "der Zugausfall", "noun"], ["passenger rights", "die Fahrgastrechte", "noun"], ["the form", "das Formular", "noun"], ["to arrive", "ankommen", "verb"]]],
+  ["b2-krankschreibung-arbeit", "B2", "gesundheit", "Krankschreibung und Arbeitgeber", "Handling sick leave correctly.", "Tessa", "zu Hause", "at home", "Sie ist länger krank als erwartet", "She is sick longer than expected", "Sie informiert den Arbeitgeber und prüft die elektronische Krankschreibung", "She informs the employer and checks the electronic sick note", "Die Personalabteilung bestätigt den Eingang", "HR confirms receipt", [["sick leave note", "die Krankschreibung", "noun"], ["employer", "der Arbeitgeber", "noun"], ["electronic", "elektronisch", "adjective"], ["receipt", "der Eingang", "noun"], ["to confirm", "bestätigen", "verb"]]],
+  ["b2-bewerbung-absage", "B2", "arbeit", "Eine Absage nach der Bewerbung", "Handling rejection professionally.", "David", "am Laptop", "at the laptop", "Er bekommt eine Absage auf eine Bewerbung", "He receives a rejection for an application", "Er antwortet höflich und bittet um kurzes Feedback", "He replies politely and asks for brief feedback", "Die Recruiterin schickt zwei hilfreiche Hinweise", "The recruiter sends two helpful notes", [["the rejection", "die Absage", "noun"], ["the application", "die Bewerbung", "noun"], ["the recruiter", "die Recruiterin", "noun"], ["the note", "der Hinweis", "noun"], ["helpful", "hilfreich", "adjective"]]],
+  ["b2-mediation-wg", "B2", "haushalt", "Ein Gespräch in der WG", "Flatshare tension handled maturely.", "Fadi", "in der WG-Küche", "in the shared flat kitchen", "Zwei Mitbewohner streiten über Sauberkeit", "Two flatmates argue about cleanliness", "Fadi moderiert das Gespräch und sammelt konkrete Wünsche", "Fadi moderates the conversation and collects concrete wishes", "Sie einigen sich auf eine neue Vereinbarung", "They agree on a new agreement", [["flatmate", "der Mitbewohner", "noun"], ["cleanliness", "die Sauberkeit", "noun"], ["to moderate", "moderieren", "verb"], ["concrete", "konkret", "adjective"], ["agreement", "die Vereinbarung", "noun"]]],
+  ["b2-netzwerktreffen", "B2", "arbeit", "Ein berufliches Netzwerktreffen", "Small talk and professional follow-up.", "Amira", "bei einem Netzwerktreffen", "at a networking event", "Sie kennt dort niemanden und fühlt sich zuerst unsicher", "She knows nobody there and feels unsure at first", "Sie stellt eine offene Frage und hört aufmerksam zu", "She asks an open question and listens attentively", "Am nächsten Tag schreibt sie zwei Kontakten eine Nachricht", "The next day she messages two contacts", [["networking event", "das Netzwerktreffen", "noun"], ["contact", "der Kontakt", "noun"], ["open question", "die offene Frage", "noun"], ["attentive", "aufmerksam", "adjective"], ["to message", "anschreiben", "verb"]]],
+  ["b2-vertragsverhandlung", "B2", "arbeit", "Eine Vertragsverhandlung", "Careful negotiation language.", "Mara", "in einer Videokonferenz", "in a video conference", "Ein Punkt im Angebot ist finanziell unklar", "One point in the offer is financially unclear", "Sie fragt nach einer transparenten Aufschlüsselung der Kosten", "She asks for a transparent breakdown of costs", "Beide Seiten einigen sich auf eine angepasste Version", "Both sides agree on an adjusted version", [["contract negotiation", "die Vertragsverhandlung", "noun"], ["the offer", "das Angebot", "noun"], ["breakdown", "die Aufschlüsselung", "noun"], ["transparent", "transparent", "adjective"], ["adjusted", "angepasst", "adjective"]]],
+  ["b2-elternabend", "B2", "alltag", "Elternabend in der Schule", "Parent meeting with formal-ish language.", "Robert", "beim Elternabend", "at the parent evening", "Viele Informationen kommen sehr schnell", "A lot of information comes very quickly", "Er macht Notizen und fragt nach den wichtigsten Fristen", "He takes notes and asks about the most important deadlines", "Nach dem Abend kennt er die nächsten Schritte", "After the evening he knows the next steps", [["parent evening", "der Elternabend", "noun"], ["deadline", "die Frist", "noun"], ["information", "die Information", "noun"], ["next steps", "die nächsten Schritte", "noun"], ["to take notes", "Notizen machen", "phrase"]]],
+  ["b2-krankenkasse-wechsel", "B2", "gesundheit", "Wechsel der Krankenkasse", "Changing health insurance, carefully.", "Anja", "am Telefon", "on the phone", "Sie überlegt, die Krankenkasse zu wechseln", "She is considering changing health insurance", "Sie fragt nach Zusatzbeitrag, Leistungen und Kündigungsfrist", "She asks about additional contribution, benefits, and notice period", "Danach vergleicht sie die Informationen in Ruhe", "Afterward she compares the information calmly", [["health insurance provider", "die Krankenkasse", "noun"], ["additional contribution", "der Zusatzbeitrag", "noun"], ["benefits", "die Leistungen", "noun"], ["notice period", "die Kündigungsfrist", "noun"], ["to compare", "vergleichen", "verb"]]],
+  ["b2-arbeitszeugnis", "B2", "arbeit", "Das Arbeitszeugnis", "Understanding a German work reference.", "Erik", "zu Hause", "at home", "Er bekommt sein Arbeitszeugnis und findet eine Formulierung seltsam", "He receives his work reference and finds one phrase strange", "Er recherchiert die Bedeutung und fragt eine Kollegin um Rat", "He researches the meaning and asks a colleague for advice", "Danach bittet er höflich um eine klarere Formulierung", "Afterward he politely asks for a clearer wording", [["work reference", "das Arbeitszeugnis", "noun"], ["wording", "die Formulierung", "noun"], ["strange", "seltsam", "adjective"], ["meaning", "die Bedeutung", "noun"], ["advice", "der Rat", "noun"]]],
+  ["b2-dokument-uebersetzung", "B2", "behörden", "Eine beglaubigte Übersetzung", "Official translation for paperwork.", "Nadia", "im Übersetzungsbüro", "at the translation office", "Das Amt verlangt eine beglaubigte Übersetzung", "The authority requires a certified translation", "Sie fragt nach Bearbeitungszeit und Kosten", "She asks about processing time and costs", "Eine Woche später holt sie das fertige Dokument ab", "One week later she picks up the finished document", [["certified translation", "die beglaubigte Übersetzung", "noun"], ["authority", "das Amt", "noun"], ["processing time", "die Bearbeitungszeit", "noun"], ["the cost", "die Kosten", "noun"], ["to pick up", "abholen", "verb"]]],
+  ["b2-projekt-risiko", "B2", "arbeit", "Ein Risiko im Projekt", "Raising project risk early.", "Kian", "im Projektmeeting", "in the project meeting", "Ein wichtiger Lieferant meldet eine Verzögerung", "An important supplier reports a delay", "Kian spricht das Risiko früh an und schlägt einen Plan B vor", "Kian raises the risk early and suggests a plan B", "Das Team kann rechtzeitig reagieren", "The team can react in time", [["the risk", "das Risiko", "noun"], ["supplier", "der Lieferant", "noun"], ["delay", "die Verzögerung", "noun"], ["Plan B", "der Plan B", "noun"], ["to react", "reagieren", "verb"]]],
+  ["b2-bankberatung", "B2", "alltag", "Beratung bei der Bank", "Careful financial language.", "Selin", "in der Bankfiliale", "in the bank branch", "Sie möchte die Gebühren ihres Kontos besser verstehen", "She wants to understand the fees of her account better", "Sie bittet um eine transparente Übersicht", "She asks for a transparent overview", "Nach der Beratung wechselt sie in ein passenderes Kontomodell", "After the consultation she switches to a more suitable account model", [["consultation", "die Beratung", "noun"], ["bank branch", "die Bankfiliale", "noun"], ["fees", "die Gebühren", "noun"], ["overview", "die Übersicht", "noun"], ["suitable", "passend", "adjective"]]]
+];
+
+storyBank.push(...extraStorySeeds.map(createGeneratedStory));
+
+function createGeneratedStory(seed) {
+  const [
+    id,
+    level,
+    topic,
+    title,
+    intro,
+    name,
+    settingDe,
+    settingEn,
+    problemDe,
+    problemEn,
+    actionDe,
+    actionEn,
+    resultDe,
+    resultEn,
+    vocab,
+  ] = seed;
+  return {
+    id,
+    level,
+    topic,
+    title,
+    intro,
+    vocab,
+    paragraphs: [
+      `Am Nachmittag ist ${name} ${settingDe}. ${problemDe}.`,
+      `${name} bleibt ruhig. ${actionDe}.`,
+      `${resultDe}.`,
+    ],
+    questions: [
+      makeGeneratedStoryQuestion(`Wo ist ${name}?`, `Where is ${name}?`, settingDe, settingEn, generatedStoryChoicePools.places_de, generatedStoryChoicePools.places_en),
+      makeGeneratedStoryQuestion("Was passiert zuerst?", "What happens first?", problemDe, problemEn, generatedStoryChoicePools.problems_de, generatedStoryChoicePools.problems_en),
+      makeGeneratedStoryQuestion(`Was macht ${name}?`, `What does ${name} do?`, actionDe, actionEn, generatedStoryChoicePools.actions_de, generatedStoryChoicePools.actions_en),
+      makeGeneratedStoryQuestion("Was passiert am Ende?", "What happens in the end?", resultDe, resultEn, generatedStoryChoicePools.endings_de, generatedStoryChoicePools.endings_en),
+    ],
+  };
+}
+
+function makeGeneratedStoryQuestion(q_de, q_en, answerDe, answerEn, distractorsDe, distractorsEn) {
+  const options_de = [answerDe];
+  const options_en = [answerEn];
+  distractorsDe.forEach((optionDe, index) => {
+    if (options_de.length >= 4 || normalizeAnswer(optionDe) === normalizeAnswer(answerDe)) return;
+    options_de.push(optionDe);
+    options_en.push(distractorsEn[index]);
+  });
+  return { q_de, q_en, options_de, options_en, answer: 0 };
+}
+
 let db = loadDb();
 let activeRound = null;
 let activeStory = null;
@@ -2869,15 +3864,17 @@ function renderDailyPhrase() {
   els.phraseNote.textContent = phrase.note;
 }
 
-function startStoryMode() {
-  const story = pickStoryForLevel();
+function startStoryMode(options = {}) {
+  const story = pickStoryForLevel(options);
   if (!story) {
-    els.coachMessage.textContent = "No story is available for this level yet. Tiny plot hole. Try another level.";
+    renderStoryReplayPrompt();
     return;
   }
 
   activeRound = null;
+  ensureStoryWords(story);
   activeStory = prepareStory(story);
+  storage.set(JSON.stringify(db));
   setQuizMode(true);
   els.quizForm.hidden = true;
   els.choiceQuiz.hidden = true;
@@ -2889,32 +3886,96 @@ function startStoryMode() {
   renderStoryIntro();
 }
 
-function pickStoryForLevel() {
+function getEligibleStoriesForLevel() {
   const userIndex = levelIndex(getUserLevel());
-  const recentStoryIds = db.sessions
-    .filter((session) => getSessionMode(session) === "story")
-    .slice(-3)
-    .map((session) => session.story_id);
-  const eligible = storyBank.filter((story) => {
+  return storyBank.filter((story) => {
     const storyIndex = levelIndex(story.level);
     return storyIndex <= userIndex && storyIndex >= Math.max(0, userIndex - 1);
   });
-  const fresh = eligible.filter((story) => !recentStoryIds.includes(story.id));
-  return shuffle(fresh.length ? fresh : eligible)[0];
+}
+
+function getCompletedStoryIds() {
+  return new Set(
+    db.sessions
+      .filter((session) => !session.skipped && getSessionMode(session) === "story" && session.story_id)
+      .map((session) => session.story_id)
+  );
+}
+
+function pickStoryForLevel({ allowRepeats = false } = {}) {
+  const eligible = getEligibleStoriesForLevel();
+  if (!eligible.length) return null;
+
+  const completedStoryIds = getCompletedStoryIds();
+  const unplayed = eligible.filter((story) => !completedStoryIds.has(story.id));
+  if (unplayed.length) return shuffle(unplayed)[0];
+  if (allowRepeats) return shuffle(eligible)[0];
+  return null;
+}
+
+function renderStoryReplayPrompt() {
+  const eligible = getEligibleStoriesForLevel();
+  const completedCount = eligible.filter((story) => getCompletedStoryIds().has(story.id)).length;
+
+  activeRound = null;
+  activeStory = null;
+  setQuizMode(true);
+  els.quizForm.hidden = true;
+  els.choiceQuiz.hidden = true;
+  els.storyPanel.hidden = false;
+  els.resultsPanel.innerHTML = "";
+  els.quizTitle.textContent = "Story Mode";
+  els.roundMeta.textContent = `${getUserLevel()} · ${completedCount}/${eligible.length} complete`;
+  els.coachMessage.textContent = "You cleared the fresh stories for this level band.";
+  els.storyPanel.innerHTML = `
+    <article class="story-card story-replay-card">
+      <div class="story-heading">
+        <p class="eyebrow">Story shelf complete</p>
+        <h3>Repeat the stories?</h3>
+        <p>You have already finished every available story for your current level range. Repeating is useful, but the app will keep new stories first whenever they exist.</p>
+      </div>
+      <div class="story-actions">
+        <button class="primary-button" type="button" data-story-action="repeat-all">Repeat stories</button>
+        <button class="secondary-button" type="button" data-story-action="home">Back home</button>
+      </div>
+    </article>
+  `;
 }
 
 function prepareStory(story) {
   return {
     ...story,
+    showTranslations: false,
     answers: Array(story.questions.length).fill(null),
     questions: story.questions.map((question) => {
-      const shuffled = shuffle(question.options.map((text, index) => ({ text, originalIndex: index })));
+      const normalized = normalizeStoryQuestion(question);
+      const shuffled = shuffle(normalized.options.map((text, index) => ({ text, en: normalized.options_en[index], originalIndex: index })));
       return {
-        q: question.q,
+        q: normalized.q,
+        q_en: normalized.q_en,
         options: shuffled.map((option) => option.text),
+        options_en: shuffled.map((option) => option.en),
         answer: shuffled.findIndex((option) => option.originalIndex === question.answer),
       };
     }),
+  };
+}
+
+function normalizeStoryQuestion(question) {
+  const legacyTranslation = legacyStoryQuestionTranslations[question.q];
+  if (legacyTranslation) {
+    return {
+      q: legacyTranslation.q_de,
+      q_en: legacyTranslation.q_en,
+      options: legacyTranslation.options_de,
+      options_en: legacyTranslation.options_en,
+    };
+  }
+  return {
+    q: question.q_de || question.q || "",
+    q_en: question.q_en || "",
+    options: question.options_de || question.options || [],
+    options_en: question.options_en || question.options || [],
   };
 }
 
@@ -2951,6 +4012,9 @@ function renderStoryQuiz() {
       <div class="story-heading">
         <p class="eyebrow">${escapeHtml(activeStory.level)} Story</p>
         <h3>${escapeHtml(activeStory.title)}</h3>
+        <button class="secondary-button story-translate-button" type="button" data-story-action="toggle-translation">
+          ${activeStory.showTranslations ? "Hide English" : "Show English"}
+        </button>
       </div>
       <div class="story-text">
         ${activeStory.paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
@@ -2960,13 +4024,17 @@ function renderStoryQuiz() {
           .map(
             (question, questionIndex) => `
               <fieldset class="story-question">
-                <legend>${questionIndex + 1}. ${escapeHtml(question.q)}</legend>
+                <legend>
+                  ${questionIndex + 1}. ${escapeHtml(question.q)}
+                  ${activeStory.showTranslations && question.q_en ? `<span>${escapeHtml(question.q_en)}</span>` : ""}
+                </legend>
                 <div class="story-options">
                   ${question.options
                     .map(
                       (option, optionIndex) => `
                         <button class="story-option ${activeStory.answers[questionIndex] === optionIndex ? "selected" : ""}" type="button" data-story-question="${questionIndex}" data-story-option="${optionIndex}">
                           ${escapeHtml(option)}
+                          ${activeStory.showTranslations && question.options_en[optionIndex] ? `<span>${escapeHtml(question.options_en[optionIndex])}</span>` : ""}
                         </button>
                       `
                     )
@@ -2991,6 +4059,12 @@ function handleStoryPanelClick(event) {
     const action = actionButton.dataset.storyAction;
     if (action === "read") renderStoryQuiz();
     if (action === "intro") renderStoryIntro();
+    if (action === "repeat-all") startStoryMode({ allowRepeats: true });
+    if (action === "home") exitRound();
+    if (action === "toggle-translation" && activeStory) {
+      activeStory.showTranslations = !activeStory.showTranslations;
+      renderStoryQuiz();
+    }
     if (action === "submit") finishStoryMode();
     return;
   }
@@ -3043,8 +4117,42 @@ function getStoryWordRecords(story) {
   const wordsByKey = new Map(db.words.map((word) => [normalizeAnswer(`${word.word_en}|${word.word_de}`), word]));
   const wordsByGerman = new Map(db.words.map((word) => [normalizeAnswer(word.word_de), word]));
   return story.vocab
-    .map(([word_en, word_de]) => wordsByKey.get(normalizeAnswer(`${word_en}|${word_de}`)) || wordsByGerman.get(normalizeAnswer(word_de)))
+    .map((entry) => {
+      const { word_en, word_de } = normalizeStoryVocabEntry(entry, story);
+      return wordsByKey.get(normalizeAnswer(`${word_en}|${word_de}`)) || wordsByGerman.get(normalizeAnswer(word_de));
+    })
     .filter(Boolean);
+}
+
+function ensureStoryWords(story) {
+  const wordsByKey = new Map(db.words.map((word) => [normalizeAnswer(`${word.word_en}|${word.word_de}`), word]));
+  const wordsByGerman = new Map(db.words.map((word) => [normalizeAnswer(word.word_de), word]));
+  const now = new Date().toISOString();
+
+  story.vocab.forEach((entry) => {
+    const record = normalizeStoryVocabEntry(entry, story);
+    const key = normalizeAnswer(`${record.word_en}|${record.word_de}`);
+    if (wordsByKey.has(key) || wordsByGerman.has(normalizeAnswer(record.word_de))) return;
+    const word = normalizeWordRecord({
+      id: makeId(),
+      word_en: record.word_en,
+      word_de: record.word_de,
+      part_of_speech: record.part_of_speech || guessPartOfSpeech(record.word_en, record.word_de),
+      topic: record.topic || story.topic || guessTopic(record.word_en, record.word_de),
+      difficulty: record.difficulty || story.level || guessDifficulty(record.word_en, record.word_de),
+      notes: record.notes || `From Story Mode: ${story.title}`,
+      status: "new",
+      created_at: now,
+    });
+    db.words.push(word);
+    wordsByKey.set(key, word);
+    wordsByGerman.set(normalizeAnswer(word.word_de), word);
+  });
+}
+
+function normalizeStoryVocabEntry(entry, story) {
+  const [word_en, word_de, part_of_speech = "", topic = story.topic || "", difficulty = story.level || "", notes = ""] = entry;
+  return { word_en, word_de, part_of_speech, topic, difficulty, notes };
 }
 
 function applyStoryExposure(words, accuracy) {
@@ -3081,7 +4189,8 @@ function renderStoryResults(score, total) {
           .map((question, index) => {
             const chosen = story.answers[index];
             const correct = chosen === question.answer;
-            return `<li class="${correct ? "correct" : "wrong"}">${index + 1}. ${escapeHtml(question.q)}<br><strong>${escapeHtml(question.options[question.answer])}</strong>${correct ? " ✓" : ` · you chose ${escapeHtml(question.options[chosen])}`}</li>`;
+            const chosenText = chosen === null || chosen === undefined ? "blank" : question.options[chosen];
+            return `<li class="${correct ? "correct" : "wrong"}">${index + 1}. ${escapeHtml(question.q)}${question.q_en ? ` <span class="half">(${escapeHtml(question.q_en)})</span>` : ""}<br><strong>${escapeHtml(question.options[question.answer])}</strong>${correct ? " ✓" : ` · you chose ${escapeHtml(chosenText)}`}</li>`;
           })
           .join("")}
       </ol>

@@ -1070,6 +1070,10 @@ h3 {
   box-shadow: 0 14px 34px rgba(23, 23, 23, 0.08);
 }
 
+.story-replay-card {
+  background: #d9fae9;
+}
+
 .story-heading h3 {
   margin-bottom: 8px;
   font-size: clamp(2rem, 5vw, 4.2rem);
@@ -1079,6 +1083,10 @@ h3 {
 .story-heading p:last-child {
   margin-bottom: 0;
   color: var(--muted);
+}
+
+.story-translate-button {
+  margin-top: 12px;
 }
 
 .story-vocab-grid {
@@ -1140,6 +1148,14 @@ h3 {
   font-weight: 850;
 }
 
+.story-question legend span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .story-options {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1147,6 +1163,8 @@ h3 {
 }
 
 .story-option {
+  display: grid;
+  gap: 4px;
   min-height: 58px;
   padding: 12px 14px;
   border-radius: 8px;
@@ -1159,6 +1177,12 @@ h3 {
 .story-option.selected {
   background: var(--cyan);
   box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+.story-option span {
+  color: rgba(35, 35, 38, 0.68);
+  font-size: 0.86rem;
+  font-weight: 700;
 }
 
 .story-actions {
