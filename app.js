@@ -5254,9 +5254,9 @@ function startSentenceMode() {
   els.tensePanel.hidden = true;
   els.sentencePanel.hidden = false;
   els.resultsPanel.innerHTML = "";
-  els.quizTitle.textContent = "Sentence Challenge";
+  els.quizTitle.textContent = "Sentence Builder";
   els.roundMeta.textContent = `Round ${activeSentenceRound.roundNumber} · Score to beat: ${getBestScoreLabel("sentence", sentences.length)}`;
-  els.coachMessage.textContent = "First read the 10 useful sentences. Then prove you can recognize them in real situations.";
+  els.coachMessage.textContent = "First read the 2 useful sentences. Then translate them by tapping words in order.";
   renderSentenceIntro();
 }
 
@@ -5266,7 +5266,7 @@ function renderSentenceIntro() {
     <article class="sentence-card sentence-intro-card">
       <div class="sentence-heading">
         <p class="eyebrow">${escapeHtml(getModeLevel("sentence"))} sentence mode</p>
-        <h3>Learn these 10 useful sentences</h3>
+        <h3>Learn these 2 useful sentences</h3>
         <p>These are not tiny textbook lines. They are the kind of sentences you can actually use in Germany.</p>
       </div>
       <div class="sentence-list">
@@ -5283,21 +5283,23 @@ function renderSentenceIntro() {
           .join("")}
       </div>
       <div class="story-actions">
-        <button class="primary-button" type="button" data-sentence-action="start-quiz">Start 10-sentence challenge</button>
+        <button class="primary-button" type="button" data-sentence-action="start-quiz">Start 2-sentence challenge</button>
         <button class="secondary-button" type="button" data-sentence-action="home">Back home</button>
       </div>
     </article>
   `;
 }
 
-function getSentenceOptions(correctSentence) {
-  const sameLevel = sentenceBank.filter((sentence) => sentence.id !== correctSentence.id && sentence.level === correctSentence.level);
-  const sameTopic = sentenceBank.filter((sentence) => sentence.id !== correctSentence.id && sentence.topic === correctSentence.topic);
-  const fallback = sentenceBank.filter((sentence) => sentence.id !== correctSentence.id);
-  const distractors = shuffle([...sameTopic, ...sameLevel, ...fallback])
-    .filter((sentence, index, sentences) => sentences.findIndex((item) => item.id === sentence.id) === index)
-    .slice(0, 3);
-  return shuffle([correctSentence, ...distractors]);
+function getSentencePuzzleWords(correctSentence) {
+  const correctWords = correctSentence.de.split(" ").filter(w => w.trim());
+  const distractors = sentenceBank
+    .filter((s) => s.id !== correctSentence.id)
+    .flatMap((s) => s.de.split(" "))
+    .filter((w) => w.length > 2 && !correctWords.includes(w));
+  const uniqueDistractors = [...new Set(distractors)];
+  const pickedDistractors = shuffle(uniqueDistractors).slice(0, 3);
+  const allWords = shuffle([...correctWords, ...pickedDistractors]);
+  return allWords.map((word, index) => ({ id: `word-${index}`, text: word }));
 }
 
 function renderSentenceQuestion() {
@@ -5307,13 +5309,19 @@ function renderSentenceQuestion() {
     finishSentenceMode();
     return;
   }
-  if (!activeSentenceRound.currentOptions || activeSentenceRound.currentOptionsFor !== sentence.id) {
-    activeSentenceRound.currentOptions = getSentenceOptions(sentence);
-    activeSentenceRound.currentOptionsFor = sentence.id;
-    activeSentenceRound.currentAnswered = false;
+  if (!activeSentenceRound.puzzle || activeSentenceRound.puzzleFor !== sentence.id) {
+    activeSentenceRound.puzzle = {
+      availableWords: getSentencePuzzleWords(sentence),
+      selectedWords: [],
+      checked: false,
+      isCorrect: false,
+    };
+    activeSentenceRound.puzzleFor = sentence.id;
   }
-  const selected = activeSentenceRound.results.find((result) => result.sentence.id === sentence.id);
+  
+  const puzzle = activeSentenceRound.puzzle;
   const correctSoFar = activeSentenceRound.results.filter((result) => result.correct).length;
+  
   els.sentencePanel.innerHTML = `
     <article class="sentence-card sentence-quiz-card">
       <div class="choice-status">
@@ -5325,62 +5333,88 @@ function renderSentenceQuestion() {
         <h3>${escapeHtml(sentence.en)}</h3>
         <p>${escapeHtml(sentence.note)}</p>
       </div>
-      <div class="sentence-options">
-        ${activeSentenceRound.currentOptions
-          .map((option) => {
-            const isSelected = selected?.answerId === option.id;
-            const isCorrect = option.id === sentence.id;
-            const showState = Boolean(selected);
-            return `
-              <button class="sentence-option ${showState && isCorrect ? "correct-choice" : ""} ${showState && isSelected && !isCorrect ? "wrong-choice" : ""}" type="button" data-sentence-answer="${escapeHtml(option.id)}" ${showState ? "disabled" : ""}>
-                ${escapeHtml(option.de)}
-              </button>
-            `;
-          })
-          .join("")}
+      
+      <div class="sentence-dropzone" ${puzzle.checked ? 'disabled' : ''}>
+        ${puzzle.selectedWords.map(w => `<button class="word-tile" type="button" data-word-id="${w.id}" data-location="dropzone" ${puzzle.checked ? "disabled" : ""}>${escapeHtml(w.text)}</button>`).join("")}
       </div>
-      ${
-        selected
-          ? `<div class="sentence-feedback ${selected.correct ? "correct" : "wrong"}">
-              <strong>${selected.correct ? "Correct." : "Not quite."}</strong>
-              <span>${escapeHtml(sentence.de)} · ${escapeHtml(sentence.note)}</span>
-            </div>
-            <button class="primary-button sentence-next-button" type="button" data-sentence-action="next">
-              ${activeSentenceRound.questionIndex + 1 >= activeSentenceRound.sentences.length ? "See results" : "Next sentence"}
-            </button>`
-          : ""
-      }
+      
+      <div class="sentence-bank" ${puzzle.checked ? 'disabled' : ''}>
+        ${puzzle.availableWords.map(w => `<button class="word-tile" type="button" data-word-id="${w.id}" data-location="bank" ${puzzle.checked ? "disabled" : ""}>${escapeHtml(w.text)}</button>`).join("")}
+      </div>
+      
+      ${puzzle.checked ? `
+        <div class="sentence-feedback ${puzzle.isCorrect ? "correct" : "wrong"}">
+          <strong>${puzzle.isCorrect ? "Correct!" : "Not quite."}</strong>
+          <span>${escapeHtml(sentence.de)}</span>
+        </div>
+        <button class="primary-button sentence-next-button" type="button" data-sentence-action="next">
+          ${activeSentenceRound.questionIndex + 1 >= activeSentenceRound.sentences.length ? "See results" : "Next"}
+        </button>
+      ` : `
+        <button class="primary-button sentence-check-button" type="button" data-sentence-action="check" ${puzzle.selectedWords.length === 0 ? "disabled" : ""}>Check</button>
+      `}
     </article>
   `;
 }
 
 function handleSentencePanelClick(event) {
+  if (!activeSentenceRound) return;
+  const sentence = activeSentenceRound.sentences[activeSentenceRound.questionIndex];
+  if (!sentence) return;
+
   const actionButton = event.target.closest("[data-sentence-action]");
   if (actionButton) {
     const action = actionButton.dataset.sentenceAction;
     if (action === "start-quiz") renderSentenceQuestion();
-    if (action === "next" && activeSentenceRound) {
+    if (action === "next") {
       activeSentenceRound.questionIndex += 1;
-      activeSentenceRound.currentOptions = null;
+      activeSentenceRound.puzzle = null;
       renderSentenceQuestion();
     }
     if (action === "home") exitRound();
+    if (action === "check") {
+      const puzzle = activeSentenceRound.puzzle;
+      if (!puzzle || puzzle.checked) return;
+      const userText = puzzle.selectedWords.map(w => w.text).join(" ");
+      const isCorrect = userText.trim() === sentence.de.trim();
+      puzzle.checked = true;
+      puzzle.isCorrect = isCorrect;
+      
+      activeSentenceRound.results.push({
+        sentence,
+        answerId: userText,
+        answerDe: userText,
+        correct: isCorrect,
+      });
+      renderSentenceQuestion();
+    }
     return;
   }
 
-  const answerButton = event.target.closest("[data-sentence-answer]");
-  if (!answerButton || !activeSentenceRound) return;
-  const sentence = activeSentenceRound.sentences[activeSentenceRound.questionIndex];
-  if (!sentence || activeSentenceRound.results.some((result) => result.sentence.id === sentence.id)) return;
-  const answerId = answerButton.dataset.sentenceAnswer;
-  const answer = activeSentenceRound.currentOptions.find((option) => option.id === answerId);
-  activeSentenceRound.results.push({
-    sentence,
-    answerId,
-    answerDe: answer?.de || "",
-    correct: answerId === sentence.id,
-  });
-  renderSentenceQuestion();
+  const wordBtn = event.target.closest("[data-word-id]");
+  if (wordBtn) {
+    const puzzle = activeSentenceRound.puzzle;
+    if (!puzzle || puzzle.checked) return;
+    
+    const wordId = wordBtn.dataset.wordId;
+    const location = wordBtn.dataset.location;
+    
+    if (location === "bank") {
+      const idx = puzzle.availableWords.findIndex(w => w.id === wordId);
+      if (idx > -1) {
+        puzzle.selectedWords.push(puzzle.availableWords[idx]);
+        puzzle.availableWords.splice(idx, 1);
+        renderSentenceQuestion();
+      }
+    } else if (location === "dropzone") {
+      const idx = puzzle.selectedWords.findIndex(w => w.id === wordId);
+      if (idx > -1) {
+        puzzle.availableWords.push(puzzle.selectedWords[idx]);
+        puzzle.selectedWords.splice(idx, 1);
+        renderSentenceQuestion();
+      }
+    }
+  }
 }
 
 function finishSentenceMode() {
