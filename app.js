@@ -5213,7 +5213,7 @@ function pickSentences(size = 10) {
   const sentenceLevel = getModeLevel("sentence");
   const userIndex = levelIndex(sentenceLevel);
   const preferredLevels = userIndex <= levelIndex("A2") ? ["A2"] : [sentenceLevel, "B1", "A2"];
-  const recent = getRecentSentenceIds(3);
+  const recent = getRecentSentenceIds(20);
   const eligible = sentenceBank
     .filter((sentence) => preferredLevels.includes(sentence.level))
     .sort((a, b) => {
@@ -5347,6 +5347,7 @@ function renderSentenceQuestion() {
           <strong>${puzzle.isCorrect ? "Correct!" : "Not quite."}</strong>
           <span>${escapeHtml(sentence.de)}</span>
         </div>
+        ${!puzzle.isCorrect ? `<button class="secondary-button" type="button" data-sentence-action="retry" style="margin-bottom: 8px;">Try again</button>` : ""}
         <button class="primary-button sentence-next-button" type="button" data-sentence-action="next">
           ${activeSentenceRound.questionIndex + 1 >= activeSentenceRound.sentences.length ? "See results" : "Next"}
         </button>
@@ -5366,6 +5367,15 @@ function handleSentencePanelClick(event) {
   if (actionButton) {
     const action = actionButton.dataset.sentenceAction;
     if (action === "start-quiz") renderSentenceQuestion();
+    if (action === "retry") {
+      activeSentenceRound.puzzle.checked = false;
+      activeSentenceRound.puzzle.isCorrect = false;
+      activeSentenceRound.puzzle.availableWords = [...activeSentenceRound.puzzle.availableWords, ...activeSentenceRound.puzzle.selectedWords];
+      activeSentenceRound.puzzle.selectedWords = [];
+      activeSentenceRound.results.pop(); // Remove the wrong result
+      renderSentenceQuestion();
+      return;
+    }
     if (action === "next") {
       activeSentenceRound.questionIndex += 1;
       activeSentenceRound.puzzle = null;
@@ -5562,6 +5572,9 @@ function startTenseMode() {
     id: `tense-${Date.now()}`,
     roundNumber: getSessionNumber(),
     items,
+    itemIndex: 0,
+    currentStep: "study",
+    results: [],
   };
 
   setQuizMode(true);
@@ -5574,114 +5587,145 @@ function startTenseMode() {
   els.resultsPanel.innerHTML = "";
   els.quizTitle.textContent = "Tense Trainer";
   els.roundMeta.textContent = `Round ${activeTenseRound.roundNumber} · Score to beat: ${getBestScoreLabel("tense", items.length * 3)}`;
-  els.coachMessage.textContent = "Learn the pattern first: present, spoken past with Perfekt, and future with werden.";
-  renderTenseIntro();
+  renderTenseQuestion();
 }
 
-function renderTenseIntro() {
+function renderTenseQuestion() {
   if (!activeTenseRound) return;
-  const sample = activeTenseRound.items[0];
-  els.tensePanel.innerHTML = `
-    <article class="tense-card tense-intro-card">
-      <div class="tense-heading">
-        <p class="eyebrow">${escapeHtml(getModeLevel("tense"))} tense trainer</p>
-        <h3>Present, Perfekt, Future</h3>
-        <p>We keep it practical: the present, the spoken past Germans use every day, and the future with <strong>werden</strong>.</p>
-      </div>
-      <div class="tense-pattern-grid">
-        <article>
-          <small>Present</small>
-          <strong>ich + verb</strong>
-          <span>${escapeHtml(sample.de.present)}</span>
-        </article>
-        <article>
-          <small>Past / Perfekt</small>
-          <strong>ich habe/bin + Partizip II</strong>
-          <span>${escapeHtml(sample.de.past)}</span>
-        </article>
-        <article>
-          <small>Future</small>
-          <strong>ich werde + infinitive</strong>
-          <span>${escapeHtml(sample.de.future)}</span>
-        </article>
-      </div>
-      <div class="tense-learn-list">
-        ${activeTenseRound.items
-          .map(
-            (item, index) => `
-              <article class="tense-learn-item">
-                <small>${index + 1}. ${escapeHtml(item.topic)} · ${escapeHtml(item.level)} · ${escapeHtml(item.infinitive)}</small>
-                <strong>${escapeHtml(item.en.present.replace(/\.$/, ""))}</strong>
-                <span>${escapeHtml(item.de.present)}</span>
-                <span>${escapeHtml(item.de.past)}</span>
-                <span>${escapeHtml(item.de.future)}</span>
-                <em>${escapeHtml(item.note)}</em>
-              </article>
-            `
-          )
-          .join("")}
-      </div>
-      <div class="story-actions">
-        <button class="primary-button" type="button" data-tense-action="start-practice">Start tense practice</button>
-        <button class="secondary-button" type="button" data-tense-action="home">Back home</button>
-      </div>
-    </article>
-  `;
+  const item = activeTenseRound.items[activeTenseRound.itemIndex];
+  if (!item) {
+    finishTenseMode();
+    return;
+  }
+
+  if (activeTenseRound.currentStep === "study") {
+    els.coachMessage.textContent = "Study the patterns for this verb before practicing.";
+    els.tensePanel.innerHTML = `
+      <article class="tense-card tense-intro-card">
+        <div class="tense-heading">
+          <p class="eyebrow">Verb ${activeTenseRound.itemIndex + 1} of ${activeTenseRound.items.length}</p>
+          <h3>Study: ${escapeHtml(item.topic)}</h3>
+          <p>Read carefully. You will be quizzed on these immediately.</p>
+        </div>
+        <div class="tense-pattern-grid">
+          <article>
+            <small>Present</small>
+            <strong>${escapeHtml(item.en.present.replace(/\.$/, ""))}</strong>
+            <span>${escapeHtml(item.de.present)}</span>
+          </article>
+          <article>
+            <small>Past / Perfekt</small>
+            <strong>${escapeHtml(item.en.past.replace(/\.$/, ""))}</strong>
+            <span>${escapeHtml(item.de.past)}</span>
+          </article>
+          <article>
+            <small>Future</small>
+            <strong>${escapeHtml(item.en.future.replace(/\.$/, ""))}</strong>
+            <span>${escapeHtml(item.de.future)}</span>
+          </article>
+        </div>
+        <div class="story-actions" style="margin-top: 24px;">
+          <button class="primary-button" type="button" data-tense-action="start-practice">Got it, let's practice</button>
+        </div>
+      </article>
+    `;
+  } else {
+    const tense = activeTenseRound.currentStep;
+    const currentResult = activeTenseRound.results.find((r) => r.item.id === item.id && r.tense === tense);
+    
+    els.coachMessage.textContent = "Write the sentence in German. Articles and word order count.";
+    els.tensePanel.innerHTML = `
+      <form class="tense-card tense-practice-card" id="tensePracticeForm">
+        <div class="tense-heading">
+          <p class="eyebrow">Verb ${activeTenseRound.itemIndex + 1}/${activeTenseRound.items.length} · ${escapeHtml(getTenseLabel(tense))} Tense</p>
+          <h3>Translate to German</h3>
+          <p style="font-size: 1.1rem; font-weight: 600;">${escapeHtml(item.en[tense])}</p>
+        </div>
+        
+        <div class="tense-question-list">
+          <fieldset class="tense-question-card" style="padding-top: 16px;">
+            <label>
+              <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" data-tense-kind="${tense}" ${currentResult ? "disabled" : ""} value="${currentResult ? escapeHtml(currentResult.answer) : ""}"/>
+            </label>
+            ${currentResult ? `
+              <div class="sentence-feedback ${currentResult.result === 'correct' ? 'correct' : currentResult.result === 'half' ? 'almost' : 'wrong'}" style="margin-top: 16px; border-radius: 8px;">
+                <strong>${currentResult.result === 'correct' ? 'Perfect!' : currentResult.result === 'half' ? 'Almost there.' : 'Not quite.'}</strong>
+                <span>Correct answer: ${escapeHtml(currentResult.expected)}</span>
+              </div>
+            ` : ""}
+          </fieldset>
+        </div>
+        <div class="submit-row">
+          ${currentResult ? `
+            <button class="primary-button" type="button" data-tense-action="next-tense">Next</button>
+          ` : `
+            <button class="primary-button" type="submit">Check</button>
+          `}
+        </div>
+      </form>
+    `;
+    
+    if (!currentResult) {
+      const input = els.tensePanel.querySelector("input");
+      if (input) input.focus();
+    }
+  }
 }
 
-function renderTensePractice() {
+function advanceTenseStep() {
   if (!activeTenseRound) return;
-  els.coachMessage.textContent = "Write each sentence in German. Articles and word order count, but small spelling slips get marked as almost there.";
-  els.tensePanel.innerHTML = `
-    <form class="tense-card tense-practice-card" id="tensePracticeForm">
-      <div class="tense-heading">
-        <p class="eyebrow">15 answers</p>
-        <h3>Write the German forms</h3>
-        <p>Use <strong>Perfekt</strong> for past: ich habe/ich bin + Partizip II.</p>
-      </div>
-      <div class="tense-question-list">
-        ${activeTenseRound.items
-          .map(
-            (item, itemIndex) => `
-              <fieldset class="tense-question-card">
-                <legend>${itemIndex + 1}. ${escapeHtml(item.en.present.replace(/\.$/, ""))}</legend>
-                ${["present", "past", "future"]
-                  .map(
-                    (tense) => `
-                      <label>
-                        <span>${escapeHtml(getTenseLabel(tense))}: ${escapeHtml(item.en[tense])}</span>
-                        <input type="text" autocomplete="off" autocapitalize="none" spellcheck="false" data-tense-item="${itemIndex}" data-tense-kind="${tense}" />
-                      </label>
-                    `
-                  )
-                  .join("")}
-                <p>${escapeHtml(item.note)}</p>
-              </fieldset>
-            `
-          )
-          .join("")}
-      </div>
-      <div class="submit-row">
-        <button class="primary-button" type="submit">Check tenses</button>
-      </div>
-    </form>
-  `;
-  const firstInput = els.tensePanel.querySelector("input");
-  if (firstInput) firstInput.focus();
+  const steps = ["study", "present", "past", "future"];
+  const currentIdx = steps.indexOf(activeTenseRound.currentStep);
+  if (currentIdx < steps.length - 1) {
+    activeTenseRound.currentStep = steps[currentIdx + 1];
+  } else {
+    activeTenseRound.itemIndex += 1;
+    activeTenseRound.currentStep = "study";
+  }
+  renderTenseQuestion();
 }
 
 function handleTensePanelClick(event) {
   const actionButton = event.target.closest("[data-tense-action]");
   if (!actionButton) return;
   const action = actionButton.dataset.tenseAction;
-  if (action === "start-practice") renderTensePractice();
+  if (action === "start-practice") {
+    advanceTenseStep();
+  }
+  if (action === "next-tense") {
+    advanceTenseStep();
+  }
   if (action === "home") exitRound();
 }
 
 function handleTenseSubmit(event) {
   if (!event.target.closest("#tensePracticeForm")) return;
   event.preventDefault();
-  finishTenseMode();
+  if (!activeTenseRound) return;
+
+  const item = activeTenseRound.items[activeTenseRound.itemIndex];
+  const tense = activeTenseRound.currentStep;
+  
+  const existingResult = activeTenseRound.results.find((r) => r.item.id === item.id && r.tense === tense);
+  if (existingResult) {
+    advanceTenseStep();
+    return;
+  }
+
+  const input = els.tensePanel.querySelector(`input[data-tense-kind="${tense}"]`);
+  const answer = input?.value || "";
+  const expected = item.de[tense];
+  const grade = gradeTenseAnswer(answer, expected);
+  
+  activeTenseRound.results.push({
+    item,
+    tense,
+    answer,
+    expected,
+    ...grade
+  });
+  
+  renderTenseQuestion();
 }
 
 function getTenseLabel(tense) {
@@ -5692,19 +5736,7 @@ function getTenseLabel(tense) {
 
 function finishTenseMode() {
   if (!activeTenseRound) return;
-  const graded = activeTenseRound.items.flatMap((item, itemIndex) =>
-    ["present", "past", "future"].map((tense) => {
-      const input = els.tensePanel.querySelector(`[data-tense-item="${itemIndex}"][data-tense-kind="${tense}"]`);
-      const answer = input?.value || "";
-      return {
-        item,
-        tense,
-        answer,
-        expected: item.de[tense],
-        ...gradeTenseAnswer(answer, item.de[tense]),
-      };
-    })
-  );
+  const graded = activeTenseRound.results;
   const score = graded.filter((item) => item.result === "correct").length;
   const total = graded.length;
   const accuracy = Math.round((score / total) * 100);
