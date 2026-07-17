@@ -6893,6 +6893,7 @@ function handleStatusWordAction(event) {
   lastStatusMoveMessage = `${word.word_de} moved from ${oldStatus} to ${targetStatus}.`;
   els.coachMessage.textContent = `${word.word_de} moved from ${oldStatus} to ${targetStatus}.`;
   saveDb();
+  renderStatusWordList();
 }
 
 function moveWordToStatus(word, targetStatus) {
