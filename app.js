@@ -4166,6 +4166,7 @@ function loadDb() {
 
 function normalizeWordRecord(word) {
   return {
+    ...word,
     id: word.id || makeId(),
     word_de: word.word_de || "",
     word_en: word.word_en || "",
@@ -4257,7 +4258,7 @@ function mergeStarterWords(database) {
     if (existingKeys.has(key)) return;
     database.words.push(
       normalizeWordRecord({
-        id: `seed-${String(index + 1).padStart(3, "0")}`,
+        id: makeId(),
         word_en: row[0],
         word_de: row[1],
         part_of_speech: row[2],
@@ -4283,7 +4284,16 @@ function mergeStarterWords(database) {
 }
 
 function saveDb() {
-  storage.set(JSON.stringify(db));
+  if (db.sessions && db.sessions.length > 200) {
+    db.sessions = db.sessions.slice(-200);
+  }
+  try {
+    storage.set(JSON.stringify(db));
+  } catch (e) {
+    console.error("Failed to save database:", e);
+    els.coachMessage.textContent = "Storage limit reached. Please export CSV backup or clear data.";
+    return;
+  }
   renderDashboard();
   renderProfile();
 }
@@ -5103,7 +5113,7 @@ function finishContextDrillRound() {
   });
   const score = graded.filter((item) => item.exact).length;
   const total = graded.length;
-  const accuracy = Math.round((score / total) * 100);
+  const accuracy = total ? Math.round((score / total) * 100) : 0;
   const touchedWords = applyContextExposure(graded);
 
   db.sessions.push({
@@ -5173,7 +5183,7 @@ function applyContextExposure(graded) {
 }
 
 function renderContextResults(graded, score, total) {
-  const accuracy = Math.round((score / total) * 100);
+  const accuracy = total ? Math.round((score / total) * 100) : 0;
   els.coachMessage.textContent =
     accuracy >= 80
       ? "Context locked in. These words are starting to behave in real sentences."
@@ -5214,16 +5224,22 @@ function pickSentences(size = 10) {
   const userIndex = levelIndex(sentenceLevel);
   const preferredLevels = userIndex <= levelIndex("A2") ? ["A2"] : [sentenceLevel, "B1", "A2"];
   const recent = getRecentSentenceIds(20);
-  const eligible = sentenceBank
-    .filter((sentence) => preferredLevels.includes(sentence.level))
-    .sort((a, b) => {
-      const aRecent = recent.has(a.id) ? 1 : 0;
-      const bRecent = recent.has(b.id) ? 1 : 0;
-      const aLevelFit = a.level === sentenceLevel ? 0 : 1;
-      const bLevelFit = b.level === sentenceLevel ? 0 : 1;
-      return aRecent - bRecent || aLevelFit - bLevelFit || Math.random() - 0.5;
-    });
-  return eligible.slice(0, Math.min(size, eligible.length));
+  const eligible = sentenceBank.filter((sentence) => preferredLevels.includes(sentence.level));
+  
+  const shuffled = [...eligible];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  
+  shuffled.sort((a, b) => {
+    const aRecent = recent.has(a.id) ? 1 : 0;
+    const bRecent = recent.has(b.id) ? 1 : 0;
+    const aLevelFit = a.level === sentenceLevel ? 0 : 1;
+    const bLevelFit = b.level === sentenceLevel ? 0 : 1;
+    return aRecent - bRecent || aLevelFit - bLevelFit || 0;
+  });
+  return shuffled.slice(0, Math.min(size, shuffled.length));
 }
 
 function startSentenceMode() {
@@ -5431,7 +5447,7 @@ function finishSentenceMode() {
   if (!activeSentenceRound) return;
   const score = activeSentenceRound.results.filter((result) => result.correct).length;
   const total = activeSentenceRound.sentences.length;
-  const accuracy = Math.round((score / total) * 100);
+  const accuracy = total ? Math.round((score / total) * 100) : 0;
   const touchedWords = getSentenceWordRecords(activeSentenceRound.sentences);
   applySentenceExposure(touchedWords, accuracy);
   db.sessions.push({
@@ -5490,7 +5506,7 @@ function applySentenceExposure(words, accuracy) {
 
 function renderSentenceResults(score, total) {
   const round = activeSentenceRound;
-  const accuracy = Math.round((score / total) * 100);
+  const accuracy = total ? Math.round((score / total) * 100) : 0;
   els.coachMessage.textContent =
     accuracy >= 80
       ? "Sentence reflexes are waking up. These lines are usable now."
@@ -5739,7 +5755,7 @@ function finishTenseMode() {
   const graded = activeTenseRound.results;
   const score = graded.filter((item) => item.result === "correct").length;
   const total = graded.length;
-  const accuracy = Math.round((score / total) * 100);
+  const accuracy = total ? Math.round((score / total) * 100) : 0;
   const touchedWords = getTenseWordRecords(activeTenseRound.items);
   applySentenceExposure(touchedWords, accuracy);
   db.sessions.push({
@@ -5793,7 +5809,7 @@ function getTenseWordRecords(items) {
 }
 
 function renderTenseResults(graded, score, total) {
-  const accuracy = Math.round((score / total) * 100);
+  const accuracy = total ? Math.round((score / total) * 100) : 0;
   els.coachMessage.textContent =
     accuracy >= 80
       ? "Strong tense control. That is how sentences start becoming automatic."
@@ -5902,10 +5918,10 @@ function gradeAnswer(answer, word) {
     return { result: "correct", comment: answer.includes("ss") && expected.includes("ß") ? "ss accepted for ß" : "" };
   }
 
-  const isNoun = word.part_of_speech === "noun";
+  const expectedParts = splitArticle(expected);
+  const answerParts = splitArticle(answer);
+  const isNoun = word.part_of_speech === "noun" || guessPartOfSpeech(word.word_en, word.word_de) === "noun" || expectedParts.article;
   if (isNoun) {
-    const expectedParts = splitArticle(expected);
-    const answerParts = splitArticle(answer);
     if (expectedParts.lemma && normalizeAnswer(answerParts.lemma) === normalizeAnswer(expectedParts.lemma)) {
       return { result: "half", comment: "article slip" };
     }
@@ -5974,9 +5990,11 @@ function applyResults(graded) {
       if (word.correct_streak >= 3) word.status = "mastered";
     } else if (item.result === "half") {
       word.half_count += 1;
+      word.correct_streak = Math.max(0, word.correct_streak - 1);
       word.last_missed_at = nowIso;
       word.last_missed_round_id = activeRound.id;
       if (word.status === "new") word.status = "learning";
+      if (word.status === "mastered" && word.correct_streak < 3) word.status = "learning";
     } else {
       word.correct_streak = 0;
       word.wrong_count += 1;
@@ -6019,7 +6037,7 @@ function renderResults(graded) {
   const wrong = graded.filter((item) => item.result === "wrong");
   const score = correct.length;
   const total = activeRound.roundSize;
-  const accuracy = Math.round((score / total) * 100);
+  const accuracy = total ? Math.round((score / total) * 100) : 0;
   const bestScoreLabel = getBestScoreLabel(activeRound.sessionMode, total);
   const currentStreak = getCurrentStreak();
 
@@ -6651,7 +6669,7 @@ function finishStoryMode() {
 
   const score = activeStory.questions.filter((question, index) => activeStory.answers[index] === question.answer).length;
   const total = activeStory.questions.length;
-  const accuracy = Math.round((score / total) * 100);
+  const accuracy = total ? Math.round((score / total) * 100) : 0;
   const storyWords = getStoryWordRecords(activeStory);
   applyStoryExposure(storyWords, accuracy);
   db.sessions.push({
@@ -6733,7 +6751,7 @@ function applyStoryExposure(words, accuracy) {
 
 function renderStoryResults(score, total) {
   const story = activeStory;
-  const accuracy = Math.round((score / total) * 100);
+  const accuracy = total ? Math.round((score / total) * 100) : 0;
   els.coachMessage.textContent =
     accuracy >= 80
       ? "Story understood. That vocab has context now."
@@ -6880,20 +6898,27 @@ function getStatusMeta(status) {
 }
 
 function handleStatusWordAction(event) {
-  const button = event.target.closest("[data-word-action='status']");
-  if (!button) return;
-  event.stopPropagation();
+  try {
+    const button = event.target.closest("[data-word-action='status']");
+    if (!button) return;
+    event.stopPropagation();
 
-  const word = db.words.find((item) => item.id === button.dataset.wordId);
-  if (!word) return;
+    const wordId = String(button.dataset.wordId);
+    const word = db.words.find((item) => String(item.id) === wordId);
+    if (!word) {
+      console.error("Word not found for ID:", wordId);
+      return;
+    }
 
-  const targetStatus = button.dataset.targetStatus;
-  const oldStatus = word.status;
-  moveWordToStatus(word, targetStatus);
-  lastStatusMoveMessage = `${word.word_de} moved from ${oldStatus} to ${targetStatus}.`;
-  els.coachMessage.textContent = `${word.word_de} moved from ${oldStatus} to ${targetStatus}.`;
-  saveDb();
-  renderStatusWordList();
+    const targetStatus = button.dataset.targetStatus;
+    const oldStatus = word.status;
+    moveWordToStatus(word, targetStatus);
+    lastStatusMoveMessage = `${word.word_de} moved from ${oldStatus} to ${targetStatus}.`;
+    els.coachMessage.textContent = `${word.word_de} moved from ${oldStatus} to ${targetStatus}.`;
+    saveDb();
+  } catch (error) {
+    console.error("Status action failed:", error);
+  }
 }
 
 function moveWordToStatus(word, targetStatus) {
