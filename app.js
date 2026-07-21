@@ -5753,7 +5753,9 @@ function getTenseLabel(tense) {
 function finishTenseMode() {
   if (!activeTenseRound) return;
   const graded = activeTenseRound.results;
-  const score = graded.filter((item) => item.result === "correct").length;
+  const correctCount = graded.filter((item) => item.result === "correct").length;
+  const halfCount = graded.filter((item) => item.result === "half").length;
+  const score = correctCount + (halfCount * 0.5);
   const total = graded.length;
   const accuracy = total ? Math.round((score / total) * 100) : 0;
   const touchedWords = getTenseWordRecords(activeTenseRound.items);
@@ -5973,6 +5975,8 @@ function levenshtein(a, b) {
 
 function applyResults(graded) {
   const scoreCorrect = graded.filter((item) => item.result === "correct").length;
+  const scoreHalf = graded.filter((item) => item.result === "half").length;
+  const scoreTotal = scoreCorrect + (scoreHalf * 0.5);
   const wordsById = new Map(db.words.map((word) => [word.id, word]));
   const today = TODAY();
   const nowIso = new Date().toISOString();
@@ -6015,9 +6019,9 @@ function applyResults(graded) {
   db.sessions.push({
     round_id: activeRound.id,
     date: new Date().toISOString(),
-    score_correct: scoreCorrect,
+    score_correct: scoreTotal,
     score_total: activeRound.roundSize,
-    accuracy: Math.round((scoreCorrect / activeRound.roundSize) * 100),
+    accuracy: Math.round((scoreTotal / activeRound.roundSize) * 100),
     words_ids: graded.map((item) => item.word.id),
     count_new: counts.new || 0,
     count_learning: counts.learning || 0,
@@ -6035,7 +6039,7 @@ function renderResults(graded) {
   const correct = graded.filter((item) => item.result === "correct");
   const half = graded.filter((item) => item.result === "half");
   const wrong = graded.filter((item) => item.result === "wrong");
-  const score = correct.length;
+  const score = correct.length + (half.length * 0.5);
   const total = activeRound.roundSize;
   const accuracy = total ? Math.round((score / total) * 100) : 0;
   const bestScoreLabel = getBestScoreLabel(activeRound.sessionMode, total);
