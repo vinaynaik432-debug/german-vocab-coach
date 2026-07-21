@@ -5114,7 +5114,7 @@ function finishContextDrillRound() {
   const score = graded.filter((item) => item.exact).length;
   const total = graded.length;
   const accuracy = total ? Math.round((score / total) * 100) : 0;
-  const touchedWords = applyContextExposure(graded);
+  const { touchedWords, statusShifts } = applyContextExposure(graded);
 
   db.sessions.push({
     round_id: activeContextRound.id,
@@ -5133,7 +5133,7 @@ function finishContextDrillRound() {
   });
 
   setRepeatConfig({ type: "context", label: "Repeat Context Drill" });
-  renderContextResults(graded, score, total);
+  renderContextResults(graded, score, total, statusShifts);
   activeContextRound = null;
   els.contextDrillQuiz.hidden = true;
   setResultsMode();
@@ -5162,12 +5162,15 @@ function ensureContextWord(option, drill) {
 
 function applyContextExposure(graded) {
   const touchedById = new Map();
+  const statusShifts = [];
   const today = TODAY();
   graded.forEach(({ drill, exact }) => {
     drill.options
       .filter((option) => option.fits)
       .forEach((option) => {
         const word = ensureContextWord(option, drill);
+        const oldStatus = word.status;
+
         word.times_seen += 1;
         word.last_seen = today;
         word.last_result = exact ? "correct" : "half";
@@ -5176,13 +5179,17 @@ function applyContextExposure(graded) {
           word.correct_streak += 1;
           if (word.correct_streak >= 3) word.status = "mastered";
         }
+        
+        if (oldStatus !== word.status) {
+          statusShifts.push({ word_de: word.word_de, oldStatus, newStatus: word.status });
+        }
         touchedById.set(word.id, word);
       });
   });
-  return [...touchedById.values()];
+  return { touchedWords: [...touchedById.values()], statusShifts };
 }
 
-function renderContextResults(graded, score, total) {
+function renderContextResults(graded, score, total, statusShifts = []) {
   const accuracy = total ? Math.round((score / total) * 100) : 0;
   els.coachMessage.textContent =
     accuracy >= 80
@@ -5197,6 +5204,7 @@ function renderContextResults(graded, score, total) {
       <article><small>Level</small><strong>${escapeHtml(getModeLevel("context"))}</strong></article>
       <article><small>Words touched</small><strong>${new Set(graded.flatMap((item) => item.drill.options.filter((option) => option.fits).map((option) => option.word_de))).size}</strong></article>
     </div>
+    ${renderStatusShiftsHtml(statusShifts)}
     <section class="result-group">
       <h3>Sentence checks</h3>
       <ol class="result-list context-result-list">
@@ -5449,7 +5457,7 @@ function finishSentenceMode() {
   const total = activeSentenceRound.sentences.length;
   const accuracy = total ? Math.round((score / total) * 100) : 0;
   const touchedWords = getSentenceWordRecords(activeSentenceRound.sentences);
-  applySentenceExposure(touchedWords, accuracy);
+  const { statusShifts } = applySentenceExposure(touchedWords, accuracy);
   db.sessions.push({
     round_id: activeSentenceRound.id,
     date: new Date().toISOString(),
@@ -5491,8 +5499,10 @@ function getSentenceWordRecords(sentences) {
 
 function applySentenceExposure(words, accuracy) {
   const result = accuracy >= 70 ? "correct" : accuracy >= 50 ? "half" : "wrong";
+  const statusShifts = [];
   const today = TODAY();
   words.forEach((word) => {
+    const oldStatus = word.status;
     word.times_seen += 1;
     word.last_seen = today;
     word.last_result = result;
@@ -5501,10 +5511,14 @@ function applySentenceExposure(words, accuracy) {
       word.correct_streak += 1;
       if (word.correct_streak >= 3) word.status = "mastered";
     }
+    if (oldStatus !== word.status) {
+      statusShifts.push({ word_de: word.word_de, oldStatus, newStatus: word.status });
+    }
   });
+  return { statusShifts };
 }
 
-function renderSentenceResults(score, total) {
+function renderSentenceResults(score, total, statusShifts = []) {
   const round = activeSentenceRound;
   const accuracy = total ? Math.round((score / total) * 100) : 0;
   els.coachMessage.textContent =
@@ -5759,7 +5773,7 @@ function finishTenseMode() {
   const total = graded.length;
   const accuracy = total ? Math.round((score / total) * 100) : 0;
   const touchedWords = getTenseWordRecords(activeTenseRound.items);
-  applySentenceExposure(touchedWords, accuracy);
+  const { statusShifts } = applySentenceExposure(touchedWords, accuracy);
   db.sessions.push({
     round_id: activeTenseRound.id,
     date: new Date().toISOString(),
@@ -5777,7 +5791,7 @@ function finishTenseMode() {
   });
 
   setRepeatConfig({ type: "tense", label: "Repeat Tense Trainer" });
-  renderTenseResults(graded, score, total);
+  renderTenseResults(graded, score, total, statusShifts);
   activeTenseRound = null;
   els.tensePanel.hidden = true;
   setResultsMode();
@@ -5810,7 +5824,7 @@ function getTenseWordRecords(items) {
   return [...words.values()];
 }
 
-function renderTenseResults(graded, score, total) {
+function renderTenseResults(graded, score, total, statusShifts = []) {
   const accuracy = total ? Math.round((score / total) * 100) : 0;
   els.coachMessage.textContent =
     accuracy >= 80
@@ -5830,6 +5844,7 @@ function renderTenseResults(graded, score, total) {
       <article><small>Level focus</small><strong>${escapeHtml(getModeLevel("tense"))}</strong></article>
       <article><small>Words touched</small><strong>${getTenseWordRecords(activeTenseRound.items).length}</strong></article>
     </div>
+    ${renderStatusShiftsHtml(statusShifts)}
     <section class="result-group">
       <h3>Tense checks</h3>
       <div class="tense-result-list">
@@ -5899,8 +5914,8 @@ function submitAnswers(event) {
         ? { retryOnly: true, size: activeRound.roundSize }
         : { size: activeRound.roundSize },
   });
-  applyResults(graded);
-  renderResults(graded);
+  const statusShifts = applyResults(graded);
+  renderResults(graded, statusShifts);
   activeRound = null;
   els.quizForm.hidden = true;
   setResultsMode();
@@ -5981,10 +5996,13 @@ function applyResults(graded) {
   const today = TODAY();
   const nowIso = new Date().toISOString();
   const missedItems = graded.filter((item) => item.result === "wrong" || item.result === "half");
+  const statusShifts = [];
 
   graded.forEach((item) => {
     const word = wordsById.get(item.word.id);
     if (!word) return;
+    const oldStatus = word.status;
+
     word.times_seen += 1;
     word.last_seen = today;
     word.last_result = item.result;
@@ -6005,6 +6023,10 @@ function applyResults(graded) {
       word.last_missed_at = nowIso;
       word.last_missed_round_id = activeRound.id;
       word.status = "learning";
+    }
+
+    if (oldStatus !== word.status) {
+      statusShifts.push({ word_de: word.word_de, oldStatus, newStatus: word.status });
     }
   });
 
@@ -6033,9 +6055,23 @@ function applyResults(graded) {
     mode: activeRound.sessionMode,
     level: getUserLevel(),
   });
+
+  return statusShifts;
 }
 
-function renderResults(graded) {
+function renderStatusShiftsHtml(statusShifts = []) {
+  if (!statusShifts || statusShifts.length === 0) return "";
+  return `
+    <div class="result-group">
+      <h4>📈 Status Changes</h4>
+      <ul class="result-list">
+        ${statusShifts.map((s) => `<li><strong>${escapeHtml(s.word_de)}</strong> shifted from <em>${s.oldStatus}</em> to <em>${s.newStatus}</em></li>`).join("")}
+      </ul>
+    </div>
+  `;
+}
+
+function renderResults(graded, statusShifts = []) {
   const correct = graded.filter((item) => item.result === "correct");
   const half = graded.filter((item) => item.result === "half");
   const wrong = graded.filter((item) => item.result === "wrong");
@@ -6053,6 +6089,7 @@ function renderResults(graded) {
       <article><small>70% streak</small><strong>${currentStreak}</strong></article>
       <article><small>Best</small><strong>${bestScoreLabel}</strong></article>
     </div>
+    ${renderStatusShiftsHtml(statusShifts)}
     ${renderResultGroup("✅ Correct", correct, "correct")}
     ${renderResultGroup("⚠️ Gender/spelling slip", half, "half")}
     ${renderResultGroup("❌ Wrong", wrong, "wrong")}
@@ -6675,7 +6712,7 @@ function finishStoryMode() {
   const total = activeStory.questions.length;
   const accuracy = total ? Math.round((score / total) * 100) : 0;
   const storyWords = getStoryWordRecords(activeStory);
-  applyStoryExposure(storyWords, accuracy);
+  const { statusShifts } = applyStoryExposure(storyWords, accuracy);
   db.sessions.push({
     round_id: `story-${Date.now()}`,
     date: new Date().toISOString(),
@@ -6693,7 +6730,7 @@ function finishStoryMode() {
   });
 
   setRepeatConfig({ type: "story", label: "Read another story" });
-  renderStoryResults(score, total);
+  renderStoryResults(score, total, statusShifts);
   activeStory = null;
   els.storyPanel.hidden = true;
   setResultsMode();
@@ -6744,16 +6781,23 @@ function normalizeStoryVocabEntry(entry, story) {
 
 function applyStoryExposure(words, accuracy) {
   const result = accuracy >= 70 ? "correct" : accuracy >= 50 ? "half" : "wrong";
+  const statusShifts = [];
   const today = TODAY();
   words.forEach((word) => {
+    const oldStatus = word.status;
     word.times_seen += 1;
     word.last_seen = today;
     word.last_result = result;
     if (word.status === "new") word.status = "learning";
+
+    if (oldStatus !== word.status) {
+      statusShifts.push({ word_de: word.word_de, oldStatus, newStatus: word.status });
+    }
   });
+  return { statusShifts };
 }
 
-function renderStoryResults(score, total) {
+function renderStoryResults(score, total, statusShifts = []) {
   const story = activeStory;
   const accuracy = total ? Math.round((score / total) * 100) : 0;
   els.coachMessage.textContent =
@@ -6769,6 +6813,7 @@ function renderStoryResults(score, total) {
       <article><small>Level</small><strong>${escapeHtml(story.level)}</strong></article>
       <article><small>Vocab touched</small><strong>${getStoryWordRecords(story).length}</strong></article>
     </div>
+    ${renderStatusShiftsHtml(statusShifts)}
     <section class="result-group">
       <h3>${escapeHtml(story.title)}</h3>
       <ol class="result-list">

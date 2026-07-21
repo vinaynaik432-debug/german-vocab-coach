@@ -1,4 +1,4 @@
-const CACHE_NAME = "german-vocab-coach-pwa-v29";
+const CACHE_NAME = "german-vocab-coach-pwa-v30";
 const APP_ASSETS = [
   "./",
   "./index.html",
