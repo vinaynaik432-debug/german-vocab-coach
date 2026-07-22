@@ -4152,8 +4152,9 @@ function loadDb() {
     parsed.sessions = parsed.sessions || [];
     parsed.profile = normalizeProfile(parsed.profile, !parsed.profile);
     const addedStarterWords = mergeStarterWords(parsed);
+    const deduplicatedCount = deduplicateWordIds(parsed);
     const profileChanged = JSON.stringify(parsed.profile) !== profileBefore;
-    const shouldPersistUpgrade = addedStarterWords || profileChanged || Number(parsed.version || 0) < STARTER_BANK_VERSION;
+    const shouldPersistUpgrade = addedStarterWords || deduplicatedCount || profileChanged || Number(parsed.version || 0) < STARTER_BANK_VERSION;
     parsed.version = STARTER_BANK_VERSION;
     if (shouldPersistUpgrade) storage.set(JSON.stringify(parsed));
     return parsed;
@@ -4162,6 +4163,29 @@ function loadDb() {
     storage.set(JSON.stringify(seeded));
     return seeded;
   }
+}
+
+function deduplicateWordIds(database) {
+  const seenIds = new Map();
+  let fixed = 0;
+  database.words.forEach((word) => {
+    if (seenIds.has(word.id)) {
+      const existing = seenIds.get(word.id);
+      const existingProgress = Number(existing.times_seen || 0);
+      const currentProgress = Number(word.times_seen || 0);
+      if (currentProgress <= existingProgress) {
+        word.id = makeId();
+      } else {
+        existing.id = makeId();
+        seenIds.set(word.id, word);
+      }
+      fixed += 1;
+    } else {
+      seenIds.set(word.id, word);
+    }
+  });
+  if (fixed > 0) console.log(`[Vocab Coach] Deduplicated ${fixed} word IDs.`);
+  return fixed;
 }
 
 function normalizeWordRecord(word) {
