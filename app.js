@@ -6016,14 +6016,15 @@ function applyResults(graded) {
   const scoreCorrect = graded.filter((item) => item.result === "correct").length;
   const scoreHalf = graded.filter((item) => item.result === "half").length;
   const scoreTotal = scoreCorrect + (scoreHalf * 0.5);
+  const wordsById = new Map(db.words.map((word) => [word.id, word]));
   const today = TODAY();
   const nowIso = new Date().toISOString();
   const missedItems = graded.filter((item) => item.result === "wrong" || item.result === "half");
   const statusShifts = [];
 
   graded.forEach((item) => {
-    const word = item.word;
-    if (!word || !db.words.includes(word)) return;
+    const word = wordsById.get(item.word.id);
+    if (!word) return;
     const oldStatus = word.status;
 
     word.times_seen += 1;
