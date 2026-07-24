@@ -4689,7 +4689,8 @@ function newWordScore(word, recentSet) {
 
 function fillScore(word) {
   const statusScore = word.status === "learning" ? 20 : word.status === "new" ? 14 : 5;
-  return statusScore + Number(word.wrong_count || 0) * 3 - Number(word.correct_streak || 0);
+  const cappedWrong = Math.min(Number(word.wrong_count || 0), 3);
+  return statusScore + cappedWrong * 3 - Number(word.correct_streak || 0);
 }
 
 function shuffle(items) {
@@ -5014,15 +5015,15 @@ function pickContextDrills(size = 5) {
   const contextLevel = getModeLevel("context");
   const userIndex = levelIndex(contextLevel);
   const recent = getRecentContextDrillIds(3);
-  const eligible = contextDrills
+  const eligible = shuffle(contextDrills
     .filter((drill) => {
       const drillIndex = levelIndex(drill.level);
       return drillIndex <= userIndex && drillIndex >= Math.max(0, userIndex - 1);
-    })
+    }))
     .sort((a, b) => {
       const aRecent = recent.has(a.id) ? 1 : 0;
       const bRecent = recent.has(b.id) ? 1 : 0;
-      return aRecent - bRecent || levelIndex(b.level) - levelIndex(a.level) || Math.random() - 0.5;
+      return aRecent - bRecent || levelIndex(b.level) - levelIndex(a.level);
     });
 
   return eligible.slice(0, Math.min(size, eligible.length));
@@ -5202,6 +5203,10 @@ function applyContextExposure(graded) {
         if (exact) {
           word.correct_streak += 1;
           if (word.correct_streak >= 3) word.status = "mastered";
+        } else {
+          word.half_count += 1;
+          word.correct_streak = Math.max(0, word.correct_streak - 1);
+          if (word.status === "mastered" && word.correct_streak < 3) word.status = "learning";
         }
         
         if (oldStatus !== word.status) {
@@ -5534,6 +5539,14 @@ function applySentenceExposure(words, accuracy) {
     if (result === "correct") {
       word.correct_streak += 1;
       if (word.correct_streak >= 3) word.status = "mastered";
+    } else if (result === "half") {
+      word.half_count += 1;
+      word.correct_streak = Math.max(0, word.correct_streak - 1);
+      if (word.status === "mastered" && word.correct_streak < 3) word.status = "learning";
+    } else {
+      word.wrong_count += 1;
+      word.correct_streak = 0;
+      word.status = "learning";
     }
     if (oldStatus !== word.status) {
       statusShifts.push({ word_de: word.word_de, oldStatus, newStatus: word.status });
@@ -5589,20 +5602,21 @@ function pickTenseItems(size = 5) {
       const bRecent = recent.has(b.id) ? 1 : 0;
       const aLevelFit = a.level === userLevel ? 0 : 1;
       const bLevelFit = b.level === userLevel ? 0 : 1;
-      return aRecent - bRecent || aLevelFit - bLevelFit || Math.random() - 0.5;
+      return aRecent - bRecent || aLevelFit - bLevelFit;
     });
+  const shuffledSorted = shuffle(sorted);
 
   const selected = [];
-  sorted.forEach((item) => {
+  shuffledSorted.forEach((item) => {
     if (selected.length >= size) return;
     const count = topicCounts.get(item.topic) || 0;
-    if (count >= 2 && sorted.length > size) return;
+    if (count >= 2 && shuffledSorted.length > size) return;
     selected.push(item);
     topicCounts.set(item.topic, count + 1);
   });
 
   if (selected.length < size) {
-    sorted.forEach((item) => {
+    shuffledSorted.forEach((item) => {
       if (selected.length >= size || selected.some((selectedItem) => selectedItem.id === item.id)) return;
       selected.push(item);
     });
@@ -5612,7 +5626,7 @@ function pickTenseItems(size = 5) {
 }
 
 function startTenseMode() {
-  const items = pickTenseItems(5);
+  const items = pickTenseItems(1);
   if (!items.length) {
     els.coachMessage.textContent = "No tense practice sentences are available yet.";
     return;
@@ -6813,6 +6827,18 @@ function applyStoryExposure(words, accuracy) {
     word.last_seen = today;
     word.last_result = result;
     if (word.status === "new") word.status = "learning";
+    if (result === "correct") {
+      word.correct_streak += 1;
+      if (word.correct_streak >= 3) word.status = "mastered";
+    } else if (result === "half") {
+      word.half_count += 1;
+      word.correct_streak = Math.max(0, word.correct_streak - 1);
+      if (word.status === "mastered" && word.correct_streak < 3) word.status = "learning";
+    } else {
+      word.wrong_count += 1;
+      word.correct_streak = 0;
+      word.status = "learning";
+    }
 
     if (oldStatus !== word.status) {
       statusShifts.push({ word_de: word.word_de, oldStatus, newStatus: word.status });
@@ -7189,7 +7215,7 @@ function guessDifficulty(en, de) {
 
 function exportCsv() {
   const rows = [
-    ["id", "word_en", "word_de", "part_of_speech", "topic", "status", "correct_streak", "times_seen", "wrong_count", "half_count", "last_seen", "last_result", "difficulty", "notes"],
+    ["id", "word_en", "word_de", "part_of_speech", "topic", "status", "correct_streak", "times_seen", "wrong_count", "half_count", "last_seen", "last_result", "last_missed_at", "last_missed_round_id", "difficulty", "notes", "created_at"],
     ...db.words.map((word) => [
       word.id,
       word.word_en,
@@ -7203,8 +7229,11 @@ function exportCsv() {
       word.half_count,
       word.last_seen,
       word.last_result,
+      word.last_missed_at,
+      word.last_missed_round_id,
       word.difficulty,
       word.notes,
+      word.created_at,
     ]),
   ];
   downloadText(`german-vocab-${TODAY()}.csv`, rows.map(toCsvRow).join("\n"));
@@ -7267,6 +7296,7 @@ async function importCsv(event) {
     imported += 1;
   });
 
+  deduplicateWordIds(db);
   event.target.value = "";
   els.coachMessage.textContent = `${imported} new word${imported === 1 ? "" : "s"} imported. The word bank just got heavier.`;
   saveDb();
