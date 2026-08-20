@@ -4139,6 +4139,9 @@ function createStorageAdapter() {
 }
 
 function loadDb() {
+  if (navigator.storage && navigator.storage.persist) {
+    navigator.storage.persist().catch(() => {});
+  }
   const raw = storage.get();
   if (!raw) {
     const seeded = createSeedDb();
@@ -7449,6 +7452,21 @@ els.resetBtn.addEventListener("click", resetDb);
 document.addEventListener("click", handleOutsidePanelClick);
 document.addEventListener("keydown", handleEscapeKey);
 
+function speakGerman(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'de-DE';
+  utterance.rate = 0.9;
+  const voices = window.speechSynthesis.getVoices();
+  const deVoice = voices.find(v => v.lang.startsWith('de') && !v.localService === false);
+  if (deVoice) utterance.voice = deVoice;
+  window.speechSynthesis.speak(utterance);
+}
+
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
 renderDailyPhrase();
 renderDashboard();
 renderProfile();
