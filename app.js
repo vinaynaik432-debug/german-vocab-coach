@@ -2434,6 +2434,110 @@ storyBank.push(
       { q_de: "Was muss Priya erklären?", q_en: "What must Priya explain?", options_de: ["Warum der Kurs zu ihrer Rolle passt", "Warum sie umzieht", "Warum sie krank ist", "Warum der Zug verspätet ist"], options_en: ["Why the course fits her role", "Why she is moving", "Why she is sick", "Why the train is delayed"], answer: 0 },
       { q_de: "Was erhält Priya nach dem Kurs?", q_en: "What does Priya receive after the course?", options_de: ["Ein Zertifikat", "Eine Kündigung", "Eine Nebenkostenabrechnung", "Eine Fahrkarte"], options_en: ["A certificate", "A termination", "A utility bill", "A ticket"], answer: 0 },
     ],
+  },
+  {
+    id: "b1-wg-casting",
+    level: "B1",
+    topic: "alltag",
+    title: "Das legendäre WG-Casting",
+    intro: "A deep dive into the unique and stressful world of German flatmate interviews.",
+    vocab: [
+      ["the flatshare", "die Wohngemeinschaft", "noun"],
+      ["the cleaning schedule", "der Putzplan", "noun"],
+      ["the viewing", "die Besichtigung", "noun"],
+      ["sympathetic / likeable", "sympathisch", "adjective"],
+      ["to move in", "einziehen", "verb"],
+      ["the house rules", "die Hausordnung", "noun"]
+    ],
+    paragraphs: [
+      "Julian sucht dringend ein Zimmer in Berlin. Nach fünfzig E-Mails bekommt er endlich eine Einladung zu einem WG-Casting. Die Wohngemeinschaft liegt im Prenzlauer Berg und hat drei Mitbewohner.",
+      "Das Gespräch fühlt sich an wie ein strenges Bewerbungsgespräch. Die Mitbewohner fragen ihn nach seinen Hobbys, seiner Musik und vor allem: seiner Einstellung zum Putzplan. 'Wir sind keine Zweck-WG', erklärt eine Mitbewohnerin ernst.",
+      "Julian bleibt entspannt, bringt sogar einen Kuchen mit und erzählt lustige Geschichten. Zwei Tage später bekommt er den Anruf: Er ist den anderen sehr sympathisch und darf nächste Woche einziehen."
+    ],
+    questions: [
+      { q_de: "Womit wird das WG-Casting verglichen?", q_en: "What is the WG-Casting compared to?", options_de: ["Mit einem strengen Bewerbungsgespräch", "Mit einer entspannten Party", "Mit einem langweiligen Vortrag", "Mit einem Familienessen"], options_en: ["With a strict job interview", "With a relaxed party", "With a boring lecture", "With a family dinner"], answer: 0 },
+      { q_de: "Wonach fragen die Mitbewohner Julian?", q_en: "What do the flatmates ask Julian about?", options_de: ["Nach seinen Hobbys und dem Putzplan", "Nach seinem Bankkonto", "Nur nach seinen Lieblingsfilmen", "Nach seinen Kochkünsten"], options_en: ["About his hobbies and the cleaning schedule", "About his bank account", "Only about his favorite movies", "About his cooking skills"], answer: 0 },
+      { q_de: "Was bedeutet 'keine Zweck-WG' in diesem Kontext?", q_en: "What does 'keine Zweck-WG' mean in this context?", options_de: ["Sie wollen befreundet sein, nicht nur Geld sparen", "Sie interessieren sich nur für die günstige Miete", "Sie putzen nie", "Sie erlauben keinen Besuch"], options_en: ["They want to be friends, not just save money", "They only care about cheap rent", "They never clean", "They don't allow visitors"], answer: 0 },
+      { q_de: "Warum bekommt Julian das Zimmer?", q_en: "Why does Julian get the room?", options_de: ["Er hat Kuchen mitgebracht und war sympathisch", "Er hat angeboten, mehr Miete zu zahlen", "Er versprach, alles zu putzen", "Er kannte den Vermieter"], options_en: ["He brought cake and was likeable", "He offered to pay more rent", "He promised to clean everything", "He knew the landlord"], answer: 0 }
+    ]
+  },
+  {
+    id: "b1-sonntagsruhe",
+    level: "B1",
+    topic: "kultur",
+    title: "Die heilige Sonntagsruhe",
+    intro: "A cultural lesson on why you should never recycle glass on a Sunday in Germany.",
+    vocab: [
+      ["the quiet time", "die Ruhezeit", "noun"],
+      ["the glass container", "der Glascontainer", "noun"],
+      ["the neighbor", "der Nachbar", "noun"],
+      ["to complain", "sich beschweren", "verb"],
+      ["loud", "laut", "adjective"],
+      ["the rule", "die Regel", "noun"]
+    ],
+    paragraphs: [
+      "Es ist ein sonniger Sonntagnachmittag. Emma hat ihre Wohnung aufgeräumt und möchte nun die leeren Weinflaschen zum Altglascontainer bringen. Sie denkt sich nichts dabei.",
+      "Als die erste Flasche mit einem lauten Klirren in den Container fällt, öffnet sich im Erdgeschoss sofort ein Fenster. Ein älterer Herr schaut grimmig heraus. 'Haben Sie nicht auf die Uhr gesehen? Heute ist Sonntag!', ruft er.",
+      "Emma entschuldigt sich schnell. Sie lernt eine wichtige deutsche Regel: Die Sonntagsruhe ist heilig. Kein Rasenmähen, kein Bohren und definitiv kein lautes Altglas."
+    ],
+    questions: [
+      { q_de: "Was möchte Emma am Sonntagnachmittag machen?", q_en: "What does Emma want to do on Sunday afternoon?", options_de: ["Leere Weinflaschen recyceln", "Ihre Wohnung staubsaugen", "Den Rasen mähen", "Eine Party feiern"], options_en: ["Recycle empty wine bottles", "Vacuum her apartment", "Mow the lawn", "Throw a party"], answer: 0 },
+      { q_de: "Wie reagiert der ältere Nachbar?", q_en: "How does the older neighbor react?", options_de: ["Er öffnet das Fenster und beschwert sich", "Er hilft ihr, die Flaschen zu tragen", "Er ignoriert sie", "Er ruft sofort die Polizei"], options_en: ["He opens the window and complains", "He helps her carry the bottles", "He ignores her", "He calls the police immediately"], answer: 0 },
+      { q_de: "Worauf bezieht sich 'klirren'?", q_en: "What does 'klirren' refer to?", options_de: ["Auf das Geräusch von brechendem Glas", "Auf das Geräusch eines Rasenmähers", "Auf einen bellenden Hund", "Auf eine höfliche Begrüßung"], options_en: ["To the sound of breaking glass", "To the sound of a lawnmower", "To a barking dog", "To a polite greeting"], answer: 0 },
+      { q_de: "Welche Lektion lernt Emma?", q_en: "What is the lesson Emma learns?", options_de: ["Die Sonntagsruhe in Deutschland ist heilig", "Glascontainer sind immer voll", "Nachbarn sind immer freundlich", "Sie sollte nur montags recyceln"], options_en: ["Sunday quiet time is sacred in Germany", "Glass containers are always full", "Neighbors are always friendly", "She should only recycle on Mondays"], answer: 0 }
+    ]
+  },
+  {
+    id: "b2-sperrmuell",
+    level: "B2",
+    topic: "alltag",
+    title: "Der Schatz auf dem Gehweg",
+    intro: "Discovering the magic of 'Sperrmüll' (bulky waste) and 'Zu verschenken' boxes.",
+    vocab: [
+      ["bulky waste", "der Sperrmüll", "noun"],
+      ["to give away for free", "verschenken", "verb"],
+      ["the pavement / sidewalk", "der Gehweg", "noun"],
+      ["the condition", "der Zustand", "noun"],
+      ["to repair", "reparieren", "verb"],
+      ["the treasure", "der Schatz", "noun"]
+    ],
+    paragraphs: [
+      "In vielen deutschen Städten gibt es eine unausgesprochene Tradition: Dinge, die man nicht mehr braucht, stellt man mit einem Schild 'Zu verschenken' auf den Gehweg. Für aufmerksame Spaziergänger ist das oft eine wahre Goldgrube.",
+      "Eines Abends entdeckt Leon auf dem Heimweg eine wunderschöne, alte Stehlampe neben ein paar Kartons. Der Lampenschirm ist etwas staubig, aber ansonsten ist sie in einem hervorragenden Zustand.",
+      "Leon nimmt die Lampe begeistert mit in seine Wohnung. Er muss nur die Glühbirne wechseln und ein kleines Kabel reparieren. Aus dem weggeworfenen Sperrmüll ist sein neues Lieblingsmöbelstück geworden."
+    ],
+    questions: [
+      { q_de: "Was ist die 'Zu verschenken' Tradition?", q_en: "What is the 'Zu verschenken' tradition?", options_de: ["Unerwünschte Gegenstände für andere auf den Gehweg stellen", "Alte Möbel an Nachbarn verkaufen", "Alles in den Müll werfen", "Ein besonderer Flohmarkt"], options_en: ["Leaving unwanted items on the sidewalk for others", "Selling old furniture to neighbors", "Throwing everything in the trash", "A special flea market"], answer: 0 },
+      { q_de: "Was findet Leon auf seinem Heimweg?", q_en: "What does Leon find on his way home?", options_de: ["Eine alte Stehlampe", "Einen Karton mit Büchern", "Einen kaputten Stuhl", "Ein Fahrrad"], options_en: ["An old floor lamp", "A box of books", "A broken chair", "A bicycle"], answer: 0 },
+      { q_de: "In welchem Zustand ist der gefundene Gegenstand?", q_en: "What is the condition of the item he finds?", options_de: ["Er ist etwas staubig, aber in hervorragendem Zustand", "Er ist komplett kaputt und unbrauchbar", "Er sieht brandneu und teuer aus", "Es fehlen zu viele Teile"], options_en: ["It is slightly dusty but in excellent condition", "It is completely broken and useless", "It looks brand new and expensive", "It is missing too many parts"], answer: 0 },
+      { q_de: "Was musste Leon tun, um die Lampe zu reparieren?", q_en: "What did Leon have to do to fix the lamp?", options_de: ["Die Glühbirne wechseln und ein kleines Kabel reparieren", "Das ganze Ding neu streichen", "Einen neuen Lampenschirm kaufen", "Einen Elektriker bezahlen"], options_en: ["Change the lightbulb and repair a small cable", "Repaint the whole thing", "Buy a new lampshade", "Pay an electrician"], answer: 0 }
+    ]
+  },
+  {
+    id: "b2-buergeramt",
+    level: "B2",
+    topic: "behörden",
+    title: "Mission: Anmeldung",
+    intro: "A suspenseful thriller about navigating German bureaucracy.",
+    vocab: [
+      ["the citizens' office", "das Bürgeramt", "noun"],
+      ["the appointment", "der Termin", "noun"],
+      ["the confirmation of residence", "die Wohnungsgeberbestätigung", "noun"],
+      ["the official", "der Beamte", "noun"],
+      ["to register", "sich anmelden", "verb"],
+      ["desperate", "verzweifelt", "adjective"]
+    ],
+    paragraphs: [
+      "Wer nach Deutschland zieht, muss sich innerhalb von zwei Wochen beim Bürgeramt anmelden. In der Theorie klingt das einfach. In der Praxis gleicht es einem Überlebenskampf, denn Termine sind oft monatelang ausgebucht.",
+      "Maria aktualisiert seit drei Stunden verzweifelt die Webseite der Stadt. Plötzlich, um exakt 14:03 Uhr, leuchtet ein freier Termin für den nächsten Morgen auf. Mit zitternden Fingern klickt sie auf Buchen und sichert sich den begehrten Platz.",
+      "Am nächsten Tag sitzt sie nervös im Wartebereich. Als ihre Nummer aufgerufen wird, überreicht sie dem Beamten stolz ihren Pass und die magische 'Wohnungsgeberbestätigung'. Der Beamte nickt stumm, stempelt das Formular ab, und Maria verlässt das Gebäude als offiziell registrierte Einwohnerin."
+    ],
+    questions: [
+      { q_de: "Warum wird die Anmeldung beim Bürgeramt als Kampf beschrieben?", q_en: "Why is registering at the Bürgeramt described as a struggle?", options_de: ["Termine sind oft monatelang ausgebucht", "Die Büros sind immer geschlossen", "Die Formulare sind in einer Geheimsprache", "Es kostet sehr viel Geld"], options_en: ["Appointments are often fully booked for months", "The offices are always closed", "The forms are in a secret language", "It costs a lot of money"], answer: 0 },
+      { q_de: "Wie bekommt Maria endlich einen Termin?", q_en: "How does Maria finally get an appointment?", options_de: ["Sie aktualisiert die Webseite obsessiv, bis einer frei wird", "Sie besticht einen Beamten", "Sie ruft den Bürgermeister an", "Ihr Vermieter erledigt das für sie"], options_en: ["She obsessively refreshes the website until one opens up", "She bribes an official", "She calls the mayor", "Her landlord does it for her"], answer: 0 },
+      { q_de: "Welches spezifische Dokument wird als magisch bezeichnet?", q_en: "What specific document is mentioned as magical?", options_de: ["Die Wohnungsgeberbestätigung", "Der Reisepass", "Der Putzplan", "Der Mietvertrag"], options_en: ["Die Wohnungsgeberbestätigung", "Der Reisepass", "Der Putzplan", "Der Mietvertrag"], answer: 0 },
+      { q_de: "Wie reagiert der Beamte, als sie ihre Dokumente abgibt?", q_en: "How does the official react when she hands in her documents?", options_de: ["Er nickt stumm und stempelt das Formular ab", "Er lächelt breit und heißt sie willkommen", "Er lehnt die Dokumente ab", "Er bittet sie, morgen wiederzukommen"], options_en: ["He nods silently and stamps the form", "He smiles broadly and welcomes her", "He rejects the documents", "He asks her to come back tomorrow"], answer: 0 }
+    ]
   }
 );
 
