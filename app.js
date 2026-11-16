@@ -1,6 +1,8 @@
 const STORAGE_KEY = "vinay_german_vocab_coach_v1";
 const ROUND_SIZE = 20;
-const STARTER_BANK_VERSION = 4;
+const STARTER_BANK_VERSION = 6;
+const RESTORE_SAFETY_KEY = `${STORAGE_KEY}_before_restore`;
+const CURRICULUM_BY_ID = new Map(VOCAB_CURRICULUM.words.map((word) => [word.curriculum_id, word]));
 const LEGACY_PROFILE_NAME = "Vinay";
 const DEFAULT_LEVEL = "B1";
 const DEFAULT_WEEKLY_GOAL = 30;
@@ -4185,8 +4187,23 @@ let activeStatusFilter = "learning";
 let lastStatusMoveMessage = "";
 let lastRepeatConfig = null;
 let pendingLevelChange = null;
+let marketingCategory = 'all';
+let marketingSearch = '';
+let marketingListLimit = 12;
+let pendingBackupRestore = null;
+let backupRestoreRequest = 0;
 
 const els = {
+  tabMarketingBtn: document.querySelector('#tabMarketingBtn'),
+  marketingLane: document.querySelector('#marketingLane'),
+  marketingCategory: document.querySelector('#marketingCategory'),
+  marketingSearch: document.querySelector('#marketingSearch'),
+  marketingList: document.querySelector('#marketingList'),
+  marketingSummary: document.querySelector('#marketingSummary'),
+  marketingPracticeBtn: document.querySelector('#marketingPracticeBtn'),
+  marketingMoreBtn: document.querySelector('#marketingMoreBtn'),
+  everydayRoundBtn: document.querySelector('#everydayRoundBtn'),
+  learningFocus: document.querySelector('#learningFocus'),
   appShell: document.querySelector(".app-shell"),
   totalWords: document.querySelector("#totalWords"),
   learningWords: document.querySelector("#learningWords"),
@@ -4201,9 +4218,11 @@ const els = {
   tenseBestScore: document.querySelector("#tenseBestScore"),
   streakCount: document.querySelector("#streakCount"),
   storageStatus: document.querySelector("#storageStatus"),
+  storageWarning: document.querySelector('#storageWarning'),
   masteryLabel: document.querySelector("#masteryLabel"),
   masteryBar: document.querySelector("#masteryBar"),
   masteryCaption: document.querySelector("#masteryCaption"),
+  masteryMigrationNote: document.querySelector("#masteryMigrationNote"),
   dayStreak: document.querySelector("#dayStreak"),
   todayMissionCard: document.querySelector("#todayMissionCard"),
   missionTitle: document.querySelector("#missionTitle"),
@@ -4304,6 +4323,14 @@ const els = {
   addWordsBtn: document.querySelector("#addWordsBtn"),
   addWordsStatus: document.querySelector("#addWordsStatus"),
   hardWordsList: document.querySelector("#hardWordsList"),
+  exportBackupBtn: document.querySelector('#exportBackupBtn'),
+  restoreBackupInput: document.querySelector('#restoreBackupInput'),
+  backupStatus: document.querySelector('#backupStatus'),
+  restorePreview: document.querySelector('#restorePreview'),
+  restorePreviewSummary: document.querySelector('#restorePreviewSummary'),
+  confirmRestoreBtn: document.querySelector('#confirmRestoreBtn'),
+  cancelRestoreBtn: document.querySelector('#cancelRestoreBtn'),
+  downloadSafetyBackupBtn: document.querySelector('#downloadSafetyBackupBtn'),
   exportCsvBtn: document.querySelector("#exportCsvBtn"),
   importCsvInput: document.querySelector("#importCsvInput"),
   sampleCsvBtn: document.querySelector("#sampleCsvBtn"),
@@ -4313,7 +4340,7 @@ const els = {
 
 function createSeedDb() {
   const now = new Date().toISOString();
-  return {
+  const seeded = {
     version: STARTER_BANK_VERSION,
     created_at: now,
     words: getStarterWordRows().map((row, index) => ({
@@ -4337,7 +4364,46 @@ function createSeedDb() {
     })),
     sessions: [],
     profile: createProfile(),
+    preferences: { learningFocus: 'marketing' },
   };
+  seeded.words = seeded.words.map(normalizeWordRecord);
+  mergeCurriculumWords(seeded);
+  return seeded;
+}
+
+function mergeCurriculumWords(database) {
+  const existing = new Map(database.words.map(word => [normalizeAnswer(`${word.word_en}|${word.word_de}`), word]));
+  let changed = 0;
+  VOCAB_CURRICULUM.words.forEach(entry => {
+    const key = normalizeAnswer(`${entry.word_en}|${entry.word_de}`);
+    const found = existing.get(key);
+    if (found) {
+      if (found.curriculum_id !== entry.curriculum_id) {
+        found.curriculum_id = entry.curriculum_id;
+        changed += 1;
+      }
+      return;
+    }
+    const word = normalizeWordRecord({
+      id: `curriculum-${entry.curriculum_id}`, word_en: entry.word_en, word_de: entry.word_de,
+      part_of_speech: entry.part_of_speech, topic: entry.topic, difficulty: entry.difficulty,
+      notes: entry.notes, curriculum_id: entry.curriculum_id,
+    });
+    database.words.push(word);
+    existing.set(key, word);
+    changed += 1;
+  });
+  return changed;
+}
+
+function wordCurriculum(word) { return CURRICULUM_BY_ID.get(word.curriculum_id); }
+function isMarketingWord(word) { return wordCurriculum(word)?.domain === 'marketing'; }
+function getLearningFocus() { return db.preferences?.learningFocus === 'everyday' ? 'everyday' : 'marketing'; }
+function compareNewWords(a, b, scope = 'all') {
+  return LearningPriorities.compareNew(a, b, {
+    focus: scope === 'everyday' ? 'everyday' : scope === 'marketing' ? 'marketing' : getLearningFocus(),
+    data: WORD_FREQUENCIES, metadata: CURRICULUM_BY_ID,
+  });
 }
 
 function createStorageAdapter() {
@@ -4348,8 +4414,16 @@ function createStorageAdapter() {
     window.localStorage.removeItem(testKey);
     return {
       persistent: true,
-      get: () => window.localStorage.getItem(STORAGE_KEY),
-      set: (value) => window.localStorage.setItem(STORAGE_KEY, value),
+      lastValue: null,
+      get() {
+        const value = window.localStorage.getItem(STORAGE_KEY);
+        this.lastValue = value;
+        return value;
+      },
+      set(value) {
+        window.localStorage.setItem(STORAGE_KEY, value);
+        this.lastValue = value;
+      },
     };
   } catch {
     return {
@@ -4366,10 +4440,13 @@ function loadDb() {
   if (navigator.storage && navigator.storage.persist) {
     navigator.storage.persist().catch(() => {});
   }
-  const raw = storage.get();
+  let raw;
+  try { raw = storage.get(); }
+  catch { return useTemporaryDatabase(createSeedDb(), 'Saved data could not be read. This session is temporary; existing saved data has not been replaced.'); }
   if (!raw) {
     const seeded = createSeedDb();
-    storage.set(JSON.stringify(seeded));
+    try { storage.set(JSON.stringify(seeded)); }
+    catch { return useTemporaryDatabase(seeded, 'This browser could not save the word bank. This session is temporary; download a full backup to keep your progress.'); }
     return seeded;
   }
   try {
@@ -4377,19 +4454,31 @@ function loadDb() {
     const profileBefore = JSON.stringify(parsed.profile || null);
     parsed.words = (parsed.words || []).map(normalizeWordRecord);
     parsed.sessions = parsed.sessions || [];
-    parsed.profile = normalizeProfile(parsed.profile, !parsed.profile);
+    parsed.profile = { ...parsed.profile, ...normalizeProfile(parsed.profile, !parsed.profile) };
+    parsed.preferences = { ...parsed.preferences, learningFocus: parsed.preferences?.learningFocus === 'everyday' ? 'everyday' : 'marketing' };
     const addedStarterWords = mergeStarterWords(parsed);
+    const curriculumChanged = mergeCurriculumWords(parsed);
     const deduplicatedCount = deduplicateWordIds(parsed);
     const profileChanged = JSON.stringify(parsed.profile) !== profileBefore;
-    const shouldPersistUpgrade = addedStarterWords || deduplicatedCount || profileChanged || Number(parsed.version || 0) < STARTER_BANK_VERSION;
+    const shouldPersistUpgrade = addedStarterWords || curriculumChanged || deduplicatedCount || profileChanged || Number(parsed.version || 0) < STARTER_BANK_VERSION;
     parsed.version = STARTER_BANK_VERSION;
-    if (shouldPersistUpgrade) storage.set(JSON.stringify(parsed));
+    if (shouldPersistUpgrade) {
+      try { storage.set(JSON.stringify(parsed)); }
+      catch { return useTemporaryDatabase(parsed, 'The vocabulary update could not be saved. Your previous saved progress is intact. This session is temporary; download a full backup before closing.'); }
+    }
     return parsed;
   } catch {
-    const seeded = createSeedDb();
-    storage.set(JSON.stringify(seeded));
-    return seeded;
+    return useTemporaryDatabase(createSeedDb(), 'Saved data needs recovery. The original saved data has not been replaced. This is a temporary practice session.');
   }
+}
+
+function useTemporaryDatabase(database, warning) {
+  let value = JSON.stringify(database);
+  storage.persistent = false;
+  storage.warning = warning;
+  storage.get = () => value;
+  storage.set = next => { value = next; };
+  return database;
 }
 
 function deduplicateWordIds(database) {
@@ -4415,8 +4504,13 @@ function deduplicateWordIds(database) {
   return fixed;
 }
 
+function normalizedCounter(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Math.max(0, Math.floor(number)) : 0;
+}
+
 function normalizeWordRecord(word) {
-  return {
+  return RecallEvidence.normalizeWord({
     ...word,
     id: word.id || makeId(),
     word_de: word.word_de || "",
@@ -4424,18 +4518,18 @@ function normalizeWordRecord(word) {
     part_of_speech: word.part_of_speech || guessPartOfSpeech(word.word_en, word.word_de),
     topic: word.topic || guessTopic(word.word_en, word.word_de),
     status: ["new", "learning", "mastered"].includes(word.status) ? word.status : "new",
-    correct_streak: Number(word.correct_streak || 0),
-    times_seen: Number(word.times_seen || 0),
-    wrong_count: Number(word.wrong_count || 0),
-    half_count: Number(word.half_count || 0),
+    correct_streak: normalizedCounter(word.correct_streak),
+    times_seen: normalizedCounter(word.times_seen),
+    wrong_count: normalizedCounter(word.wrong_count),
+    half_count: normalizedCounter(word.half_count),
     last_seen: word.last_seen || "",
     last_result: word.last_result || "",
     last_missed_at: word.last_missed_at || "",
     last_missed_round_id: word.last_missed_round_id || "",
     difficulty: LEVELS.includes(word.difficulty) ? word.difficulty : DEFAULT_LEVEL,
     notes: word.notes || "",
-    created_at: word.created_at || new Date().toISOString(),
-  };
+    created_at: Number.isFinite(Date.parse(word.created_at)) ? new Date(word.created_at).toISOString() : new Date().toISOString(),
+  });
 }
 
 function createModeLevels(level = DEFAULT_LEVEL, modeLevels = {}) {
@@ -4535,14 +4629,11 @@ function mergeStarterWords(database) {
 }
 
 function saveDb() {
-  if (db.sessions && db.sessions.length > 200) {
-    db.sessions = db.sessions.slice(-200);
-  }
   try {
     storage.set(JSON.stringify(db));
   } catch (e) {
     console.error("Failed to save database:", e);
-    els.coachMessage.textContent = "Storage limit reached. Please export CSV backup or clear data.";
+    els.coachMessage.textContent = "Changes could not be saved. Download a full backup now to keep your progress; do not clear your browser data.";
     return;
   }
   renderDashboard();
@@ -4568,7 +4659,7 @@ function saveProfileName(rawName, { fromPrompt = false } = {}) {
 function saveProfileSetup(rawName, level) {
   const name = sanitizeProfileName(rawName);
   if (!name) return false;
-  db.profile = createProfile(name, true, level, db.profile?.weeklyGoal, true, createModeLevels(level, db.profile?.modeLevels));
+  db.profile = createProfile(name, true, level, db.profile?.weeklyGoal, true, createModeLevels(level));
   storage.set(JSON.stringify(db));
   if (window.posthog) window.posthog.identify(name);
   renderProfile();
@@ -4600,6 +4691,7 @@ function renderProfile() {
   els.profileNameInput.value = db.profile?.name || "";
   els.weeklyGoalInput.value = String(db.profile?.weeklyGoal || DEFAULT_WEEKLY_GOAL);
   els.profilePromptLevel.value = getModeLevel("vocab");
+  els.learningFocus.value = getLearningFocus();
   [...els.levelButtons.querySelectorAll("[data-level-option]")].forEach((button) => {
     const active = button.dataset.levelOption === getModeLevel("vocab");
     button.classList.toggle("active", active);
@@ -4721,8 +4813,9 @@ function getSessionMode(session) {
   return "full";
 }
 
-function getRoundMode({ mode, retryOnly, roundSize, mission }) {
+function getRoundMode({ mode, retryOnly, roundSize, mission, scope }) {
   if (mission) return "mission";
+  if (scope === 'marketing' || scope === 'everyday') return scope;
   if (mode === "choice") return "choice";
   if (retryOnly) return "retry";
   return Number(roundSize || 0) <= 5 ? "quick" : "full";
@@ -4806,15 +4899,12 @@ function levelIndex(level) {
 }
 
 function wordLevelIndex(word) {
-  return levelIndex(word.difficulty);
+  return levelIndex(wordCurriculum(word)?.difficulty || word.difficulty);
 }
 
-function isNewWordLevelEligible(word) {
-  return wordLevelIndex(word) <= Math.min(LEVELS.length - 1, levelIndex(getUserLevel()) + 1);
-}
 
 function levelFitScore(word) {
-  const userIndex = levelIndex(getModeLevel("context"));
+  const userIndex = levelIndex(getModeLevel("vocab"));
   const wordIndex = wordLevelIndex(word);
   if (wordIndex === userIndex) return 14;
   if (wordIndex === userIndex - 1) return 8;
@@ -4823,10 +4913,18 @@ function levelFitScore(word) {
   return -16;
 }
 
-function pickRound({ retryOnly = false, size = ROUND_SIZE, mission = false } = {}) {
-  const targetSize = Math.max(1, Math.min(size, db.words.length || size));
+function pickRound({ retryOnly = false, size = ROUND_SIZE, mission = false, scope = 'all', category = 'all', wordIds = null } = {}) {
+  const requestedIds = wordIds ? new Set(wordIds) : null;
+  const pool = db.words.filter(word => {
+    if (requestedIds && !requestedIds.has(word.id)) return false;
+    if (scope === 'marketing') return isMarketingWord(word) && (category === 'all' || wordCurriculum(word)?.category === category);
+    if (scope === 'everyday') return !isMarketingWord(word);
+    return true;
+  });
+  const targetSize = Math.max(1, Math.min(size, pool.length || size));
   const selected = [];
   const selectedIds = new Set();
+  const selectedAnswers = new Set();
   const recentTwo = getRecentWordIds(2);
   const recentFive = getRecentWordIds(5);
   const quotas = getRoundQuotas(targetSize, mission);
@@ -4834,13 +4932,16 @@ function pickRound({ retryOnly = false, size = ROUND_SIZE, mission = false } = {
   const addFrom = (words, limit) => {
     for (const word of words) {
       if (selected.length >= targetSize || selectedIds.has(word.id)) continue;
+      const answerKey = normalizeAnswer(word.word_de);
+      if (selectedAnswers.has(answerKey)) continue;
       if (limit !== undefined && selected.filter((item) => item.bucket === word.bucket).length >= limit) continue;
       selected.push(word);
       selectedIds.add(word.id);
+      selectedAnswers.add(answerKey);
     }
   };
 
-  const learning = db.words
+  const learning = pool
     .filter((word) => word.status === "learning")
     .map((word) => ({ ...word, bucket: "learning" }))
     .sort((a, b) => difficultyScore(b, recentTwo) + levelFitScore(b) - (difficultyScore(a, recentTwo) + levelFitScore(a)));
@@ -4850,12 +4951,15 @@ function pickRound({ retryOnly = false, size = ROUND_SIZE, mission = false } = {
     return selected.slice(0, targetSize);
   }
 
-  const newWords = db.words
-    .filter((word) => word.status === "new" && isNewWordLevelEligible(word))
+  const newWords = pool
+    .filter((word) => word.status === "new" && (
+      (isMarketingWord(word) && (scope === 'marketing' || getLearningFocus() === 'marketing')) ||
+      wordLevelIndex(word) <= levelIndex(getUserLevel())
+    ))
     .map((word) => ({ ...word, bucket: "new" }))
-    .sort((a, b) => newWordScore(b, recentTwo) - newWordScore(a, recentTwo));
+    .sort((a, b) => compareNewWords(a, b, scope));
 
-  const mastered = db.words
+  const mastered = pool
     .filter((word) => word.status === "mastered" && !recentFive.has(word.id))
     .map((word) => ({ ...word, bucket: "mastered" }))
     .sort((a, b) => levelFitScore(b) - levelFitScore(a) || (a.last_seen || "").localeCompare(b.last_seen || ""));
@@ -4864,11 +4968,11 @@ function pickRound({ retryOnly = false, size = ROUND_SIZE, mission = false } = {
   addFrom(newWords, quotas.new);
   addFrom(mastered, quotas.mastered);
 
-  const fillers = [...learning, ...newWords, ...mastered, ...db.words.map((word) => ({ ...word, bucket: word.status }))]
-    .filter((word) => !recentTwo.has(word.id) || db.words.length < targetSize * 2)
-    .sort((a, b) => fillScore(b) + levelFitScore(b) - (fillScore(a) + levelFitScore(a)));
-
-  addFrom(fillers, targetSize);
+  // Fill within the chosen curriculum. Never bypass its level/category filter.
+  addFrom(newWords);
+  addFrom(learning);
+  addFrom(mastered);
+  addFrom(pool.filter(word => word.status === 'mastered').map(word => ({ ...word, bucket: 'mastered' })));
   return shuffle(selected).slice(0, targetSize);
 }
 
@@ -4892,33 +4996,14 @@ function getRoundQuotas(size, mission = false) {
 }
 
 function difficultyScore(word, recentSet) {
-  let score = 20 - word.correct_streak * 3 + word.wrong_count * 4 + word.half_count * 2;
+  let score = 20 - RecallEvidence.count(word) * 3 + word.wrong_count * 4 + word.half_count * 2;
   if (word.last_result === "wrong") score += 10;
   if (word.last_result === "half") score += 7;
   if (recentSet.has(word.id)) score -= 8;
   return score;
 }
 
-function newWordScore(word, recentSet) {
-  const topicBoosts = {
-    alltag: 10,
-    haushalt: 9,
-    arbeit: 9,
-    transport: 8,
-    gefühle: 8,
-    gesundheit: 8,
-    freizeit: 7,
-    behörden: 7,
-  };
-  const difficultyBoost = word.difficulty === "B1" ? 7 : word.difficulty === "A2" ? 4 : 3;
-  return (topicBoosts[word.topic] || 4) + difficultyBoost + levelFitScore(word) - (recentSet.has(word.id) ? 6 : 0);
-}
 
-function fillScore(word) {
-  const statusScore = word.status === "learning" ? 20 : word.status === "new" ? 14 : 5;
-  const cappedWrong = Math.min(Number(word.wrong_count || 0), 3);
-  return statusScore + cappedWrong * 3 - Number(word.correct_streak || 0);
-}
 
 function shuffle(items) {
   const copy = [...items];
@@ -4945,6 +5030,9 @@ function startRound(options = {}) {
     roundNumber: getSessionNumber(),
     retryOnly: Boolean(options.retryOnly),
     mission: Boolean(options.mission),
+    scope: options.scope || 'all',
+    category: options.category || 'all',
+    wordIds: options.wordIds || null,
     mode: options.mode || "typed",
     roundSize: words.length,
     words,
@@ -4957,6 +5045,7 @@ function startRound(options = {}) {
     retryOnly: activeRound.retryOnly,
     roundSize: activeRound.roundSize,
     mission: activeRound.mission,
+    scope: activeRound.scope,
   });
 
   activeStory = null;
@@ -4974,7 +5063,12 @@ function startRound(options = {}) {
   els.promptList.innerHTML = "";
   els.choiceOptions.innerHTML = "";
   els.quizTitle.textContent =
-    activeRound.mission
+    activeRound.wordIds?.length === 1 ? 'Recall this word'
+      : activeRound.scope === 'marketing'
+      ? `Marketing practice · ${activeRound.roundSize} words`
+      : activeRound.scope === 'everyday'
+      ? `Everyday German · ${activeRound.roundSize} words`
+      : activeRound.mission
       ? "Today's Mission"
       : activeRound.mode === "choice"
       ? "Multiple choice"
@@ -4984,10 +5078,10 @@ function startRound(options = {}) {
   els.roundMeta.textContent = `Round ${activeRound.roundNumber} · Score to beat: ${getBestScoreLabel(activeRound.sessionMode, activeRound.roundSize)}`;
   els.coachMessage.textContent =
     activeRound.mission
-      ? `${getUserLevel()} mission: 8 words, no noise, just progress.`
+      ? `${getLearningFocus() === 'marketing' ? 'Marketing first' : 'Frequent everyday German first'}. New words plus practice and review.`
       : activeRound.mode === "choice"
       ? "Pick the German answer. Four doors, one correct exit."
-      : "English → German. Nouns need their article. No hints, no mercy, let's cook.";
+      : "English → German. Include the article for nouns. Common listed alternatives are accepted.";
 
   if (activeRound.mode === "choice") {
     renderChoiceQuestion();
@@ -5051,6 +5145,7 @@ function setHomeMode() {
 }
 
 function switchModeTab(tabName) {
+  els.tabMarketingBtn.classList.toggle('active', tabName === 'marketing');
   els.tabPracticeBtn.classList.toggle("active", tabName === "practice");
   els.tabLearnBtn.classList.toggle("active", tabName === "learn");
   els.tabReviewBtn.classList.toggle("active", tabName === "review");
@@ -5058,6 +5153,10 @@ function switchModeTab(tabName) {
   els.practiceLane.hidden = tabName !== "practice";
   els.learnLane.hidden = tabName !== "learn";
   els.reviewLane.hidden = tabName !== "review";
+  els.marketingLane.hidden = tabName !== 'marketing';
+  for (const [name, button] of [['marketing', els.tabMarketingBtn], ['practice', els.tabPracticeBtn], ['learn', els.tabLearnBtn], ['review', els.tabReviewBtn]]) {
+    button.setAttribute('aria-selected', String(tabName === name));
+  }
 }
 
 function exitRound() {
@@ -5202,13 +5301,20 @@ function renderChoiceQuestion() {
 }
 
 function getChoiceOptions(correctWord) {
+  const correctAnswers = new Set([correctWord.word_de, ...getAcceptedAnswers(correctWord)].map(normalizeAnswer));
   const sameType = db.words.filter(
-    (word) => word.id !== correctWord.id && word.part_of_speech === correctWord.part_of_speech
+    (word) => word.id !== correctWord.id && !correctAnswers.has(normalizeAnswer(word.word_de)) && word.part_of_speech === correctWord.part_of_speech
   );
-  const fallback = db.words.filter((word) => word.id !== correctWord.id);
-  const distractors = shuffle(sameType.length >= 3 ? sameType : fallback)
-    .filter((word, index, words) => words.findIndex((item) => normalizeAnswer(item.word_de) === normalizeAnswer(word.word_de)) === index)
-    .slice(0, 3);
+  const fallback = db.words.filter((word) => word.id !== correctWord.id && !correctAnswers.has(normalizeAnswer(word.word_de)));
+  const distractors = [];
+  const displayed = new Set(correctAnswers);
+  for (const word of shuffle(sameType.length >= 3 ? sameType : fallback)) {
+    const answer = normalizeAnswer(word.word_de);
+    if (displayed.has(answer)) continue;
+    displayed.add(answer);
+    distractors.push(word);
+    if (distractors.length === 3) break;
+  }
   return shuffle([correctWord, ...distractors]);
 }
 
@@ -5414,35 +5520,14 @@ function ensureContextWord(option, drill) {
 
 function applyContextExposure(graded) {
   const touchedById = new Map();
-  const statusShifts = [];
-  const today = TODAY();
-  graded.forEach(({ drill, exact }) => {
-    drill.options
-      .filter((option) => option.fits)
-      .forEach((option) => {
-        const word = ensureContextWord(option, drill);
-        const oldStatus = word.status;
-
-        word.times_seen += 1;
-        word.last_seen = today;
-        word.last_result = exact ? "correct" : "half";
-        if (word.status === "new") word.status = "learning";
-        if (exact) {
-          word.correct_streak += 1;
-          if (word.correct_streak >= 3) word.status = "mastered";
-        } else {
-          word.half_count += 1;
-          word.correct_streak = Math.max(0, word.correct_streak - 1);
-          if (word.status === "mastered" && word.correct_streak < 3) word.status = "learning";
-        }
-        
-        if (oldStatus !== word.status) {
-          statusShifts.push({ word_de: word.word_de, oldStatus, newStatus: word.status });
-        }
-        touchedById.set(word.id, word);
-      });
+  graded.forEach(({ drill }) => {
+    drill.options.filter(option => option.fits).forEach(option => {
+      const word = ensureContextWord(option, drill);
+      touchedById.set(word.id, word);
+    });
   });
-  return { touchedWords: [...touchedById.values()], statusShifts };
+  const words = [...touchedById.values()];
+  return { touchedWords: words, ...applyWordExposure(words, 'context') };
 }
 
 function renderContextResults(graded, score, total, statusShifts = []) {
@@ -5753,31 +5838,17 @@ function getSentenceWordRecords(sentences) {
   return [...words.values()];
 }
 
-function applySentenceExposure(words, accuracy) {
-  const result = accuracy >= 70 ? "correct" : accuracy >= 50 ? "half" : "wrong";
+function applySentenceExposure(words, accuracy, source = 'sentence') {
+  return applyWordExposure(words, source);
+}
+
+function applyWordExposure(words, source) {
   const statusShifts = [];
-  const today = TODAY();
-  words.forEach((word) => {
+  const at = new Date().toISOString();
+  new Map(words.map(word => [word.id, word])).forEach(word => {
     const oldStatus = word.status;
-    word.times_seen += 1;
-    word.last_seen = today;
-    word.last_result = result;
-    if (word.status === "new") word.status = "learning";
-    if (result === "correct") {
-      word.correct_streak += 1;
-      if (word.correct_streak >= 3) word.status = "mastered";
-    } else if (result === "half") {
-      word.half_count += 1;
-      word.correct_streak = Math.max(0, word.correct_streak - 1);
-      if (word.status === "mastered" && word.correct_streak < 3) word.status = "learning";
-    } else {
-      word.wrong_count += 1;
-      word.correct_streak = 0;
-      word.status = "learning";
-    }
-    if (oldStatus !== word.status) {
-      statusShifts.push({ word_de: word.word_de, oldStatus, newStatus: word.status });
-    }
+    RecallEvidence.recordExposure(word, { source, at });
+    if (oldStatus !== word.status) statusShifts.push({ word_de: word.word_de, oldStatus, newStatus: word.status });
   });
   return { statusShifts };
 }
@@ -6038,7 +6109,7 @@ function finishTenseMode() {
   const total = graded.length;
   const accuracy = total ? Math.round((score / total) * 100) : 0;
   const touchedWords = getTenseWordRecords(activeTenseRound.items);
-  const { statusShifts } = applySentenceExposure(touchedWords, accuracy);
+  const { statusShifts } = applySentenceExposure(touchedWords, accuracy, 'tense');
   db.sessions.push({
     round_id: activeTenseRound.id,
     date: new Date().toISOString(),
@@ -6166,14 +6237,23 @@ function submitAnswers(event) {
 
   setRepeatConfig({
     type: "round",
-    label: activeRound.mission
+    label: activeRound.wordIds?.length === 1 ? 'Practise this word again'
+      : activeRound.scope === 'marketing'
+      ? 'Practise more marketing words'
+      : activeRound.scope === 'everyday'
+      ? 'Practise more everyday words'
+      : activeRound.mission
       ? "Repeat mission style"
       : activeRound.retryOnly
         ? "Retry hard words again"
         : activeRound.roundSize <= 5
           ? "Repeat 5-word sprint"
           : "Repeat full round",
-    options: activeRound.mission
+    options: activeRound.wordIds
+      ? { wordIds: activeRound.wordIds, size: activeRound.roundSize, mode: 'typed' }
+      : activeRound.scope !== 'all'
+      ? { scope: activeRound.scope, category: activeRound.category, wordIds: activeRound.wordIds, size: activeRound.roundSize }
+      : activeRound.mission
       ? { mission: true, size: activeRound.roundSize }
       : activeRound.retryOnly
         ? { retryOnly: true, size: activeRound.roundSize }
@@ -6187,7 +6267,21 @@ function submitAnswers(event) {
   saveDb();
 }
 
+function getAcceptedAnswers(word) {
+  let imported = word.accepted_answers;
+  if (typeof imported === 'string') {
+    try { imported = JSON.parse(imported); } catch { imported = []; }
+  }
+  return [...new Set([...(Array.isArray(imported) ? imported.filter(v => typeof v === 'string') : []), ...(wordCurriculum(word)?.accepted_answers || [])])];
+}
+
 function gradeAnswer(answer, word) {
+  const options = [word.word_de, ...getAcceptedAnswers(word)];
+  const grades = options.map(expected => gradeSingleAnswer(answer, { ...word, word_de: expected }));
+  return grades.find(grade => grade.result === 'correct') || grades.find(grade => grade.result === 'half') || grades[0];
+}
+
+function gradeSingleAnswer(answer, word) {
   const expected = word.word_de.trim();
   const normalizedAnswer = normalizeAnswer(answer);
   const normalizedExpected = normalizeAnswer(expected);
@@ -6268,26 +6362,14 @@ function applyResults(graded) {
     if (!word) return;
     const oldStatus = word.status;
 
-    word.times_seen += 1;
-    word.last_seen = today;
-    word.last_result = item.result;
-    if (item.result === "correct") {
-      word.correct_streak += 1;
-      if (word.status === "new") word.status = "learning";
-      if (word.correct_streak >= 3) word.status = "mastered";
-    } else if (item.result === "half") {
-      word.half_count += 1;
-      word.correct_streak = Math.max(0, word.correct_streak - 1);
-      word.last_missed_at = nowIso;
-      word.last_missed_round_id = activeRound.id;
-      if (word.status === "new") word.status = "learning";
-      if (word.status === "mastered" && word.correct_streak < 3) word.status = "learning";
+    if (activeRound.mode === 'typed') {
+      RecallEvidence.record(word, { result: item.result, at: nowIso });
+      if (item.result !== 'correct') {
+        word.last_missed_at = nowIso;
+        word.last_missed_round_id = activeRound.id;
+      }
     } else {
-      word.correct_streak = 0;
-      word.wrong_count += 1;
-      word.last_missed_at = nowIso;
-      word.last_missed_round_id = activeRound.id;
-      word.status = "learning";
+      RecallEvidence.recordExposure(word, { source: 'choice', result: item.result, at: nowIso });
     }
 
     if (oldStatus !== word.status) {
@@ -6319,6 +6401,7 @@ function applyResults(graded) {
     retry_only: activeRound.retryOnly,
     mode: activeRound.sessionMode,
     level: getUserLevel(),
+    evidence_type: activeRound.mode === 'typed' ? 'typed_recall' : 'recognition',
   });
 
   return statusShifts;
@@ -6534,13 +6617,18 @@ function renderDashboard() {
   els.sentenceBestScore.textContent = getBestScoreLabel("sentence", 10);
   els.tenseBestScore.textContent = getBestScoreLabel("tense", 15);
   els.streakCount.textContent = String(getCurrentStreak());
-  els.storageStatus.textContent = storage.persistent
-    ? `Progress is saved locally in this browser. Word bank: ${db.words.length}/${getStarterWordRows().length}.`
-    : `Temporary mode: this browser blocked persistent storage. Word bank: ${db.words.length}/${getStarterWordRows().length}. Use CSV export/import for backup.`;
+  els.storageStatus.textContent = storage.warning || (storage.persistent
+    ? `Progress is saved locally in this browser. ${db.words.length} words, including ${db.words.filter(isMarketingWord).length} for marketing.`
+    : `Temporary mode: this browser blocked persistent storage. ${db.words.length} words. Download a full backup to keep your progress.`);
   els.storageStatus.classList.toggle("warning", !storage.persistent);
+  els.storageWarning.hidden = storage.persistent;
+  els.storageWarning.textContent = storage.warning || 'Temporary practice: this browser cannot save your progress. Export CSV before closing.';
   els.masteryLabel.textContent = `${masteryPercent}%`;
   els.masteryBar.style.width = `${masteryPercent}%`;
-  els.masteryCaption.textContent = `${mastered} mastered · ${learning} learning · ${newCount} waiting`;
+  els.masteryCaption.textContent = `${mastered} verified mastered · ${learning} learning · ${newCount} waiting`;
+  const legacyChecks = db.words.filter(word => word.legacy_mastery && !RecallEvidence.isMastered(word)).length;
+  els.masteryMigrationNote.hidden = !legacyChecks;
+  els.masteryMigrationNote.textContent = `${legacyChecks} previously mastered ${legacyChecks === 1 ? 'word needs' : 'words need'} a direct recall check. Their practice history has been kept.`;
   els.dayStreak.textContent = String(getDayStreak());
   els.wordsSeen.textContent = String(seen);
   els.dashboardAccuracy.textContent = `${getOverallAccuracy()}%`;
@@ -6555,6 +6643,8 @@ function renderDashboard() {
   renderStatusWordList();
   renderHardWords();
   renderHomeProgress();
+  renderMarketingWords();
+  renderBackupRecovery();
 }
 
 function getOverallAccuracy() {
@@ -6649,9 +6739,38 @@ function renderTodayMission() {
   els.todayMissionCard.hidden = complete;
   if (complete) return;
 
-  const quotas = getRoundQuotas(8, true);
-  els.missionTitle.textContent = `Practice 8 ${getUserLevel()}-smart words`;
-  els.missionDetails.textContent = `${quotas.new} new · ${quotas.learning} weak · ${quotas.mastered} review. Finish it once today and this card disappears.`;
+  els.missionTitle.textContent = getLearningFocus() === 'marketing' ? 'Marketing first · 8 words' : 'Everyday German · 8 words';
+  els.missionDetails.textContent = getLearningFocus() === 'marketing'
+    ? 'Your work vocabulary first, with room to practise learning words and revisit familiar ones.'
+    : 'Common words before rarer ones, alongside learning words and familiar-word review.';
+}
+
+function renderMarketingWords() {
+  const all = db.words.filter(isMarketingWord);
+  const matching = all.filter(word => {
+    const entry = wordCurriculum(word);
+    if (marketingCategory !== 'all' && entry.category !== marketingCategory) return false;
+    const haystack = normalizeAnswer([word.word_de, word.word_en, entry.example_de, ...entry.accepted_answers].join(' '));
+    return !marketingSearch || haystack.includes(normalizeAnswer(marketingSearch));
+  }).sort((a, b) => compareNewWords(a, b, 'marketing'));
+  const categoryWords = all.filter(word => marketingCategory === 'all' || wordCurriculum(word).category === marketingCategory);
+  const practised = categoryWords.filter(word => word.times_seen > 0).length;
+  els.marketingSummary.textContent = `${categoryWords.length} work words & phrases · ${practised} practised · ${matching.length} matching`;
+  els.marketingList.innerHTML = matching.slice(0, marketingListLimit).map(word => {
+    const entry = wordCurriculum(word);
+    const stage = entry.priority === 1 ? 'Start here' : entry.priority === 2 ? 'Build depth' : 'Use it at work';
+    return `<article class="marketing-word-card">
+      <div class="marketing-word-top"><span>${escapeHtml(VOCAB_CURRICULUM.categories[entry.category])} · ${stage}</span><small>${escapeHtml(word.status)}</small></div>
+      <h4>${escapeHtml(word.word_de)}</h4><p class="marketing-meaning">${escapeHtml(word.word_en)}</p>
+      <p class="marketing-example" lang="de">${escapeHtml(entry.example_de)}</p><p class="marketing-translation">${escapeHtml(entry.example_en)}</p>
+      ${entry.accepted_answers.length ? `<p class="marketing-alternatives">Also accepted: ${entry.accepted_answers.map(escapeHtml).join(' · ')}</p>` : ''}
+      <details><summary>Usage note</summary><p>${escapeHtml(entry.notes)}</p></details>
+      ${'speechSynthesis' in window ? `<button class="secondary-button marketing-listen" type="button" data-speak-word="${escapeHtml(word.id)}" aria-label="Hear ${escapeHtml(word.word_de)}">Hear German</button>` : ''}
+    </article>`;
+  }).join('') || '<p>No matching words. Try a different search or category.</p>';
+  els.marketingMoreBtn.hidden = matching.length <= marketingListLimit;
+  els.marketingPracticeBtn.textContent = `Practise ${Math.min(5, categoryWords.length)} ${marketingCategory === 'all' ? 'marketing' : VOCAB_CURRICULUM.categories[marketingCategory]} words`;
+  els.marketingPracticeBtn.disabled = !categoryWords.length;
 }
 
 function getWeekStart(date = new Date()) {
@@ -7045,33 +7164,7 @@ function normalizeStoryVocabEntry(entry, story) {
 }
 
 function applyStoryExposure(words, accuracy) {
-  const result = accuracy >= 70 ? "correct" : accuracy >= 50 ? "half" : "wrong";
-  const statusShifts = [];
-  const today = TODAY();
-  words.forEach((word) => {
-    const oldStatus = word.status;
-    word.times_seen += 1;
-    word.last_seen = today;
-    word.last_result = result;
-    if (word.status === "new") word.status = "learning";
-    if (result === "correct") {
-      word.correct_streak += 1;
-      if (word.correct_streak >= 3) word.status = "mastered";
-    } else if (result === "half") {
-      word.half_count += 1;
-      word.correct_streak = Math.max(0, word.correct_streak - 1);
-      if (word.status === "mastered" && word.correct_streak < 3) word.status = "learning";
-    } else {
-      word.wrong_count += 1;
-      word.correct_streak = 0;
-      word.status = "learning";
-    }
-
-    if (oldStatus !== word.status) {
-      statusShifts.push({ word_de: word.word_de, oldStatus, newStatus: word.status });
-    }
-  });
-  return { statusShifts };
+  return applyWordExposure(words, 'story');
 }
 
 function renderStoryResults(score, total, statusShifts = []) {
@@ -7156,7 +7249,8 @@ function renderStatusWordList() {
         <article class="status-word-row">
           <div>
             <strong>${escapeHtml(toPrompt(word.word_en))} → ${escapeHtml(word.word_de)}</strong>
-            <span>${escapeHtml(word.topic)} · ${escapeHtml(word.difficulty)} · streak ${word.correct_streak} · seen ${word.times_seen}${lastResult}</span>
+            <span>${escapeHtml(word.topic)} · ${escapeHtml(word.difficulty)} · seen ${word.times_seen}${lastResult}</span>
+            <small>${escapeHtml(RecallEvidence.explain(word))}</small>
             ${notes}
           </div>
           <button class="${meta.buttonClass}" type="button" data-word-action="status" data-word-id="${escapeHtml(word.id)}" data-target-status="${meta.target}">
@@ -7174,7 +7268,7 @@ function sortStatusWords(words, status) {
     return sorted.sort(
       (a, b) =>
         Number(b.wrong_count || 0) - Number(a.wrong_count || 0) ||
-        Number(a.correct_streak || 0) - Number(b.correct_streak || 0) ||
+        RecallEvidence.count(a) - RecallEvidence.count(b) ||
         Number(b.times_seen || 0) - Number(a.times_seen || 0) ||
         a.word_en.localeCompare(b.word_en)
     );
@@ -7183,7 +7277,7 @@ function sortStatusWords(words, status) {
     return sorted.sort(
       (a, b) =>
         (b.last_seen || "").localeCompare(a.last_seen || "") ||
-        Number(b.correct_streak || 0) - Number(a.correct_streak || 0) ||
+        RecallEvidence.count(b) - RecallEvidence.count(a) ||
         a.word_en.localeCompare(b.word_en)
     );
   }
@@ -7202,7 +7296,7 @@ function getStatusMeta(status) {
       action: "Move to learning",
       target: "learning",
       buttonClass: "secondary-button status-move-button",
-      empty: "No mastered words yet. They graduate after a solid streak.",
+      empty: "No verified mastery yet. Recall a word correctly in typing on 3 separate days, at least 24 hours apart.",
     };
   }
   if (status === "new") {
@@ -7216,8 +7310,8 @@ function getStatusMeta(status) {
   }
   return {
     label: "Learning",
-    action: "Mark mastered",
-    target: "mastered",
+    action: "Practise recall",
+    target: "recall",
     buttonClass: "primary-button status-move-button",
     empty: "No learning words right now. Start a round and some words will enter the arena.",
   };
@@ -7237,6 +7331,11 @@ function handleStatusWordAction(event) {
     }
 
     const targetStatus = button.dataset.targetStatus;
+    if (targetStatus === 'recall') {
+      closeUtilityPanels();
+      startRound({ size: 1, mode: 'typed', wordIds: [word.id] });
+      return;
+    }
     const oldStatus = word.status;
     moveWordToStatus(word, targetStatus);
     lastStatusMoveMessage = `${word.word_de} moved from ${oldStatus} to ${targetStatus}.`;
@@ -7248,15 +7347,8 @@ function handleStatusWordAction(event) {
 }
 
 function moveWordToStatus(word, targetStatus) {
-  if (targetStatus === "mastered") {
-    word.status = "mastered";
-    word.correct_streak = Math.max(3, Number(word.correct_streak || 0));
-    return;
-  }
-  if (targetStatus === "learning") {
-    word.status = "learning";
-    word.correct_streak = 0;
-  }
+  if (targetStatus === 'learning') RecallEvidence.reset(word);
+  // Verified mastery can only be earned through direct, delayed typed recall.
 }
 
 function renderHardWords() {
@@ -7304,7 +7396,7 @@ function renderRecapWord(word, isFresh = false) {
   return `
     <div class="hard-item ${isFresh ? "fresh-miss" : ""}">
       <strong>${escapeHtml(toPrompt(word.word_en))} → ${escapeHtml(word.word_de)}</strong>
-      <small>${escapeHtml(label)}${when} · missed ${word.wrong_count || 0}x · half ${word.half_count || 0}x · streak ${word.correct_streak || 0}</small>
+      <small>${escapeHtml(label)}${when} · missed ${word.wrong_count || 0}x · half ${word.half_count || 0}x · recall days ${RecallEvidence.count(word)}/3</small>
     </div>
   `;
 }
@@ -7334,7 +7426,7 @@ function hardScore(word) {
     recencyBoost +
     resultBoost +
     statusBoost -
-    Number(word.correct_streak || 0) * 2
+    RecallEvidence.count(word) * 2
   );
 }
 
@@ -7440,9 +7532,112 @@ function guessDifficulty(en, de) {
   return "B1";
 }
 
+function exportFullBackup() {
+  try {
+    const text = BackupData.stringify(db, { maxDatabaseVersion: STARTER_BANK_VERSION });
+    downloadText(`german-vocab-full-backup-${TODAY()}.json`, text, 'application/json;charset=utf-8');
+    els.backupStatus.textContent = 'Full backup download started: words, recall evidence, settings and all retained sessions. Keep the file somewhere safe.';
+  } catch (error) {
+    els.backupStatus.textContent = `Backup could not be created: ${error.message}`;
+  }
+}
+
+function prepareBackupRestore(text) {
+  const backup = BackupData.parse(text, { maxDatabaseVersion: STARTER_BANK_VERSION });
+  const candidate = backup.database;
+  candidate.words = candidate.words.map(normalizeWordRecord);
+  candidate.profile = { ...candidate.profile, ...normalizeProfile(candidate.profile) };
+  mergeStarterWords(candidate);
+  mergeCurriculumWords(candidate);
+  candidate.version = STARTER_BANK_VERSION;
+  return { ...backup, database: BackupData.validateDatabase(candidate, { maxDatabaseVersion: STARTER_BANK_VERSION }) };
+}
+
+async function previewFullBackupRestore(event) {
+  const request = ++backupRestoreRequest;
+  pendingBackupRestore = null;
+  els.restorePreview.hidden = true;
+  const file = event.target.files?.[0];
+  if (!file) return;
+  try {
+    if (file.size > BackupData.MAX_TEXT_BYTES) throw new Error('This backup exceeds the 20 MB limit.');
+    const text = await file.text();
+    if (request !== backupRestoreRequest) return;
+    const backup = prepareBackupRestore(text);
+    const summary = BackupData.preview(backup);
+    pendingBackupRestore = backup;
+    els.restorePreviewSummary.textContent = `${file.name || 'Selected backup'} — ${summary.learnerName || 'Unnamed learner'} · ${summary.wordCount} words · ${summary.sessionCount} sessions · ${summary.counts.mastered} verified mastered. Saved ${new Date(summary.exportedAt).toLocaleString()}. Priority: ${summary.learningFocus === 'marketing' ? 'Marketing first' : 'Everyday frequency first'}. This replaces the current ${db.words.length} words, ${db.sessions.length} sessions and settings in this browser. Older mastery labels without recall evidence return to Learning; their history is retained.`;
+    els.restorePreview.hidden = false;
+    els.backupStatus.textContent = 'Backup checked. Review the details before restoring. Nothing has changed yet.';
+    els.confirmRestoreBtn.focus();
+  } catch (error) {
+    if (request !== backupRestoreRequest) return;
+    els.backupStatus.textContent = `Cannot restore: ${error.message} Your current data has not been changed.`;
+  } finally {
+    if (request === backupRestoreRequest) event.target.value = '';
+  }
+}
+
+function commitBackupRestore(backup) {
+  if (!storage.persistent) throw new Error('This browser cannot currently save data. Restore is unavailable until local storage works.');
+  if (window.localStorage.getItem(STORAGE_KEY) !== storage.lastValue) {
+    throw new Error('Saved data changed in another tab. Reload this page and review the backup again before restoring.');
+  }
+  // Validate again, save a recoverable copy, then replace the main value atomically.
+  // Never assign the candidate to the live app before the main write succeeds.
+  const candidate = BackupData.validateBackup(backup, { maxDatabaseVersion: STARTER_BANK_VERSION }).database;
+  const safetyCopy = BackupData.stringify(db, { maxDatabaseVersion: STARTER_BANK_VERSION });
+  window.localStorage.setItem(RESTORE_SAFETY_KEY, safetyCopy);
+  storage.set(JSON.stringify(candidate));
+  db = candidate;
+}
+
+function confirmFullBackupRestore() {
+  if (!pendingBackupRestore) return;
+  backupRestoreRequest += 1;
+  try {
+    commitBackupRestore(pendingBackupRestore);
+  } catch (error) {
+    els.backupStatus.textContent = `Restore could not be saved: ${error.message} Your current data has not been replaced.`;
+    return;
+  }
+  pendingBackupRestore = null;
+  els.restorePreview.hidden = true;
+  activeRound = activeStory = activeContextRound = activeSentenceRound = activeTenseRound = null;
+  lastRepeatConfig = null;
+  els.resultsPanel.innerHTML = '';
+  renderDashboard();
+  renderProfile();
+  els.backupStatus.textContent = `Restored ${db.words.length} words, ${db.sessions.length} sessions and your settings. The pre-restore safety copy is available below.`;
+}
+
+function cancelFullBackupRestore() {
+  backupRestoreRequest += 1;
+  pendingBackupRestore = null;
+  els.restorePreview.hidden = true;
+  els.backupStatus.textContent = 'Restore cancelled. Your current data is unchanged.';
+}
+
+function renderBackupRecovery() {
+  let available = false;
+  try { available = Boolean(window.localStorage.getItem(RESTORE_SAFETY_KEY)); } catch {}
+  els.downloadSafetyBackupBtn.hidden = !available;
+}
+
+function downloadSafetyBackup() {
+  try {
+    const text = window.localStorage.getItem(RESTORE_SAFETY_KEY);
+    BackupData.parse(text, { maxDatabaseVersion: STARTER_BANK_VERSION });
+    downloadText(`german-vocab-before-restore-${TODAY()}.json`, text, 'application/json;charset=utf-8');
+    els.backupStatus.textContent = 'Pre-restore backup download started. Choose it with Restore full backup to return to that saved state.';
+  } catch (error) {
+    els.backupStatus.textContent = `Safety copy is unavailable: ${error.message}`;
+  }
+}
+
 function exportCsv() {
   const rows = [
-    ["id", "word_en", "word_de", "part_of_speech", "topic", "status", "correct_streak", "times_seen", "wrong_count", "half_count", "last_seen", "last_result", "last_missed_at", "last_missed_round_id", "difficulty", "notes", "created_at"],
+    ["id", "word_en", "word_de", "part_of_speech", "topic", "status", "correct_streak", "times_seen", "wrong_count", "half_count", "last_seen", "last_result", "last_missed_at", "last_missed_round_id", "difficulty", "notes", "created_at", "curriculum_id", "accepted_answers", "recall", "legacy_mastery", "exposure"],
     ...db.words.map((word) => [
       word.id,
       word.word_en,
@@ -7461,6 +7656,11 @@ function exportCsv() {
       word.difficulty,
       word.notes,
       word.created_at,
+      word.curriculum_id || '',
+      JSON.stringify(getAcceptedAnswers(word)),
+      JSON.stringify(word.recall || null),
+      JSON.stringify(word.legacy_mastery || null),
+      JSON.stringify(word.exposure || null),
     ]),
   ];
   downloadText(`german-vocab-${TODAY()}.csv`, rows.map(toCsvRow).join("\n"));
@@ -7475,12 +7675,13 @@ function showSampleCsv() {
   downloadText("german-vocab-import-template.csv", sample.map(toCsvRow).join("\n"));
 }
 
-function downloadText(filename, text) {
-  const blob = new Blob([text], { type: "text/csv;charset=utf-8" });
+function downloadText(filename, text, type = "text/csv;charset=utf-8") {
+  const blob = new Blob([text], { type });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
   link.download = filename;
+  link.addEventListener('click', event => event.stopPropagation());
   document.body.appendChild(link);
   link.click();
   link.remove();
@@ -7503,11 +7704,21 @@ async function importCsv(event) {
   let imported = 0;
 
   rows.slice(1).forEach((row) => {
-    const record = Object.fromEntries(headers.map((header, index) => [header, row[index] || ""]));
+    const csvFields = new Set(['id','word_en','word_de','part_of_speech','topic','status','correct_streak','times_seen','wrong_count','half_count','last_seen','last_result','last_missed_at','last_missed_round_id','difficulty','notes','created_at','curriculum_id','accepted_answers','recall','legacy_mastery','exposure']);
+    const record = Object.fromEntries(headers.map((header, index) => [header, row[index] || ""]).filter(([header]) => csvFields.has(header)));
     if (!record.word_en || !record.word_de) return;
+    ['recall', 'legacy_mastery', 'exposure'].forEach(field => {
+      if (!record[field]) { delete record[field]; return; }
+      try { record[field] = JSON.parse(record[field]); } catch { delete record[field]; }
+    });
     const key = normalizeAnswer(`${record.word_en}|${record.word_de}`);
     if (existing.has(key)) {
-      Object.assign(existing.get(key), normalizeWordRecord({ ...existing.get(key), ...record }));
+      const current = existing.get(key);
+      // Importing an old word list must not roll back newer practice.
+      const incoming = Number(current.times_seen) > 0
+        ? Object.fromEntries(['word_en','word_de','part_of_speech','topic','difficulty','notes','accepted_answers'].filter(field => record[field]).map(field => [field, record[field]]))
+        : record;
+      Object.assign(current, normalizeWordRecord({ ...current, ...incoming, id: current.id }));
       return;
     }
     const word = normalizeWordRecord({
@@ -7523,9 +7734,10 @@ async function importCsv(event) {
     imported += 1;
   });
 
+  mergeCurriculumWords(db);
   deduplicateWordIds(db);
   event.target.value = "";
-  els.coachMessage.textContent = `${imported} new word${imported === 1 ? "" : "s"} imported. The word bank just got heavier.`;
+  els.coachMessage.textContent = `${imported} new word${imported === 1 ? "" : "s"} imported. Existing practised words kept their progress. CSV does not restore settings or sessions.`;
   saveDb();
 }
 
@@ -7596,6 +7808,31 @@ function escapeHtml(value) {
 }
 
 els.quickRoundBtn.addEventListener("click", () => startRound({ size: 5 }));
+els.tabMarketingBtn.addEventListener('click', () => switchModeTab('marketing'));
+els.marketingCategory.addEventListener('change', event => {
+  marketingCategory = event.target.value;
+  marketingListLimit = 12;
+  renderMarketingWords();
+});
+els.marketingSearch.addEventListener('input', event => {
+  marketingSearch = event.target.value;
+  marketingListLimit = 12;
+  renderMarketingWords();
+});
+els.marketingMoreBtn.addEventListener('click', () => { marketingListLimit += 12; renderMarketingWords(); });
+els.marketingPracticeBtn.addEventListener('click', () => startRound({ size: 5, scope: 'marketing', category: marketingCategory }));
+els.everydayRoundBtn.addEventListener('click', () => startRound({ size: 5, scope: 'everyday' }));
+els.learningFocus.addEventListener('change', event => {
+  db.preferences = { ...db.preferences, learningFocus: event.target.value === 'everyday' ? 'everyday' : 'marketing' };
+  saveDb();
+  els.coachMessage.textContent = getLearningFocus() === 'marketing' ? 'New work vocabulary comes first.' : 'New vocabulary now starts with the most frequent everyday words.';
+});
+els.marketingList.addEventListener('click', event => {
+  const button = event.target.closest('[data-speak-word]');
+  if (!button) return;
+  const word = db.words.find(item => item.id === button.dataset.speakWord);
+  if (word) speakGerman(word.word_de);
+});
 els.fullRoundBtn.addEventListener("click", () => startRound({ size: 20 }));
 els.retryBtn.addEventListener("click", () => startRound({ retryOnly: true, size: 20 }));
 els.multipleChoiceBtn.addEventListener("click", () => startRound({ mode: "choice", size: 10 }));
@@ -7669,6 +7906,11 @@ els.tensePanel.addEventListener("submit", handleTenseSubmit);
 els.resultsPanel.addEventListener("click", handleResultsPanelClick);
 els.quizForm.addEventListener("submit", submitAnswers);
 els.addWordsBtn.addEventListener("click", addWordsFromText);
+els.exportBackupBtn.addEventListener('click', exportFullBackup);
+els.restoreBackupInput.addEventListener('change', previewFullBackupRestore);
+els.confirmRestoreBtn.addEventListener('click', confirmFullBackupRestore);
+els.cancelRestoreBtn.addEventListener('click', cancelFullBackupRestore);
+els.downloadSafetyBackupBtn.addEventListener('click', downloadSafetyBackup);
 els.exportCsvBtn.addEventListener("click", exportCsv);
 els.importCsvInput.addEventListener("change", importCsv);
 els.sampleCsvBtn.addEventListener("click", showSampleCsv);

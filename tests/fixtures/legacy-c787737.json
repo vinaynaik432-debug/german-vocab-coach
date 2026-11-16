@@ -1,0 +1,200 @@
+{
+  "version": 4,
+  "created_at": "2026-07-25T12:00:00.000Z",
+  "words": [
+    {
+      "id": "seed-001",
+      "word_en": "the responsibility",
+      "word_de": "die Verantwortung",
+      "part_of_speech": "noun",
+      "topic": "arbeit",
+      "status": "mastered",
+      "correct_streak": 3,
+      "times_seen": 3,
+      "wrong_count": 0,
+      "half_count": 0,
+      "last_seen": "2026-07-25",
+      "last_result": "correct",
+      "last_missed_at": "",
+      "last_missed_round_id": "",
+      "difficulty": "B1",
+      "notes": "Used with Verantwortung übernehmen.",
+      "created_at": "2026-07-25T12:00:00.000Z"
+    },
+    {
+      "id": "seed-002",
+      "word_en": "to negotiate",
+      "word_de": "verhandeln",
+      "part_of_speech": "verb",
+      "topic": "arbeit",
+      "status": "learning",
+      "correct_streak": 0,
+      "times_seen": 3,
+      "wrong_count": 0,
+      "half_count": 3,
+      "last_seen": "2026-07-25",
+      "last_result": "half",
+      "last_missed_at": "2026-07-25T12:00:00.000Z",
+      "last_missed_round_id": "fixture-round-2",
+      "difficulty": "B2",
+      "notes": "",
+      "created_at": "2026-07-25T12:00:00.000Z"
+    },
+    {
+      "id": "seed-003",
+      "word_en": "the appointment",
+      "word_de": "der Termin",
+      "part_of_speech": "noun",
+      "topic": "alltag",
+      "status": "learning",
+      "correct_streak": 0,
+      "times_seen": 3,
+      "wrong_count": 3,
+      "half_count": 0,
+      "last_seen": "2026-07-25",
+      "last_result": "wrong",
+      "last_missed_at": "2026-07-25T12:00:00.000Z",
+      "last_missed_round_id": "fixture-round-2",
+      "difficulty": "B1",
+      "notes": "",
+      "created_at": "2026-07-25T12:00:00.000Z"
+    },
+    {
+      "id": "synthetic-custom-campaign",
+      "word_en": "campaign approval",
+      "word_de": "die Kampagnenfreigabe",
+      "notes": "Synthetic test phrase, not a learner record.",
+      "status": "learning",
+      "times_seen": 12,
+      "correct_streak": 1,
+      "wrong_count": 3,
+      "half_count": 2,
+      "part_of_speech": "noun",
+      "topic": "alltag",
+      "last_seen": "",
+      "last_result": "",
+      "last_missed_at": "",
+      "last_missed_round_id": "",
+      "difficulty": "B1",
+      "created_at": "2026-07-25T12:00:00.000Z",
+      "fixture_note_data": {
+        "source": "synthetic"
+      }
+    }
+  ],
+  "sessions": [
+    {
+      "round_id": "fixture-round-0",
+      "date": "2026-07-25T12:00:00.000Z",
+      "score_correct": 1.5,
+      "score_total": 3,
+      "accuracy": 50,
+      "words_ids": [
+        "seed-001",
+        "seed-002",
+        "seed-003"
+      ],
+      "count_new": 0,
+      "count_learning": 3,
+      "count_mastered_review": 0,
+      "missed_word_ids": [
+        "seed-002",
+        "seed-003"
+      ],
+      "wrong_word_ids": [
+        "seed-003"
+      ],
+      "half_word_ids": [
+        "seed-002"
+      ],
+      "retry_only": false,
+      "mode": "typed",
+      "level": "B2",
+      "fixture_history": {
+        "retain": [
+          "unknown field"
+        ]
+      }
+    },
+    {
+      "round_id": "fixture-round-1",
+      "date": "2026-07-25T12:00:00.000Z",
+      "score_correct": 1.5,
+      "score_total": 3,
+      "accuracy": 50,
+      "words_ids": [
+        "seed-001",
+        "seed-002",
+        "seed-003"
+      ],
+      "count_new": 0,
+      "count_learning": 3,
+      "count_mastered_review": 0,
+      "missed_word_ids": [
+        "seed-002",
+        "seed-003"
+      ],
+      "wrong_word_ids": [
+        "seed-003"
+      ],
+      "half_word_ids": [
+        "seed-002"
+      ],
+      "retry_only": false,
+      "mode": "typed",
+      "level": "B2"
+    },
+    {
+      "round_id": "fixture-round-2",
+      "date": "2026-07-25T12:00:00.000Z",
+      "score_correct": 1.5,
+      "score_total": 3,
+      "accuracy": 50,
+      "words_ids": [
+        "seed-001",
+        "seed-002",
+        "seed-003"
+      ],
+      "count_new": 0,
+      "count_learning": 2,
+      "count_mastered_review": 1,
+      "missed_word_ids": [
+        "seed-002",
+        "seed-003"
+      ],
+      "wrong_word_ids": [
+        "seed-003"
+      ],
+      "half_word_ids": [
+        "seed-002"
+      ],
+      "retry_only": false,
+      "mode": "typed",
+      "level": "B2"
+    }
+  ],
+  "profile": {
+    "name": "Synthetic learner",
+    "hasChosenName": true,
+    "level": "B2",
+    "modeLevels": {
+      "vocab": "B2",
+      "story": "A1",
+      "context": "A2",
+      "sentence": "B1",
+      "tense": "B2"
+    },
+    "hasChosenLevel": true,
+    "weeklyGoal": 65,
+    "fixture_setting": {
+      "retain": true
+    }
+  },
+  "fixture_extension": {
+    "nested": [
+      "retain",
+      false,
+      3.25
+    ]
+  }
+}

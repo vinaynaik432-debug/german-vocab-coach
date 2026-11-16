@@ -1,0 +1,26 @@
+{
+  "source_commit": "c787737c2272fcd3cd3a8609f760ec31cdd2c3a5",
+  "source_path": "app.js",
+  "source_sha256": "576125b05a7ca755407290cea1d129be053c1bb72797541deecad494f53e4e1a",
+  "fixed_time": "2026-07-25T12:00:00.000Z",
+  "original_starter_count": 1044,
+  "selected_starter_ids": [
+    "seed-001",
+    "seed-002",
+    "seed-003"
+  ],
+  "executed_functions": [
+    "createSeedDb",
+    "createProfile",
+    "normalizeWordRecord",
+    "applyResults"
+  ],
+  "transformations": [
+    "Executed the committed script through its function definitions in an isolated VM with fake DOM and memory storage.",
+    "Kept the first three starter records; added one clearly synthetic custom marketing word through normalizeWordRecord.",
+    "Created a synthetic named profile with distinct mode levels and a weekly goal of 65 through createProfile.",
+    "Called applyResults three times with fully correct, partial and wrong answers, producing fractional historical scores and old-style same-day mastery.",
+    "Added explicitly named fixture extension fields to test retention."
+  ],
+  "privacy": "Generated entirely from committed public starter content and synthetic test values. No browser storage, personal answers, backups, or user records were read."
+}

@@ -1,0 +1,7 @@
+.frequency-env/
+work/
+outputs/
+.DS_Store
+german-vocab-*.csv
+german-coach-*.json
+scratch/
