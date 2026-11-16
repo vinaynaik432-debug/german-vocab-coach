@@ -207,8 +207,8 @@
   "implementation_status": {
     "redesign_activated": true,
     "release": "20261116-continuous4",
-    "location": "local working copy",
-    "published": false,
+    "location": "GitHub main and existing GitHub Pages site",
+    "published": true,
     "verification": "Final full test run and browser checks recorded in work/final-verification.txt and implementation plan.",
     "browser_checks": [
       "First answer, article correction and immutable first response",
@@ -219,13 +219,20 @@
       "Real full JSON download and restore with safety copy",
       "Both themes and original logo",
       "320 CSS-pixel reflow; keyboard navigation and retained checkbox focus",
-      "Server stopped: cached app reload and an answer saved offline"
+      "Server stopped: cached app reload and an answer saved offline",
+      "Existing live-browser upgrade retained Learner/B1 profile and expanded 1044 original words to 1216; closed/reopened app reports offline ready."
     ],
     "automated_checks": {
       "passed": 298,
       "failed": 0,
       "command": "node --test tests/*.test.cjs"
     },
-    "publication_authorized": true
+    "publication_authorized": true,
+    "live_url": "https://vinaynaik432-debug.github.io/german-vocab-coach/",
+    "verified_code_commit": "f4a12f20b485734205d7ff07689df7509820957d",
+    "merge_commit": "d2f589053f2c68284867a78b597272a0f4159c26",
+    "pull_request": "https://github.com/vinaynaik432-debug/german-vocab-coach/pull/1",
+    "deployment_run": "https://github.com/vinaynaik432-debug/german-vocab-coach/actions/runs/43958634443",
+    "published_assets_matched": 26
   }
 }
