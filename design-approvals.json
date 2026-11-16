@@ -1,0 +1,231 @@
+{
+  "version": 1,
+  "updated": "2026-11-16",
+  "rule": "User authorized completing remaining UI/UX and implementation on 2026-11-16, superseding earlier per-screen approval gates. Preserve the approved two themes, navigation and continuous practice direction.",
+  "preview": "integrated-continuous-app",
+  "units": [
+    {
+      "id": "V01",
+      "name": "Shared visual language",
+      "status": "approved",
+      "approved_preview": "visual-directions-v2",
+      "scope": "Cobalt & sunshine and Tangerine studio with the approved selector. Original app logo retained at the user’s request.",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U01",
+      "name": "App navigation",
+      "status": "approved",
+      "approved_preview": "continuous-practice-v1",
+      "scope": "Today, Words and Progress; separate Settings; bottom navigation on phones. Remaining screen contents completed under later broad authorization.",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U02",
+      "name": "Today and starting practice",
+      "status": "approved",
+      "approved_preview": "continuous-practice-v1",
+      "scope": "Open immediately on a question. Detailed interactions completed under later broad authorization.",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U03",
+      "name": "Question and help",
+      "status": "authorized_for_completion",
+      "review_preview": "practice-flow-v4",
+      "preview_scope": "Input, empty validation, explicit hint/reveal, deliberate next question, keyboard flow.",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U04",
+      "name": "Answer feedback",
+      "status": "authorized_for_completion",
+      "review_preview": "practice-flow-v4",
+      "preview_scope": "Correct, article/missing article, wrong, hinted, revealed, optional correction and Back to feedback, retained first response, example/translation and How this counts.",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U05",
+      "name": "Stop, resume and save state",
+      "status": "authorized_for_completion",
+      "review_preview": "practice-flow-v4",
+      "preview_scope": "Stop/resume draft and feedback; save-failure and conflict presentation; simulated recovery-copy action. Actual persistence/reload/recovery integration still requires validation.",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U06",
+      "name": "Word library and scope",
+      "status": "authorized_for_completion",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U07",
+      "name": "Word details and sound",
+      "status": "authorized_for_completion",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U08",
+      "name": "Progress",
+      "status": "authorized_for_completion",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U09",
+      "name": "Review and new-word choices",
+      "status": "authorized_for_completion",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U10",
+      "name": "Marketing work scenarios",
+      "status": "authorized_for_completion",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U11",
+      "name": "Reading and listening",
+      "status": "authorized_for_completion",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U12",
+      "name": "Speaking and writing",
+      "status": "authorized_for_completion",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U13",
+      "name": "Settings and first use",
+      "status": "authorized_for_completion",
+      "preview_scope": "Theme selector approved; other Settings remain pending.",
+      "approved_parts": {
+        "theme_selector": {
+          "preview": "theme-and-practice-v3",
+          "status": "approved",
+          "scope": "Settings appearance selector, Cobalt & sunshine and Tangerine studio, preserving current practice state."
+        }
+      },
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U14",
+      "name": "Backup, restore and reset",
+      "status": "authorized_for_completion",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U15",
+      "name": "Optional practice formats",
+      "status": "authorized_for_completion",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    },
+    {
+      "id": "U16",
+      "name": "Cross-cutting failure and access states",
+      "status": "authorized_for_completion",
+      "authorization": "2026-11-16 final direction",
+      "implementation": "implemented_under_completion_authorization"
+    }
+  ],
+  "decisions": [
+    {
+      "date": "2026-11-16",
+      "unit": "V01",
+      "preview": "continuous-practice-v1",
+      "decision": "revision_requested",
+      "user_response": "Looks too plain no? Its not engaging me. The look looks very bland. Not at all energetic, happy, classy.",
+      "scope": "No visual style approved. Prepare more energetic, happy, classy alternatives."
+    },
+    {
+      "date": "2026-11-16",
+      "unit": "U01",
+      "preview": "continuous-practice-v1",
+      "decision": "approved",
+      "user_response": "Approve this navigation",
+      "scope": "Today, Words, Progress as main navigation; Settings separate; navigation at bottom on phones. Screen contents not approved."
+    },
+    {
+      "date": "2026-11-16",
+      "unit": "U02",
+      "preview": "continuous-practice-v1",
+      "decision": "approved",
+      "user_response": "Approve Answer immediately (recommended)",
+      "scope": "Open directly on one question. Detailed question, help, feedback, save and resume states require separate approval."
+    },
+    {
+      "date": "2026-11-16",
+      "unit": "V01",
+      "preview": "visual-directions-v2",
+      "decision": "approved_with_requested_theme_choice",
+      "user_response": "I like 1 & 3 both. Possible to keep an option to change the theme, if yes, then keep these as an option.",
+      "scope": "Keep Cobalt & sunshine and Tangerine studio as selectable themes. Theme control preview to follow."
+    },
+    {
+      "date": "2026-11-16",
+      "unit": "U13.theme_selector",
+      "preview": "theme-and-practice-v3",
+      "decision": "approved",
+      "user_response": "Yes, approve the theme selector. Keep both themes and go ahead. Show me the practice flow and answer feedback next, so I can approve those too.",
+      "scope": "Both themes and the shown appearance selector only; remaining Settings and practice flow pending."
+    },
+    {
+      "date": "2026-11-16",
+      "unit": "remaining_implementation",
+      "decision": "authorized_for_completion",
+      "user_response": "I think you got the gist. You can go ahead and finish everything off now.",
+      "scope": "Complete remaining design and implementation using approved direction, without further per-screen confirmation. Existing data must remain recoverable."
+    },
+    {
+      "date": "2026-11-16",
+      "unit": "V01.original_logo",
+      "decision": "retain_original",
+      "user_response": "Also, the old logo of the app, please do retain that, and add that in this app.",
+      "scope": "Use the existing icons/logo.png mascot in the modern header; preserve existing app icon image files."
+    },
+    {
+      "date": "2026-11-16",
+      "unit": "release",
+      "decision": "publish_authorized",
+      "user_response": "Go ahead and push everything to GitHub and update the live app too. Make sure my existing words and progress are preserved.",
+      "scope": "Publish the complete reviewed app to GitHub and the existing live URL, preserving browser data and installed-app identity."
+    }
+  ],
+  "implementation_status": {
+    "redesign_activated": true,
+    "release": "20261116-continuous4",
+    "location": "local working copy",
+    "published": false,
+    "verification": "Final full test run and browser checks recorded in work/final-verification.txt and implementation plan.",
+    "browser_checks": [
+      "First answer, article correction and immutable first response",
+      "Hinted answers separate from unaided accuracy",
+      "Pause, reload and draft resume",
+      "Exact selected-word scope without filler",
+      "Scenario draft and example response",
+      "Real full JSON download and restore with safety copy",
+      "Both themes and original logo",
+      "320 CSS-pixel reflow; keyboard navigation and retained checkbox focus",
+      "Server stopped: cached app reload and an answer saved offline"
+    ],
+    "automated_checks": {
+      "passed": 298,
+      "failed": 0,
+      "command": "node --test tests/*.test.cjs"
+    },
+    "publication_authorized": true
+  }
+}

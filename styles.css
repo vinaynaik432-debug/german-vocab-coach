@@ -31,6 +31,7 @@
 }
 
 html, body {
+  scroll-padding-bottom: 100px;
   overscroll-behavior-y: none;
   -webkit-user-select: none;
   user-select: none;
@@ -632,6 +633,8 @@ h3 {
 .recap-popover {
   width: min(440px, calc(100vw - 32px));
 }
+
+.dashboard-popover { background: var(--panel); }
 
 .panel-heading {
   display: flex;
@@ -2064,6 +2067,34 @@ textarea {
 }
 
 /* Bottom Nav */
+.marketing-lane { grid-column: 1 / -1; }
+.marketing-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+.marketing-controls label { display: grid; gap: 6px; color: var(--ink); font-weight: 700; }
+.marketing-controls input, .marketing-controls select, #learningFocus {
+  width: 100%; min-width: 0; box-sizing: border-box; border: 1px solid var(--line, #b7c7ca);
+  border-radius: 12px; padding: 12px; font: inherit; font-size: 16px; background: white; color: var(--ink);
+}
+.marketing-word-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 18px 0; }
+.marketing-word-card { padding: 18px; background: rgba(255,255,255,.85); border: 1px solid #c5dcde; border-radius: 16px; min-width: 0; overflow-wrap: anywhere; }
+.marketing-word-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; font-size: .72rem; color: #36575b; }
+.marketing-word-card h4 { font-size: 1.35rem; line-height: 1.25; margin: 12px 0 4px; }
+.marketing-word-card .marketing-meaning { margin: 0 0 16px; color: #40585b; }
+.marketing-word-card .marketing-example { font-weight: 650; margin: 8px 0 4px; color: #162f33; }
+.marketing-word-card .marketing-translation { font-size: .88rem; margin: 0 0 12px; color: #465d60; }
+.marketing-word-card .marketing-alternatives { font-size: .8rem; margin: 10px 0; }
+.marketing-word-card details { font-size: .8rem; line-height: 1.5; margin: 10px 0; }
+.marketing-word-card summary { cursor: pointer; font-weight: 650; }
+.marketing-listen { padding: 7px 12px; font-size: .8rem; margin-top: 8px; }
+.mode-tabs { flex-wrap: wrap; border-radius: 20px; }
+.mode-tab { min-width: 70px; padding: 10px 8px; }
+@media (max-width: 600px) {
+  .marketing-controls, .marketing-word-grid { grid-template-columns: 1fr; }
+  .marketing-word-card { padding: 16px; }
+}
+
+.restore-preview { padding: 18px; margin: 16px 0; border: 1px solid #c7d8ca; border-radius: 14px; background: #f1f7f2; }
+.restore-preview p { overflow-wrap: anywhere; }
+
 .bottom-nav {
   display: none;
 }
@@ -2108,10 +2139,19 @@ textarea {
 }
 
 @media (max-width: 720px) {
+  .backup-primary-actions { grid-template-columns: 1fr; }
+
+  .panel-popover {
+    top: 12px;
+    max-height: calc(100dvh - 104px - env(safe-area-inset-bottom));
+    scroll-padding-block: 16px;
+    overscroll-behavior: contain;
+  }
+
   .app-shell {
     width: min(100vw - 20px, 1180px);
     margin: 10px auto;
-    padding-bottom: 80px;
+    padding-bottom: calc(100px + env(safe-area-inset-bottom));
   }
 
   .post-round-actions {
